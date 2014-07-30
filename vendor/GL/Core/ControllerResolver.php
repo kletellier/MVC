@@ -94,7 +94,7 @@ class ControllerResolver
                                 
                 if(!DEVELOPMENT_ENVIRONMENT)
                 {
-                    $message = "Oops une erreur grave est survenue...";
+                    $message = "Oops fatal error happens...";
                     $fichier = "";
                     $line = "";                    
                 }
@@ -106,7 +106,7 @@ class ControllerResolver
             {
                 if(!empty($this->_errors) && DEVELOPMENT_ENVIRONMENT)
                 {
-                    $message = "Des erreurs non bloquantes ont étés relevées.";
+                    $message = "Some non fatal error are detecting.";
                     $this->get500Response($message, "", "");    
                     exit(0);
                 }
@@ -124,7 +124,7 @@ class ControllerResolver
         * @param String $errline Error line number
         * @return boolean
         */
-        function GestionErreur($errno, $errstr, $errfile, $errline)
+        function ErrorHandler($errno, $errstr, $errfile, $errline)
         {            
             switch ($errno) 
             {
@@ -251,9 +251,9 @@ class ControllerResolver
             
                 if ((int)method_exists($controllerName, $this->_action)) 
                 {	
-                    // gestion des erreurs
-                    set_error_handler(array(&$this, "GestionErreur"));   
-                    // gestionnaire des erreurs fatales
+                    // non fatal error handling
+                    set_error_handler(array(&$this, "git remote add origin https://github.com/kletellier/MVC.git"));   
+                    // fatal error handling
                     register_shutdown_function(array(&$this,'ShutdownError'));
                     call_user_func_array(array($dispatch,$this->_action),$this->getArguments($dispatch));                  
                 }
