@@ -1,0 +1,9 @@
+testdb:
+    pattern:  /testdb
+    controller: default
+    action: testdb
+racine:
+    pattern: /{name}
+    controller: default
+    action: hello
+    defaults : { name : "World" }

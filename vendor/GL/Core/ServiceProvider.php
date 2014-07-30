@@ -1,0 +1,43 @@
+<?php
+
+namespace GL\Core;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\Request;
+
+class ServiceProvider
+{
+/**
+ * Return dependency injection container
+ * 
+ * @params string $controller controller name 
+ * 
+ * @return \Symfony\Component\DependencyInjection\ContainerBuilder
+ */
+static function GetDependencyContainer($controller)
+{
+    $container = new ContainerBuilder();
+    
+    // create variable controller
+    $container->setParameter("controller", $controller);
+    // Inject mailer
+    $container->register('mailer', '\GL\Core\Mailer');
+    // Inject Request
+    $container->register('request', '\Symfony\Component\HttpFoundation\Request')
+    ->setFactoryClass('\Symfony\Component\HttpFoundation\Request')
+    ->setFactoryMethod('createFromGlobals');         
+    // Inject Request helper
+    $container->register('request_helper', '\GL\Core\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')));
+    // Inject Twig Service
+    $container->register('twig','\GL\Core\TwigService')->addArgument('%controller%');
+    // Inject RouteCollection
+    $container->register('routes', '\Symfony\Component\Routing\RouteCollection')
+    ->setFactoryClass('\GL\Core\RouteProvider')
+    ->setFactoryMethod('GetRouteCollection');   
+    
+    // TODO add file defined service
+    
+    return $container;  
+}
+}
