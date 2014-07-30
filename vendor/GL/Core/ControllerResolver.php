@@ -252,7 +252,7 @@ class ControllerResolver
                 if ((int)method_exists($controllerName, $this->_action)) 
                 {	
                     // non fatal error handling
-                    set_error_handler(array(&$this, "git remote add origin https://github.com/kletellier/MVC.git"));   
+                    set_error_handler(array(&$this, 'ErrorHandler'));   
                     // fatal error handling
                     register_shutdown_function(array(&$this,'ShutdownError'));
                     call_user_func_array(array($dispatch,$this->_action),$this->getArguments($dispatch));                  
