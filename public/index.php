@@ -6,6 +6,7 @@
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__)));
 define('TWIGPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
+define('CONFIGPATH',ROOT . DS . 'config'.DS.'config.yml'); // Path to config file
 define('ROUTEPATH',ROOT . DS . 'config'.DS.'routes.yml'); // Path to route definition
 define('MAILPATH',ROOT . DS . 'config'.DS.'mail.yml'); // Path to mail configuration
 define('DATABASEPATH',ROOT . DS . 'config'.DS.'database.yml'); // Path to database configuration
