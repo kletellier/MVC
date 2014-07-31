@@ -1,8 +1,16 @@
+pdf:
+    pattern:  /pdf
+    controller: default
+    action: pdf  
+xls:
+    pattern:  /xls
+    controller: default
+    action: xls    
 testdb:
     pattern:  /testdb
     controller: default
     action: testdb
-racine:
+root:
     pattern: /{name}
     controller: default
     action: hello
