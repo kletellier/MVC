@@ -16,12 +16,12 @@
     <div class="row col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
         <div class="panel panel-danger">
           <div class="panel-heading" >
-            <h3 class="panel-title " id="titre" >Gestionnaires d'erreurs</h3>
+            <h3 class="panel-title " id="titre" >500 Error</h3>
           </div>
           <div id="panel-body" class="panel-body" >
               <h4 id="contenu">{{ message }}</h4>
-             {% if line %} <h5 id="contenu">Ligne n° {{ line }}</h5> {% endif %}
-             {% if file %} <h5 id="contenu">Fichier {{ file }}</h5> {% endif %}
+             {% if line %} <h5 id="contenu">line number {{ line }}</h5> {% endif %}
+             {% if file %} <h5 id="contenu">file {{ file }}</h5> {% endif %}
           </div>
         </div>
     </div>
