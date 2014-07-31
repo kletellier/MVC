@@ -21,6 +21,7 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF and PHPEx
 * Fpdf
 * Twig
 * Swiftmailer
+* PSR Log
 
 ## Objective
 
