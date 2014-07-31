@@ -1,0 +1,5 @@
+debug: true
+webpath: http://localhost
+twig:
+    cache: false
+    alwaysreload: true
