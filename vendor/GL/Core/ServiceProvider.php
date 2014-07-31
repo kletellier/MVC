@@ -35,7 +35,10 @@ static function GetDependencyContainer($controller)
     $container->register('routes', '\Symfony\Component\Routing\RouteCollection')
     ->setFactoryClass('\GL\Core\RouteProvider')
     ->setFactoryMethod('GetRouteCollection');   
-    
+    // Inject FPDF Wrapper
+     $container->register('pdf', '\GL\Core\PDF');
+    // Inject PHPExcel Wrapper
+   $container->register('excel', '\GL\Core\Excel');
     // TODO add file defined service
     
     return $container;  
