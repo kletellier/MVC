@@ -20,6 +20,7 @@ class TwigHelper extends \Twig_Extension
     {
         return array(
             'url'  => new \Twig_Function_Method($this, 'url'), 
+            'crsf' => new \Twig_Function_Method($this,'crsf'),
         );
     }
 	
@@ -53,6 +54,29 @@ class TwigHelper extends \Twig_Extension
     public function url($partialurl)
     {
         return Utils::url($partialurl);        
+    }
+    
+    /**
+     * Get Actual Token
+     * 
+     * @return string Actual Crsf Token
+     */
+    public function crsf()
+    {
+        $token = "";
+        if($this->container!=null)
+        {
+            $crsf = $this->container->get('crsf');
+            if($crsf!=null)
+            {
+                $token = $crsf->GetToken();
+                if($token==null || $token=="")
+                {
+                    $token = $crsf->InitCrsf();
+                }                 
+            }
+        }
+        return $token;
     }
     
     public function getName()
