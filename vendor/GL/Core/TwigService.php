@@ -2,6 +2,8 @@
 
 namespace GL\Core;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
  * Load Twig Environment
  *
@@ -59,7 +61,7 @@ class TwigService
      * 
      * @param \GL\Core\ContainerInterface $container DI contrainer to embed in TwigHelper
      */
-     private function setContainer(ContainerInterface $container = null)
+     private function setContainer(\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
      {
          $this->_container = $container;
      }
@@ -70,7 +72,7 @@ class TwigService
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params,ContainerInterface $container = null)
+    public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
     {
         $this->setContainer($container);
         $env = $this->getTwigEnvironment();        
