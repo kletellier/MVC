@@ -2,23 +2,24 @@
 namespace GL\Core;
 
 use GL\Core\Utils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Add function to Twig
  */
 class TwigHelper extends \Twig_Extension
 {
-     
+  protected $container;   
 
-  public function __construct()
+  public function __construct(ContainerInterface $container = null)
   {
-       
+       $this->container = $container;
   }
   
     public function getFunctions()
     {
         return array(
-            'url'  => new \Twig_Function_Method($this, 'url'),            
+            'url'  => new \Twig_Function_Method($this, 'url'), 
         );
     }
 	
@@ -53,7 +54,7 @@ class TwigHelper extends \Twig_Extension
     {
         return Utils::url($partialurl);        
     }
-
+    
     public function getName()
     {
         return 'TwigHelper';

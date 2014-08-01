@@ -10,12 +10,16 @@ namespace GL\Core;
 class TwigService
 {
      protected $_controller;
+     protected $_container;
      
      function __construct($ctl)
      {
-         $this->_controller = $ctl;
+         $this->_controller = $ctl;   
+         $this->_container = null;
      }
      
+     
+    
      /**
      * Function for Twig path searching
      * TWIG_PATH , defined in index.php
@@ -44,11 +48,21 @@ class TwigService
             $arrcache = array('cache' => $cachepath,'auto_reload'=> AUTORELOADCACHE);
         }
         $twigloader = new \Twig_Loader_Filesystem($this->getPathArray());
-        $twigenv = new \Twig_Environment($twigloader,$arrcache);
-        $twigenv->addExtension(new \GL\Core\TwigHelper());
+        $twigenv = new \Twig_Environment($twigloader,$arrcache);        
+        $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
         $twigenv->addTokenParser(new \GL\Core\TwigRenderToken());
         return $twigenv;
     }
+    
+    /**
+     * Embed DI container in TwigHelper
+     * 
+     * @param \GL\Core\ContainerInterface $container DI contrainer to embed in TwigHelper
+     */
+     private function setContainer(ContainerInterface $container = null)
+     {
+         $this->_container = $container;
+     }
     
     /**
      * Render Twig template
@@ -56,8 +70,9 @@ class TwigService
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params)
+    public function render($template,array $params,ContainerInterface $container = null)
     {
+        $this->setContainer($container);
         $env = $this->getTwigEnvironment();        
         return $env->render($template, $params);
     }

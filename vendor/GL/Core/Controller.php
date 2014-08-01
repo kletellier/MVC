@@ -96,7 +96,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
      */
     function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html') )
     {  
-        $buf = $this->get('twig')->render($template,$params);
+        $buf = $this->get('twig')->render($template,$params,$this->container);
         //$buf = $this->getTwigEnvironment()->render($template,$params);
         $response = new Response($buf, $status, $headers);
         $response->send();
@@ -111,7 +111,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
      */
     function renderHtmlTemplate($template,$params)
     {         
-        return  $this->get('twig')->render($template,$params);
+        return  $this->get('twig')->render($template,$params,$this->container);
     } 
     
     /**
