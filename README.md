@@ -216,7 +216,8 @@ You have many services on each container :
 * routes : ```Symfony\Component\Routing\RouteCollection``` all routes defined in ```config/routes.yml```.
 * pdf : ```GL\Core\PDF``` instance, wrapper of fPDF.
 * excel : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
-
+* session : ```Symfony\Component\HttpFoundation\Session\Session``` instance.
+* crsf : ```GL\Core\FormCrsf``` instance.
 
 
 
