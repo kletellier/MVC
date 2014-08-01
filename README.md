@@ -201,6 +201,8 @@ Which include the Html provided by executing this action in this controller.
 
 Your function in your controller must use ```php $this->renderHtmlTemplate ```
 
+If you enable Twig cache, don't forget to delete all files in ```cache\twig``` for recreating cache version.
+
 ### Dependency injection
 
 Each controller instance own his DI container, you can retrieve each service on this container, by using get function :
@@ -290,3 +292,4 @@ For Fpdf :
 For PHPExcel :
 
 [phpExcel] (https://github.com/PHPOffice/PHPExcel)
+
