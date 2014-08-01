@@ -39,6 +39,10 @@ static function GetDependencyContainer($controller)
      $container->register('pdf', '\GL\Core\PDF');
     // Inject PHPExcel Wrapper
    $container->register('excel', '\GL\Core\Excel');
+   // Inject Session
+   $container->register('session','\Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('start');
+   // Inject Crsf verifier
+   $container->register('crsf','\GL\Core\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
     // TODO add file defined service
     
     return $container;  
