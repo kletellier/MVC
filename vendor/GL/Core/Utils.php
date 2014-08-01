@@ -17,14 +17,14 @@ class Utils
         $basepath = BASE_PATH;
         if(substr($basepath, -1)!=$sep)
         {
-            $basepath.=$sep;
+            $basepath = $basepath.$sep;
         }
         $partial = $partialurl;
         if(substr($partial,0,1)==$sep)
         {
             $partial = substr($partial, 1);
         }
-        $path = BASE_PATH . $partial;
+        $path = $basepath . $partial;
         return $path;
     }
     
