@@ -21,6 +21,7 @@ class TwigHelper extends \Twig_Extension
         return array(
             'url'  => new \Twig_Function_Method($this, 'url'), 
             'crsf' => new \Twig_Function_Method($this,'crsf'),
+            'getcrsfinput' => new \Twig_Function_Method($this,'getcrsfinput'),
         );
     }
 	
@@ -77,6 +78,31 @@ class TwigHelper extends \Twig_Extension
             }
         }
         return $token;
+    }
+    
+    /**
+     * Return Html Input with Crsf token
+     * 
+     * @param string $inputname form input name
+     * @return string Html Input Hidden type
+     */
+    public function getcrsfinput($inputname='crsftoken')
+    {
+        $token = "";
+        if($this->container!=null)
+        {
+            $crsf = $this->container->get('crsf');
+            if($crsf!=null)
+            {
+                $token = $crsf->GetToken();
+                if($token==null || $token=="")
+                {
+                    $token = $crsf->InitCrsf();
+                }                 
+            }
+        }
+        $html = "<input type='hidden' value='".$token."' name='".$inputname."' id='".$inputname."'>";
+        return $html;
     }
     
     public function getName()
