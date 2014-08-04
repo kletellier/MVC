@@ -21,7 +21,8 @@ class TwigHelper extends \Twig_Extension
         return array(
             'url'  => new \Twig_Function_Method($this, 'url'), 
             'crsf' => new \Twig_Function_Method($this,'crsf'),
-            'getcrsfinput' => new \Twig_Function_Method($this,'getcrsfinput'),
+            'getcrsfinput' => new \Twig_Function_Method($this,'getcrsfinput',array(
+            'is_safe' => array('html'))),
         );
     }
 	
