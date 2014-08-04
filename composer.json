@@ -4,7 +4,7 @@
     },
     "require": {
 		"php": ">=5.3.3",
-        "illuminate/database": "*",
+                "illuminate/database": "*",
 		"twig/twig":"1.*",
 		"swiftmailer/swiftmailer": "5.2.*@dev",
 		"symfony/http-foundation": "2.5.*",
