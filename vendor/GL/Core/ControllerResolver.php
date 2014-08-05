@@ -72,6 +72,18 @@ class ControllerResolver
         }
         
         /**
+         * Return Errror 430 response
+         */
+        private function get403Response()
+        {
+            $this->_controller = "error";
+            $this->_action = "error403";
+            $this->_args = array();
+            $this->FixController();
+            $this->execute(); 
+        }
+        
+        /**
          * Fix controller parameter in DI container
          */
         private function FixController()
