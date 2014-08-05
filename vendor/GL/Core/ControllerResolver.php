@@ -274,6 +274,10 @@ class ControllerResolver
                     $this->get404Response();                   
                 } 
             }
+            catch(\GL\Core\AccessDeniedHttpException $ad)
+            {
+                $this->get403Response();
+            }
             catch(Exception $ex)
             {                   
                $this->get500Response($ex->getMessage()  , "", "");  
