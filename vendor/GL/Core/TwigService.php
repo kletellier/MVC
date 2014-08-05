@@ -44,14 +44,23 @@ class TwigService
     private function getTwigEnvironment()
     {   
         $arrcache = array();
-        if(TWIG_CACHE)
+        // Cache only allowed in prod mode
+        if(TWIG_CACHE && !DEBUGMODE_ENABLED)
         {
             $cachepath = CACHEPATH . DS . 'twig';            
             $arrcache = array('cache' => $cachepath,'auto_reload'=> AUTORELOADCACHE);
         }
+        if(DEBUGMODE_ENABLED)
+        {
+            $arrcache = array('debug' => true);
+        }
         $twigloader = new \Twig_Loader_Filesystem($this->getPathArray());
         $twigenv = new \Twig_Environment($twigloader,$arrcache);        
         $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
+        if(DEBUGMODE_ENABLED)
+        {
+          $twigenv->addExtension(new \Twig_Extension_Debug());  
+        }
         $twigenv->addTokenParser(new \GL\Core\TwigRenderToken());
         return $twigenv;
     }
