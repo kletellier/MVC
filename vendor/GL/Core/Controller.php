@@ -101,6 +101,14 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
         $response = new Response($buf, $status, $headers);
         $response->send();
     }
+    
+    /**
+     * Throw unauthorized error 403
+     */
+    function isUnauthorized()
+    {
+        throw new \GL\Core\AccessDeniedHttpException;
+    }
 
     /**
      * Function render html text with Twig template parsing 
