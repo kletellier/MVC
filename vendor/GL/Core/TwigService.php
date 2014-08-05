@@ -44,15 +44,16 @@ class TwigService
     private function getTwigEnvironment()
     {   
         $arrcache = array();
-        // Cache only allowed in prod mode
-        if(TWIG_CACHE && !DEBUGMODE_ENABLED)
+        
+        if(TWIG_CACHE )
         {
             $cachepath = CACHEPATH . DS . 'twig';            
-            $arrcache = array('cache' => $cachepath,'auto_reload'=> AUTORELOADCACHE);
+            $arrcache['cache'] =  $cachepath;
+            $arrcache['auto_reload'] = AUTORELOADCACHE;
         }
         if(DEBUGMODE_ENABLED)
         {
-            $arrcache = array('debug' => true);
+            $arrcache['debug']=true;
         }
         $twigloader = new \Twig_Loader_Filesystem($this->getPathArray());
         $twigenv = new \Twig_Environment($twigloader,$arrcache);        
