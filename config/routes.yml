@@ -1,3 +1,15 @@
+config_database:
+    pattern: /config/database
+    controller: config
+    action: database
+config_application:
+    pattern: /config/application
+    controller: config
+    action: application
+config_mail:
+    pattern: /config/mail
+    controller: config
+    action: mail
 pdf:
     pattern:  /pdf
     controller: default
