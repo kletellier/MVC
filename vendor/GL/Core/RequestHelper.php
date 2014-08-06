@@ -37,4 +37,14 @@ class RequestHelper
         $regex_match.=")/i";
         return  preg_match($regex_match, strtolower($useragent));
     }
+    
+    /**
+     * Test if client is local
+     * 
+     * @return boolean If client is localhost
+     */
+    function isLocalClient()
+    {
+       return in_array($this->_request->getClientIp(), array('127.0.0.1', 'fe80::1', '::1'));
+    }
 }
