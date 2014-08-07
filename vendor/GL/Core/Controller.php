@@ -71,6 +71,16 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
     {
         return $this->container->get('routes');
     }
+    
+    /**
+     * Return the session object
+     * 
+     * @return Symfony\Component\HttpFoundation\Session\Session object 
+     */
+    public function getSession()
+    {
+        return $this->container->get('session');
+    }
          
     /**
      * Function render Html 
