@@ -1,6 +1,10 @@
 <?php
 
-
+/**
+ * 
+ * based on HttpKernel Symfony Exception
+ * 
+ */
 
 namespace GL\Core;
 

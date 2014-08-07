@@ -2,6 +2,10 @@
 
 namespace GL\Core;
 
+/*
+ * Based on HttpKernel Symfony module
+ */
+
 class HttpException extends \RuntimeException 
 {
     private $statusCode;
