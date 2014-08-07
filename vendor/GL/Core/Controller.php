@@ -117,7 +117,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param array $params Twig parameters array
      * @return string Html string buffer
      */
-    function renderHtmlTemplate($template,$params)
+    function renderHtmlTemplate($template,$params = array())
     {         
         return  $this->get('twig')->render($template,$params,$this->container);
     } 
