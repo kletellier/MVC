@@ -15,7 +15,7 @@ define('PUBLICPATH',ROOT. DS . 'public'); // Path to public directory (directory
 define('FPDF_FONTPATH',ROOT .DS . 'vendor' . DS . 'Fpdf' . DS .'font' .DS); // Font directory for FPDF
 define('TMPPATH',ROOT . DS . 'tmp'); // Temporary path (using for xls export)
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
-
+define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
 /**
  * Get rewriting URL
  */
