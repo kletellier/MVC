@@ -1,0 +1,23 @@
+<?php
+ 
+
+set_time_limit(0);
+
+/**
+ * Loading path constant
+ */
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', dirname(dirname(__FILE__))); 
+define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
+
+/**
+ * Enable autoload
+ */
+require_once (ROOT . DS . 'library' . DS . 'autoload_composer.php');
+
+use GL\Command\CacheCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->add(new CacheCommand);
+$application->run();
