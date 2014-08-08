@@ -30,7 +30,7 @@ class CacheCommand extends Command
 			$fs->mkdir($path);
 			$fs->chmod($path,0777,0000,true);
 		} catch (IOExceptionInterface $e) {
-			$output->writeln('Error');
+			$output->writeln('Error : ' . $e->getMessage());
 		}		 
 		$output->writeln('finished');
     }
