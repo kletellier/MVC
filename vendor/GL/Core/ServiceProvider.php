@@ -3,6 +3,8 @@
 namespace GL\Core;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -43,7 +45,9 @@ static function GetDependencyContainer($controller)
     $container->register('session','\Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('start');
     // Inject Crsf verifier
     $container->register('crsf','\GL\Core\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
-    
+    // Inject services defined in config/services.yml
+    $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
+    $loader->load('services.yml');
     
     return $container;  
 }

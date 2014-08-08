@@ -1,0 +1,7 @@
+parameters:
+#    details here : http://symfony.com/fr/doc/current/components/dependency_injection/introduction.html
+
+services:
+#     
+    test:
+        class: Application\Classes\Test     
