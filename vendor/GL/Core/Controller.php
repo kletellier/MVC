@@ -81,6 +81,24 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
     {
         return $this->container->get('session');
     }
+    
+    /**
+     * Render view provided as PHP page
+     * 
+     * @param string $view view name to display
+     * @param string $inc_parameters parameters array
+     */
+    function renderPHP($view,$inc_parameters = array())
+    {           
+        // inject all parameters in array
+        foreach($inc_parameters as $keytmp => $valtmp)
+        {
+            $$keytmp = $valtmp;
+        }
+        $ts = new PhpTemplateService($this->container);
+        $ret = $ts->getPathTemplate($view);		 
+        require($ret);		 	
+    }
          
     /**
      * Function render Html 
