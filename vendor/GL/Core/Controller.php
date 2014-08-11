@@ -91,10 +91,12 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
     function renderPHP($view,$inc_parameters = array())
     {           
         // inject all parameters in array
-        foreach($inc_parameters as $keytmp => $valtmp)
+        // use extract function instead of manually extracting
+        extract($inc_parameters);
+        /*foreach($inc_parameters as $keytmp => $valtmp)
         {
             $$keytmp = $valtmp;
-        }
+        }*/
         $ts = new PhpTemplateService($this->container);
         $ret = $ts->getPathTemplate($view);		 
         require($ret);		 	
