@@ -2,6 +2,7 @@
 
 namespace GL\Core;
 
+use PDO;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
@@ -46,7 +47,9 @@ class DbHelper {
      * @return type
      */
     public static function select($query,$connection = "default") {
-        return Capsule::connection($connection)->select($query);
+        Capsule::connection($connection)->setFetchMode(PDO::FETCH_CLASS);
+        $queryraw = Capsule::connection($connection)->raw($query);
+        return Capsule::connection($connection)->select($queryraw);
     }
     
      /**
