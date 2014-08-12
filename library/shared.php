@@ -56,12 +56,14 @@ function HandleRequest($url)
 	}
 	catch(ResourceNotFoundException $ex)
 	{
+            ob_clean();
             // return not found controller action
             $cr404 = new ControllerResolver("error", "error404", array());
             $cr404->execute();            
 	}
 	catch(Exception $e)
-	{            
+	{       
+            ob_clean();
             // return error controller action
              $params = array('message'=>$e->getMessage(),'file'=>'','line'=>'','errors'=>array()); 
              $cr500 = new ControllerResolver("error", "error500", $params);
@@ -69,6 +71,7 @@ function HandleRequest($url)
 	}
 }  
 
+ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
 setReporting();
 HandleRequest($url);  
 

@@ -48,7 +48,8 @@ class ControllerResolver
          * @param type $line Line error in file
          */
         private function get500Response($message,$file,$line)
-        {                
+        {             
+            ob_clean();
             $params = array('message'=>$message,'file'=>$file,'line'=>$line,'errors'=>$this->_errors);  
             $this->_controller = "error";
             $this->_action = "error500";
@@ -64,6 +65,7 @@ class ControllerResolver
          */
         private function get404Response()
         {
+            ob_clean();
             $this->_controller = "error";
             $this->_action = "error404";
             $this->_args = array();
@@ -76,6 +78,7 @@ class ControllerResolver
          */
         private function get403Response()
         {
+            ob_clean();
             $this->_controller = "error";
             $this->_action = "error403";
             $this->_args = array();
