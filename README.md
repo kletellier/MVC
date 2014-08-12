@@ -14,6 +14,8 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF and PHPEx
 	* Filesystem
 	* Finder
 	* Stopwatch
+	* Config
+	* Console
 * Illuminate
 	* Eloquent
 * PhpOfffice
@@ -43,7 +45,7 @@ git clone https://github.com/kletellier/MVC.git /var/www
 
 4. Change website configuration file
 
-Open ```config/config.yml```
+Open ```config/config.yml``` or type in your browser  ```http://yourwebsite/configuration/application``` (available only in local and debug mode)
 
 ```yaml
 debug: true
@@ -62,7 +64,7 @@ In twig section, enable cache in ```cache/twig``` folder, alwaysreload parameter
 
 5. Change database configuration file
 
-Open ```config/database.yml```
+Open ```config/database.yml``` or type in your browser  ```http://yourwebsite/configuration/database``` (available only in local and debug mode)
 
 ```yaml
 default:
@@ -76,7 +78,7 @@ default:
 Actually framework will only work with MySQL/MariaDb Database.
 You can connect many databases, just create a new section after default section in the config/database.yml
 
-6. Change email configuration file
+6. Change email configuration file or type in your browser  ```http://yourwebsite/configuration/mail``` (available only in local and debug mode)
 
 
 Open ```config/mail.yml```
@@ -116,7 +118,7 @@ root:
 
 ```
 
-Each route must have a key name (the section name), and must include pattern,controller and action. You can add optional value bye adding variable between bracket in pattern section, and also you must add defaults section and define default value for each optional parameter. The position is very important, for determining selected route, the parser select the first url pattern matchingÂ !!!
+Each route must have a key name (the section name), and must include pattern,controller and action. You can add optional value bye adding variable between bracket in pattern section, and also you must add defaults section and define default value for each optional parameter. The position is very important, for determining selected route, the parser select the first url pattern matching !!!
 
 ## How it works
 
@@ -140,7 +142,7 @@ The controller can return Html ou ```Symfony/Component/HttpFoundation/Response``
 By using 
 
 ```php
-$this->render(Â«HelloÂ»)Â ;
+$this->render(«Hello») ;
 
 ```
 
@@ -148,10 +150,10 @@ return a Http Response with 200 status code, with Hello text.
 
 Controller embed many render functions, like renderJSON for rendering all objects as JSON string.
 
-You can also redirect to other action/controller by usingÂ :
+You can also redirect to other action/controller by using :
 
 ```php
-$this->redirect(Â«routenameÂ»,array(Â«Â paramÂ Â»=>Â value))Â ; // routename is a route name defined in routes.yml
+$this->redirect(«routename»,array(« param »=> value)) ; // routename is a route name defined in routes.yml
 
 ```
 
@@ -160,7 +162,7 @@ $this->redirect(Â«routenameÂ»,array(Â«Â paramÂ Â»=>Â value))Â ; // routename is 
 And also you have render function for using Twig Template engine.
 
 ```php
-$this->render('index.html.twig',array(Â«Â paramsÂ Â»=>Â Â«Â valueÂ Â»))Â ;
+$this->render('index.html.twig',array(« params »=> « value »)) ;
 ```
 
 The render function submit all params provided in array to the template file index.html.twig.
@@ -173,10 +175,10 @@ By default, the template engine will take the template file in controller folder
 
 Render function return an ```Symfony/Component/HttpFoundation/Response```, you can specify Http Status Code (by default 200) , and add headers as key-value array with overloaded methods.
 
-If you only want the Html, you can useÂ :
+If you only want the Html, you can use :
 
 ```php
-$this->renderHtmlTemplate('index.html.twig',array(Â«Â paramsÂ Â»=>Â Â«Â valueÂ Â»))Â ;
+$this->renderHtmlTemplate('index.html.twig',array(« params »=> « value »)) ;
 ```
 
 That return only raw Html.
@@ -191,10 +193,10 @@ I've add an url function, for retrieve absolute url form relative url, based on 
 
 give http://localhost/xls
 
-You can also render controller actionÂ :
+You can also render controller action :
 
 ```twig
-{Â % render Â«Â controller::actionÂ Â»,{Â«Â paramsÂ Â»Â :Â Â«Â valueÂ Â»}Â %}
+{ % render « controller::action »,{« params » : « value »} %}
 ```
 
 Which include the Html provided by executing this action in this controller.
@@ -203,31 +205,41 @@ Your function in your controller must use ```php $this->renderHtmlTemplate ```
 
 If you enable Twig cache, don't forget to delete all files in ```cache\twig``` for recreating cache version.
 
+You can use console with this command for clearing cache: ```php app/console cache:clear```.
+
+You can add your own method in Twig with ```app/Application/Shared/SharedTwigHelper.php```.
+
+If you doesn't want use Twig you can put PHP file in views folder and use 
+
+```php
+$this->renderPHP('index.php',array(« params »=> « value »)) ;
+```
+
+it works as an include file.
+
 ### Dependency injection
 
-Each controller instance own his DI container, you can retrieve each service on this container, by using get functionÂ :
+Each controller instance own his DI container, you can retrieve each service on this container, by using get function :
 
 ```php $this->get('xls') // will give you PhpExcel Object ready to works ```
 
-You have many services on each containerÂ :
+You have many services on each container :
 
 * mailer : ```\GL\Core\Mailer``` instance, a wrapper of SwiftMailer.
-* requestÂ : ```Symfony\Component\HttpFoundation\Request``` instance.
-* request_helperÂ : ```GL\Core\RequestHelper``` instance.
-* twigÂ : Twig Environnment instance.
-* routesÂ : ```Symfony\Component\Routing\RouteCollection``` all routes defined in ```config/routes.yml```.
-* pdfÂ : ```GL\Core\PDF``` instance, wrapper of fPDF.
-* excelÂ : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
+* request : ```Symfony\Component\HttpFoundation\Request``` instance.
+* request_helper : ```GL\Core\RequestHelper``` instance.
+* twig : Twig Environnment instance.
+* routes : ```Symfony\Component\Routing\RouteCollection``` all routes defined in ```config/routes.yml```.
+* pdf : ```GL\Core\PDF``` instance, wrapper of fPDF.
+* excel : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
 * session : ```Symfony\Component\HttpFoundation\Session\Session``` instance.
 * crsf : ```GL\Core\FormCrsf``` instance.
 
+You can add your own services in DI container by adding reference in ```config/services.yml```.
 
+This is Symfony yml format more information here : 
 
-
-
-
-
-
+http://symfony.com/doc/current/components/dependency_injection/introduction.html
 
 
 ### Eloquent ORM
@@ -256,40 +268,40 @@ In your controller you can access all data in this table,
 ```php
 
 // retrieve all entries from test table 
-$tests = Test::all()Â ;
+$tests = Test::all() ;
 
 // retrive only few entries
-$test2 = Test::where('column','=','value')Â ;
+$test2 = Test::where('column','=','value') ;
 ```
 
-For more information about Eloquent ORMÂ :
+For more information about Eloquent ORM :
 
 [Eloquent ORM] (http://laravel.com/docs/eloquent)
 
 
 ## Documentation
 
-For Symfony ComponentÂ : 
+For Symfony Component : 
 
 [Symfony] (http://symfony.com/fr/components)
 
-For EloquentÂ ORMÂ : 
+For Eloquent ORM : 
 
 [Eloquent ORM] (http://laravel.com/docs/eloquent)
 
-For TwigÂ :
+For Twig :
 
 [Twig] (http://twig.sensiolabs.org/documentation)
 
-For SwiftMailerÂ :
+For SwiftMailer :
 
 [Swiftmailer] (http://swiftmailer.org/docs/introduction.html)
 
-For FpdfÂ :
+For Fpdf :
 
 [fpdf] (http://www.fpdf.org/)
 
-For PHPExcelÂ :
+For PHPExcel :
 
 [phpExcel] (https://github.com/PHPOffice/PHPExcel)
 
