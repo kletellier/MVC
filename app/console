@@ -16,8 +16,10 @@ define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 require_once (ROOT . DS . 'library' . DS . 'autoload_composer.php');
 
 use GL\Command\CacheCommand;
+use GL\Command\ModelCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new CacheCommand);
+$application->add(new ModelCommand);
 $application->run();
