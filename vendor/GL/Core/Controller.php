@@ -2,9 +2,13 @@
 
 namespace GL\Core;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route; 
+use Symfony\Component\Routing\Route;   
+use GL\Core\RouteProvider;
 
 class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
@@ -83,6 +87,54 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
     }
     
     /**
+     * Get actual route name
+     * 
+     * @return string actual route
+     */
+    public function getRouteName()
+      { 
+            $name = "";
+            $collection = RouteProvider::GetRouteCollection();	
+            $request = $this->_container->get('request');
+            $url = null;
+            if($request->get('url'))
+            {
+                    $url = $request->get('url');
+            } 
+            $url = '/'.$url;		
+            $context = new RequestContext();			
+            $context->fromRequest($request);
+            $matcher = new UrlMatcher($collection, $context);			 
+            try 
+            {				
+                $parameters = $matcher->match($url); 	 				
+                $name = $parameters['_route'];				   
+            }
+            catch(ResourceNotFoundException $ex)
+            {
+                $name = "";          
+            }
+            catch(Exception $e)
+            {       
+               $name = "";      
+            } 
+
+            return $name;
+      }
+	
+     /**
+      * Add global parameters to parameters array passed to view
+      * 
+      * @param array $arr actual parameters array
+      * @return array with global parameters added to input array
+      */
+    private function GetGlobalVariables($arr)
+    {
+            $exc = new \Application\Shared\GlobalFunction($arr,$this->container);
+            return $exc->execute();
+    }
+    
+    /**
      * Render view provided as PHP page
      * 
      * @param string $view view name to display
@@ -92,7 +144,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
     {           
         // inject all parameters in array
         // use extract function instead of manually extracting
-        extract($inc_parameters);
+        extract($this->GetGlobalVariables($inc_parameters));
         /*foreach($inc_parameters as $keytmp => $valtmp)
         {
             $$keytmp = $valtmp;
@@ -126,7 +178,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
      */
     function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html') )
     {  
-        $buf = $this->get('twig')->render($template,$params,$this->container);
+        $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
         //$buf = $this->getTwigEnvironment()->render($template,$params);
         $response = new Response($buf, $status, $headers);
         $response->send();
@@ -149,7 +201,7 @@ class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
      */
     function renderHtmlTemplate($template,$params = array())
     {         
-        return  $this->get('twig')->render($template,$params,$this->container);
+        return  $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
     } 
     
     /**
