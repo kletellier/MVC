@@ -50,6 +50,7 @@ class PhpTemplateService
                 $str = $file->getRealPath();
                 break;
             }
+             if($str!=""){break;}
         }
         return $str;
     }
