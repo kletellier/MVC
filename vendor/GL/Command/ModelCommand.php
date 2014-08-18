@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ##modelname## extends Model {
 	protected $table = "##tablename##";
-	protected $foreignKey = "##foreignkey##"
+	protected $foreignKey = "##foreignkey##";
     public $timestamps = false;
 	 
 }';

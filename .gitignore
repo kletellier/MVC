@@ -13,3 +13,5 @@ Thumbs.db
 update.bat
 /library/autoload.php
 /nbproject
+commits.local.tsv.txt
+export.txt
