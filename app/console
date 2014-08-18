@@ -1,5 +1,4 @@
 <?php
- 
 
 set_time_limit(0);
 
@@ -9,17 +8,21 @@ set_time_limit(0);
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__))); 
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
+define('DATABASEPATH',ROOT . DS . 'config'.DS.'database.yml'); // Path to database configuration
 
 /**
  * Enable autoload
  */
 require_once (ROOT . DS . 'library' . DS . 'autoload_composer.php');
+require_once (ROOT . DS . 'library' . DS . 'database.php');
 
 use GL\Command\CacheCommand;
 use GL\Command\ModelCommand;
+use GL\Command\ModelsCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new CacheCommand);
 $application->add(new ModelCommand);
+$application->add(new ModelsCommand);
 $application->run();
