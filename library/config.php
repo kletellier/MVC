@@ -18,3 +18,4 @@ define('DEVELOPMENT_ENVIRONMENT',$value['debug']);
 define('BASE_PATH',$value['webpath']);
 define('TWIG_CACHE',$value['twig']['cache']);
 define('AUTORELOADCACHE',$value['twig']['alwaysreload']);
+define('LOCALE',$value['locale']);
