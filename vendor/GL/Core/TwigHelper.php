@@ -30,6 +30,7 @@ class TwigHelper extends \Twig_Extension
     {
         return array(            
 			'frenchdate' => new \Twig_Filter_Method(  $this, 'getFrenchDate'),
+            'trans'=> new \Twig_Filter_Method($this,'trans'),
         );
     }
 	
@@ -45,6 +46,19 @@ class TwigHelper extends \Twig_Extension
             $formatter = new \IntlDateFormatter($lang, \IntlDateFormatter::LONG, \IntlDateFormatter::LONG);
             $formatter->setPattern($pattern);
             return $formatter->format($datetime);
+    }
+
+    /**
+     * Get translation
+     * 
+     * @param string $text tag to find in local file translation
+     * @param string $locale locale provided by config.yml
+     * @return string string found in lang/{locale}.yml
+     */
+    public function trans($text,$locale = LOCALE)
+    {
+        $trans = new \GL\Core\Translator($text,$locale);
+        return $trans->translate();
     }
         
     /**
