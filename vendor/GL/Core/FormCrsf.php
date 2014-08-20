@@ -41,6 +41,8 @@ class FormCrsf
             {
                 $valeur = $this->_request->get($forminp);
             }
+            // clear the token
+            $this->InitCrsf();
         }
         return ($valeur==$token);
     }
