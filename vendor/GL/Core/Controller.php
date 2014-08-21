@@ -10,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;   
 use GL\Core\RouteProvider;
 
-class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
+abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
     protected $_controller;
     protected $_action;	 
