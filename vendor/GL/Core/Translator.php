@@ -10,25 +10,27 @@ use Symfony\Component\Filesystem\Exception\IOException;
  */
 class Translator  
 {
-  protected $text;   
+    
   protected $locale;
+  protected $arr;
 
 
-    public function __construct($text,$locale)
-    {
-        $this->text = $text;
-        $this->locale = $locale;
+    public function __construct()
+    {        
+        $this->locale = LOCALE;
+        $this->arr = array();
+        $this->loadFile();
     }
 
-    /**
-     * Get translation from language file
-     * 
-     * @return string string translated
-     */
-    public function translate()
+    public function setLocale($locale)
     {
-        $ret = "";
+        $this->locale = $locale;
+        $this->loadFile();
+    }
 
+    public function loadFile()
+    {
+        $ret = false;
         try 
         {
             $path = ROOT . DS . "lang" .DS . $this->locale . ".yml"; 
@@ -37,23 +39,37 @@ class Translator
 
             if($exist)
             {
-                $yaml = new Parser();
-                $value = $yaml->parse(file_get_contents($path));             
-                $arr = explode(".", $this->text);
-                $section = $arr[0];
-                $key =$arr[1];
-                if(isset($value[$section][$key]))
-                {
-                    $ret = $value[$section][$key];
-                }
+               $yaml = new Parser();
+               $this->arr = $yaml->parse(file_get_contents($path));             
+               $ret = true;
             }           
         } 
         catch (IOException $e) {
-            //echo "An error occured";
+            $ret = false;
         }
         catch (Exception $e) {
-            
-        }              
+            $ret = false;
+        }   
+        return $ret;
+    }
+
+     
+    /**
+     * Get translation from language file
+     * @param string $text  texte to translate
+     * @return string text translated
+     */
+    public function translate($text)
+    {
+        $ret = "";
+        $tmp = explode(".", $text);
+        $section = $tmp[0];
+        $key =$tmp[1];
+        if(isset($this->arr[$section][$key]))
+        {
+            $ret = $this->arr[$section][$key];
+        }
+                   
         return $ret;
     }
 }

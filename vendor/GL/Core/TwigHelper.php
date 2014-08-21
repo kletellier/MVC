@@ -57,8 +57,9 @@ class TwigHelper extends \Twig_Extension
      */
     public function trans($text,$locale = LOCALE)
     {
-        $trans = new \GL\Core\Translator($text,$locale);
-        return $trans->translate();
+        $trans = $this->container->get('translator');
+        if($locale!=LOCALE){$trans->setLocale($locale);}
+        return $trans->translate($text);
     }
         
     /**
