@@ -56,11 +56,12 @@ class ConfigController extends Controller
 		{
 			 $debug = ($request->get('debug')=='1');
 			 $webpath = $request->get('webpath');
+			 $locale = $request->get('locale');
 			 $cache = ($request->get('twigcache')=='1');
 			 $alwaysreload = ($request->get('alwaysreload')=='1');
 			 
 			 $twigarr = array('cache'=>$cache,'alwaysreload'=>$alwaysreload);			 
-			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'twig'=>$twigarr);
+			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'twig'=>$twigarr,'locale',$locale);
 			 
 			 $dumper = new Dumper();
 
