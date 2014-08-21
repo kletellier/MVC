@@ -56,7 +56,7 @@ class ConfigController extends Controller
 		{
 			 $debug = ($request->get('debug')=='1');
 			 $webpath = $request->get('webpath');
-			 $locale = $request->get('locale');
+			 $locale = $request->get('locale') != "" ? $request->get('locale') : "en";
 			 $cache = ($request->get('twigcache')=='1');
 			 $alwaysreload = ($request->get('alwaysreload')=='1');
 			 
