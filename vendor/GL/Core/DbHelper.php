@@ -10,6 +10,17 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  */
 class DbHelper {
 
+
+     /**
+     * Get Pdo instance for selected connection
+     * @param string $connection
+     * @return PDO object
+     */
+    public static function getPdo($connection="default")
+    {
+        return Capsule::connection($connection)->getPdo();
+    }
+
     /**
      * Start transaction
      * @param string $connection
