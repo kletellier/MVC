@@ -266,7 +266,7 @@ class ##modelname## extends Model {
             $nmodel = str_replace('##modelname##',$mode,$nmodel);
             $nmodel = str_replace('##tablename##',$tablename,$nmodel);             		
 
-            $path = ROOT . DS . "app" . DS . "Application" . DS . "models". DS;
+            $path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
 
             $filename = $path.$mode.".php";
             file_put_contents($filename,$nmodel);	

@@ -78,7 +78,7 @@ class ##modelname## extends Model {
 				$nmodel = str_replace('##tablename##',$name,$nmodel);
 				$nmodel = str_replace('##foreignkey##',$pk,$nmodel);			
 
-				$path = ROOT . DS . "app" . DS . "Application" . DS . "models". DS;
+				$path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
 
 				$filename = $path.$modelname.".php";
 				file_put_contents($filename,$nmodel);		
