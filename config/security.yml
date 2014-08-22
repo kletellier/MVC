@@ -1,0 +1,7 @@
+security:     
+     roles : [ ADMIN , USER , TRUSTED_USER ]
+     table : users
+cookie:
+     token : typeyoursecuritytokenhere
+     name : REMEMBERME
+     duration : 3600

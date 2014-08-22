@@ -11,6 +11,16 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 class DbHelper {
 
 
+    /**
+     * Get Schema Builder
+     * @param string $connection 
+     * @return Schema Builder
+     */
+    public static function getSchema($connection="default")
+    {
+        return Capsule::connection($connection)->getSchemaBuilder();
+    }
+
      /**
      * Get Pdo instance for selected connection
      * @param string $connection
