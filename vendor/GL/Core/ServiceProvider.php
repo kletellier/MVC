@@ -47,6 +47,8 @@ static function GetDependencyContainer($controller)
     $container->register('crsf','\GL\Core\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
     // Inject translator service
     $container->register('translator','\GL\Core\Translator');
+    // Inject Security Service
+    $container->register('security','\GL\Core\SecurityService')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
     // Inject services defined in config/services.yml
     $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
     $loader->load('services.yml');
