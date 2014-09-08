@@ -14,6 +14,9 @@ class SecurityService
 	protected $config;
 	protected $tablename;
 	protected $modelname;
+	protected $tokensalt;
+	protected $cookiename;
+	protected $cookieduration;
 	protected $model = '<?php
  
 namespace Application\Models;
@@ -41,6 +44,10 @@ class ##modelname## extends Model {
 			$value = $yaml->parse(file_get_contents(SECURITYPATH));
 			$this->config = $value;
 			$this->tablename = isset($this->config['security']['table']) ? $this->config['security']['table'] : 'users';
+			$this->tokensalt = $this->config['cookie']['token'];
+			$this->cookiename = $this->config['cookie']['name'];
+			$this->cookieduration = $this->config['cookie']['duration'];
+
 		} 
 		catch (Exception $e) 
 		{
@@ -274,7 +281,7 @@ class ##modelname## extends Model {
 				$user = $inst->find($id);	
 				if($user!=null)
 				{
-					$token = sha1($user->salt . uniqid());
+					$token = sha1($user->salt . $this->tokensalt);
 					$user->remember_token = $token;
 					$user->save();
 				}			 
