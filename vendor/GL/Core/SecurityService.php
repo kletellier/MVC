@@ -202,7 +202,7 @@ class ##modelname## extends Model {
 			$user->nblogin+=1;				 
 			$user->save();			 
 		}
-		return $ret;
+		return $user;
 	}
 
 	/**
