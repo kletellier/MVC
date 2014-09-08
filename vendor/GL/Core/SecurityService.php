@@ -311,7 +311,7 @@ class ##modelname## extends Model {
 			{
 				$token = $this->setRememberToken();	
 			}
-			$ret = new Cookie($this->cookiename, , time() + $this->cookieduration);
+			$ret = new Cookie($this->cookiename, $token, time() + $this->cookieduration);
 		}
 		return $ret;
 	}
