@@ -6,6 +6,7 @@ use GL\Core\DbHelper as DB;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class SecurityService
 {
@@ -281,8 +282,8 @@ class ##modelname## extends Model {
 				$user = $inst->find($id);	
 				if($user!=null)
 				{
-					$token = sha1($user->salt . $this->tokensalt);
-					$user->remember_token = $token;
+					$ret = sha1($user->salt . $this->tokensalt);
+					$user->remember_token = $ret;
 					$user->save();
 				}			 
 			}
@@ -291,6 +292,28 @@ class ##modelname## extends Model {
 		{
 			
 		}
+		return $ret;
+	}
+
+	/**
+	 * Return Remember me Cookie
+	 * @return Symfony\Component\HttpFoundation\Cookie
+	 */
+	public function getCookie()
+	{
+		$ret = null;
+		$id = $this->session->get('session.id');
+
+		if($id!="")
+		{
+			$token = $this->getRememberToken();
+			if($token=="")
+			{
+				$token = $this->setRememberToken();	
+			}
+			$ret = new Cookie($this->cookiename, , time() + $this->cookieduration);
+		}
+		return $ret;
 	}
 
 	/**
