@@ -177,6 +177,27 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Login by remenberme token
+	 * @param string $token rememberme token stored in cookie
+	 * @return boolean
+	 */
+	public function userAutoLogin($token)
+	{
+		$ret = false;
+		$this->logout();
+		$inst = $this->getInstance();
+		$user = $inst->where('remember_token','=',$token)->first();
+		if($user!=null)
+		{		 	
+			$this->session->set('session.id',$user->id);
+			$this->session->save();
+			$user->nblogin+=1;				 
+			$user->save();			 
+		}
+		return $ret;
+	}
+
+	/**
 	 * Return user actually logged
 	 * @return User model instance
 	 */
@@ -210,6 +231,59 @@ class ##modelname## extends Model {
 			$ret = json_decode($user->roles);
 		}
 		return $ret;
+	}
+
+	/**
+	 * Give remenbertoken
+	 * @return string remembertoken
+	 */
+	public function getRememberToken()
+	{
+		$ret = "";
+		try {
+			$inst = $this->getInstance();
+			$id = $this->session->get('session.id');
+			if($id!="")
+			{
+				$user = $inst->find($id);	
+				if($user!=null)
+				{
+					$ret = $user->remember_token;
+				}			 
+			}
+			
+		} catch (Exception $e) {
+			
+		}
+		return $ret;
+	}
+
+	/**
+	 * Set cookie remenber token
+	 * @return string
+	 */
+	public function setRememberToken()
+	{
+		$ret = "";
+		try 
+		{
+			$inst = $this->getInstance();
+			$id = $this->session->get('session.id');
+			if($id!="")
+			{
+				$user = $inst->find($id);	
+				if($user!=null)
+				{
+					$token = sha1($user->salt . uniqid());
+					$user->remember_token = $token;
+					$user->save();
+				}			 
+			}
+		} 
+		catch (Exception $e) 
+		{
+			
+		}
 	}
 
 	/**
