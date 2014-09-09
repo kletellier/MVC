@@ -383,7 +383,7 @@ class ##modelname## extends Model {
 			    $table->string('key');
 			    $table->integer('enabled')->default(0);
 			    $table->rememberToken();
-			    $table->integer('profile');
+			    $table->integer('profile')->default(-1);
 			    $table->integer('nblogin')->default(0);
 			    $table->timestamps();
 			});
