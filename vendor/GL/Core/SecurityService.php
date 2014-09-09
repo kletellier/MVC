@@ -317,7 +317,7 @@ class ##modelname## extends Model {
 				$user = $inst->find($id);	
 				if($user!=null)
 				{
-					$ret = sha1($user->salt . $this->tokensalt);
+					$ret = sha1($user->salt . $this->tokensalt . uniqid());
 					$user->remember_token = $ret;
 					$user->save();
 				}			 
