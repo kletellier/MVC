@@ -127,6 +127,15 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Return remember me cookie name
+	 * @return string
+	 */
+	public function getRememberCookieName()
+	{
+		return $this->cookiename;
+	}
+
+	/**
 	 * Create user
 	 * @param string $login 
 	 * @param string $email 
