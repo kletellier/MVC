@@ -144,7 +144,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     private function getResponse($content,$status = 200, $headers = array('Content-Type' => 'text/html'))
     {
         $response = new Response($content, $status, $headers);
-        foreach ($this->_cookie as $cookie) {
+        foreach ($this->_cookies as $cookie) {
             $response->headers->setCookie($cookie);
         }         
         return $response;
