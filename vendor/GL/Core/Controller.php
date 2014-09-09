@@ -9,11 +9,13 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;   
 use GL\Core\RouteProvider;
+use Symfony\Component\HttpFoundation\Cookie;
 
 abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
     protected $_controller;
     protected $_action;	 
+    protected $_cookies;
     
     /**
      * Controller constructor
@@ -25,6 +27,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     {
         $this->_controller = ucfirst($controller);
         $this->_action = $action;
+        $this->_cookies = array();
     }
     
     /**
@@ -133,6 +136,29 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
             $exc = new \Application\Shared\GlobalFunction($arr,$this->container);
             return $exc->execute();
     }
+
+    /**
+     * Return instance of Symfony Response Component
+     * @return type
+     */
+    private function getResponse($content,$status = 200, $headers = array('Content-Type' => 'text/html'))
+    {
+        $response = new Response($content, $status, $headers);
+        foreach ($this->_cookie as $cookie) {
+            $response->headers->setCookie($cookie);
+        }         
+        return $response;
+    }
+
+    /**
+     * Add cookie to  response
+     * @param type \Symfony\Component\HttpFoundation\Cookie $cookie 
+     * @return void
+     */
+    public function addCookie( \Symfony\Component\HttpFoundation\Cookie $cookie)
+    {
+        array_push($this->_cookies, $cookie);
+    }
     
     /**
      * Render view provided as PHP page
@@ -163,7 +189,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderText($text,$status = 200, $headers = array('Content-Type' => 'text/html'))
     {
-        $response = new Response($text, $status, $headers);        
+        $response = $this->getResponse($text,$status,$headers);             
         $response->send();
     }
 
@@ -180,7 +206,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     {  
         $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
         //$buf = $this->getTwigEnvironment()->render($template,$params);
-        $response = new Response($buf, $status, $headers);
+        $response = $this->getResponse($buf,$status,$headers);
         $response->send();
     }
     

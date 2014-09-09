@@ -206,6 +206,31 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Autologin script called from DI 
+	 * @return void
+	 */
+	public function autologin()
+	{
+		$id = $this->session->get('session.id');
+		if($id=="")
+		{
+			$inst = $this->getInstance();
+			$token = $this->request->cookies->get($this->cookiename); 
+			if($token!="")
+			{
+				$user = $inst->where('remember_token','=',$token)->first();
+				if($user!=null)
+				{		 	
+					$this->session->set('session.id',$user->id);
+					$this->session->save();
+					$user->nblogin+=1;				 
+					$user->save();			 
+				}
+			}			
+		}		
+	}
+
+	/**
 	 * Return user actually logged
 	 * @return User model instance
 	 */
@@ -241,6 +266,7 @@ class ##modelname## extends Model {
 		return $ret;
 	}
 
+	
 	/**
 	 * Give remenbertoken
 	 * @return string remembertoken
