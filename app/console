@@ -21,6 +21,7 @@ use GL\Command\CacheCommand;
 use GL\Command\ModelCommand;
 use GL\Command\ModelsCommand;
 use GL\Command\SecurityCommand;
+use GL\Command\UserCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -28,4 +29,5 @@ $application->add(new CacheCommand);
 $application->add(new ModelCommand);
 $application->add(new ModelsCommand);
 $application->add(new SecurityCommand);
+$application->add(new UserCommand);
 $application->run();
