@@ -167,6 +167,40 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Check if an user is created with specified login
+	 * @param string $login login to test 
+	 * @return boolean
+	 */
+	public function loginExist($login)
+	{
+		$ret = false;		 
+		$inst = $this->getInstance();
+		$user = $inst->where('login','=',$login)->first();
+		if($user!=null)
+		{
+			$ret = true;			 
+		}
+		return $ret;
+	}
+
+	/**
+	 * Check if an user is created with specified email
+	 * @param string $email email to check
+	 * @return boolean
+	 */
+	public function emailExist($email)
+	{
+		$ret = false;		 
+		$inst = $this->getInstance();
+		$user = $inst->where('email','=',$email)->first();
+		if($user!=null)
+		{
+			$ret = true;			 
+		}
+		return $ret;
+	}
+
+	/**
 	 * Return true if user is logged
 	 * @param string $login user login
 	 * @param string $password user password
