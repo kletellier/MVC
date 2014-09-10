@@ -219,6 +219,43 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     }
 
     /**
+     * Function to allow access to logged user and test roles
+     * @param array $roles array of roles allowed to access resource
+     * @return void 403 error if not authorized
+     */
+    function AccessTest($roles = array())
+    {
+        $id = $this->get('session')->get('session.id');
+        if($id=="")
+        {
+            $this->isUnauthorized();
+        }
+        else
+        {
+            if(count($roles)>=0)
+            {
+                $allowed = false;
+                $ss = $this->get('security');
+                $userroles = $ss->userRoles();
+                foreach ($roles as $role ) 
+                {
+                    if(in_array($role, $userroles))
+                    {
+                        $allowed = true;
+                        break;
+                    }
+                }             
+                if(!$allowed)
+                {
+                    $this->isUnauthorized();
+                }   
+            }
+        }       
+        
+    }
+
+
+    /**
      * Function render html text with Twig template parsing 
      * 
      * @param string $template Twig template to parse
