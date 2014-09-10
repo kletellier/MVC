@@ -232,7 +232,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         }
         else
         {
-            if(count($roles)>=0)
+            if(count($roles)>0)
             {
                 $allowed = false;
                 $ss = $this->get('security');

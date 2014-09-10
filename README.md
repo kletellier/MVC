@@ -234,6 +234,8 @@ You have many services on each container :
 * excel : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
 * session : ```Symfony\Component\HttpFoundation\Session\Session``` instance.
 * crsf : ```GL\Core\FormCrsf``` instance.
+* translator : ```GL\Core\Translator``` instance.
+* security : ```GL\Core\SecurityService``` instance.
 
 You can add your own services in DI container by adding reference in ```config/services.yml```.
 
