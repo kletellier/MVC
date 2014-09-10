@@ -25,4 +25,5 @@ $application = new Application();
 $application->add(new CacheCommand);
 $application->add(new ModelCommand);
 $application->add(new ModelsCommand);
+$application->add(new SecurityCommand);
 $application->run();
