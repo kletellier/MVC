@@ -61,7 +61,7 @@ class ##modelname## extends Model {
             {
                 throw new \Exception("you must specify model name");
             }            
-            $question = new Question('Please enter the foreign key name ('.$foreignkey.') : ', $foreignkey);
+            $question = new Question('Please enter the primary key name ('.$foreignkey.') : ', $foreignkey);
             $foreignkey = $helper->ask($input, $output, $question);
             if($foreignkey=="")
             {
