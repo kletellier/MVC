@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use GL\Core\SecurityService;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityCommand extends Command
 {	 
@@ -25,7 +27,7 @@ class SecurityCommand extends Command
     {        
         try 
         {
-            $ss = new SecurityService(null,null);
+            $ss = new SecurityService(new Session(),new Request());
             $output->writeln('Create users table and model');
             $ss->createTable();			 
         } 

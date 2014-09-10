@@ -9,6 +9,7 @@ define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__))); 
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('DATABASEPATH',ROOT . DS . 'config'.DS.'database.yml'); // Path to database configuration
+define('SECURITYPATH',ROOT . DS . 'config'.DS.'security.yml'); // Path to security configuration
 
 /**
  * Enable autoload
@@ -19,6 +20,7 @@ require_once (ROOT . DS . 'library' . DS . 'database.php');
 use GL\Command\CacheCommand;
 use GL\Command\ModelCommand;
 use GL\Command\ModelsCommand;
+use GL\Command\SecurityCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
