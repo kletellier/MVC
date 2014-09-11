@@ -314,12 +314,16 @@ class ##modelname## extends Model {
 	 * Give remenbertoken
 	 * @return string remembertoken
 	 */
-	public function getRememberToken()
+	public function getRememberToken($id="")
 	{
 		$ret = "";
 		try {
 			$inst = $this->getInstance();
-			$id = $this->session->get('session.id');
+			if($id=="")
+			{
+				$id = $this->session->get('session.id');
+			}
+			
 			if($id!="")
 			{
 				$user = $inst->find($id);	
@@ -339,13 +343,16 @@ class ##modelname## extends Model {
 	 * Set cookie remenber token
 	 * @return string
 	 */
-	public function setRememberToken()
+	public function setRememberToken($id="")
 	{
 		$ret = "";
 		try 
 		{
 			$inst = $this->getInstance();
-			$id = $this->session->get('session.id');
+			if($id=="")
+			{
+				$id = $this->session->get('session.id');
+			}
 			if($id!="")
 			{
 				$user = $inst->find($id);	
