@@ -295,6 +295,26 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Login from form request 
+	 * @param string $logininput name of login input in submited form
+	 * @param type $pwdinput name of password input in submited form
+	 * @return boolean true if user is logged
+	 */
+	public function formLogin($logininput = "login",$pwdinput = "password")
+	{
+		$ret = false;
+		try {
+			$login = $this->request->get($logininput);
+			$password = $this->request->get($pwdinput);
+			$ret = $this->userLogin($login,$password);
+			
+		} catch (Exception $e) {
+			$ret = false;
+		}
+		return $ret;
+	}
+
+	/**
 	 * return array of roles for user logged
 	 * @return array
 	 */
