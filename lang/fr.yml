@@ -1,0 +1,38 @@
+section:
+    test: "coucou"
+    test2: "c'est moi"
+global:
+    disable : "Désactiver"
+    enable : "Activer"
+    save : "Sauver"
+    linenumber : "N° de ligne"
+    file : "Fichier"
+    line : "Ligne"
+    message : "Message"
+error:
+    403title : "Erreur 403"
+    403message : "Non autorisé"
+    404title : "Erreur 404"
+    404message : "Page non trouvée ! "
+    500title : "Erreur 500"
+    500warnings : "Warnings"
+configuration:
+    title: "Configuration globale"
+    debug : "Mode debug : "
+    rootpath : "Racine du site"
+    twigcache : "Activer le cache Twig : "
+    reload : "Toujours recharger les templates :"
+    locale : "Traduction"
+databasecfg:
+    title : "Configuration de la base"
+    server : "Serveur"
+    port : "Port"
+    database : "Base"
+    user : "Utilisateur"
+    password : "Mot de passe"
+mailcfg:
+    title : "Configuration des mails"
+    server : "Serveur"
+    port : "Port"
+    user : "Utilisateur"
+    password : "Mot de passe"
