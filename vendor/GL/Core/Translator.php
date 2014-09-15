@@ -69,6 +69,10 @@ class Translator
         {
             $ret = $this->arr[$section][$key];
         }
+        else
+        {
+            $ret = "{{".$text."}}";
+        }
                    
         return $ret;
     }
