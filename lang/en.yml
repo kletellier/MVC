@@ -18,7 +18,7 @@ error:
     500warnings : "Warnings"
 configuration:
     title: "Application configuration"
-    debugmode : "Debug mode : "
+    debug : "Debug mode : "
     rootpath : "Web rootpath"
     twigcache : "Enable Twig cache : "
     reload : "Always reload twig template:"
