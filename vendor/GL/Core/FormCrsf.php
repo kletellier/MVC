@@ -30,7 +30,7 @@ class FormCrsf
      *   
      * @param type $forminp The name of form input or if not found value to compare
      */
-    public function VerifyCrsf($forminp)
+    public function VerifyCrsf($forminp = "crsftoken")
     {
         $session = $this->_session;
         $token = $session->get('crsftoken');
