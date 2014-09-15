@@ -1,3 +1,38 @@
 section:
     test: "hello"
     test2: "it's me"
+global:
+    disable : "Disable"
+    enable : "Enable"
+    save : "Save"
+    linenumber : "Line number"
+    file : "File"
+    line : "Line"
+    message : "Message"
+error:
+    403title : "403 Error"
+    403message : "Unauthorized"
+    404title : "404 Error"
+    404message : "Page not found ! "
+    500title : "500 Error"
+    500warnings : "Warnings"
+configuration:
+    title: "Application configuration"
+    debugmode : "Debug mode : "
+    rootpath : "Web rootpath"
+    twigcache : "Enable Twig cache : "
+    reload : "Always reload twig template:"
+    locale : "locale"
+databasecfg:
+    title : "Database configuration"
+    server : "Server"
+    port : "Port"
+    database : "Database"
+    user : "User"
+    password : "Password"
+mailcfg:
+    title : "Mail configuration"
+    server : "Server"
+    port : "Port"
+    user : "User"
+    password : "Password"
