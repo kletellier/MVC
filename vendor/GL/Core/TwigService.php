@@ -3,11 +3,11 @@
 namespace GL\Core;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * Load Twig Environment
  *
- * @author kletellier
  */
 class TwigService
 {
@@ -59,7 +59,14 @@ class TwigService
         $twigenv = new \Twig_Environment($twigloader,$arrcache);        
         $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
         // add shared TwigHelper
-        $twigenv->addExtension(new \Application\Shared\SharedTwigHelper($this->_container));
+        $yaml = new Parser();
+        $value = $yaml->parse(file_get_contents(TWIGHELPER)); 
+        foreach($value as $name => $th)
+        {
+            $class = $th['class'];
+            $twigenv->addExtension(new $class($this->_container));
+        }
+        //$twigenv->addExtension(new \Application\Shared\SharedTwigHelper($this->_container));
         if(DEVELOPMENT_ENVIRONMENT)
         {
           $twigenv->addExtension(new \Twig_Extension_Debug());  

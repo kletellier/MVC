@@ -14,6 +14,7 @@ define('FPDF_FONTPATH',ROOT .DS . 'vendor' . DS . 'Fpdf' . DS .'font' .DS); // F
 define('TMPPATH',ROOT . DS . 'tmp'); // Temporary path (using for xls export)
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
+define('TWIGHELPER',ROOT . DS . 'config'.DS.'twig.yml'); // DI service definition directory  path
 /**
  * Bootstrap application , load config file, start Eloquent ORM,  parse Request
  */
