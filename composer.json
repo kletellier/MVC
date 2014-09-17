@@ -3,27 +3,26 @@
         "vendor-dir": "plugins"
     },
     "require": {
-		"php": ">=5.3.3",
-                "illuminate/database": "*",
-		"twig/twig":"1.*",
-		"swiftmailer/swiftmailer": "5.2.*@dev",
-		"symfony/http-foundation": "2.5.*",
-		"symfony/class-loader": "2.6.*@dev",
-		"symfony/finder": "2.6.*@dev",
-		"symfony/filesystem": "2.6.*@dev",
-		"symfony/yaml": "2.6.*@dev",
-		"symfony/routing": "2.6.*@dev",
-		"symfony/stopwatch": "2.6.*@dev",
-                "symfony/config": "2.6.*@dev",
-                "symfony/console": "2.6.*@dev",
-		"psr/log": "1.0.*@dev",
-		"symfony/dependency-injection": "2.6.*@dev"
-	 
+        "php": ">=5.3.3",
+        "symfony/http-foundation": "2.5.*",
+        "symfony/routing": "2.6.*@dev",
+        "symfony/yaml": "2.6.*@dev",
+        "illuminate/database": "*",
+        "twig/twig":"1.*",
+        "symfony/dependency-injection": "2.6.*@dev",
+        "symfony/stopwatch": "2.6.*@dev",
+        "swiftmailer/swiftmailer": "5.2.*@dev",     
+        "symfony/class-loader": "2.6.*@dev",
+        "symfony/finder": "2.6.*@dev",
+        "symfony/filesystem": "2.6.*@dev",          
+        "symfony/config": "2.6.*@dev",
+        "symfony/console": "2.6.*@dev",
+        "psr/log": "1.0.*@dev"       
     },
     "autoload": {
         "psr-0": {
-            "GL" : "vendor/",
             "Application" : "app/",
+            "GL" : "vendor/",            
             "Fpdf" : "vendor/",
             "PHPExcel" : "vendor/PHPExcel/Classes/"
             } 
