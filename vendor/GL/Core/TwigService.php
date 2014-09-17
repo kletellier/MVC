@@ -4,6 +4,7 @@ namespace GL\Core;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Load Twig Environment
@@ -72,6 +73,8 @@ class TwigService
           $twigenv->addExtension(new \Twig_Extension_Debug());  
         }
         $twigenv->addTokenParser(new \GL\Core\TwigRenderToken());
+
+
         return $twigenv;
     }
     
@@ -92,9 +95,17 @@ class TwigService
      * @param array $params parameters array for template
      */
     public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
-    {
-        $this->setContainer($container);
-        $env = $this->getTwigEnvironment();        
-        return $env->render($template, $params);
+    {        
+        $stopwatch = new Stopwatch();
+        $stopwatch->start('render');
+        $this->setContainer($container);         
+        $env = $this->getTwigEnvironment();                 
+        $ret =  $env->render($template, $params);
+        $event = $stopwatch->stop('render');
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            echo "<!-- generated  twig  ".$event->getDuration()." ms -->";
+        }        
+        return $ret;
     }
 }
