@@ -270,7 +270,8 @@ class ControllerResolver
                     set_error_handler(array(&$this, 'ErrorHandler'));   
                     // fatal error handling
                     register_shutdown_function(array(&$this,'ShutdownError'));
-                    call_user_func_array(array($dispatch,$this->_action),$this->getArguments($dispatch));                  
+                    $params = $this->getArguments($dispatch);
+                    call_user_func_array(array($dispatch,$this->_action),$params);                   
                 }
                 else 
                 {
