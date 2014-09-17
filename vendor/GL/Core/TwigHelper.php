@@ -19,21 +19,23 @@ class TwigHelper extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'url'  => new \Twig_Function_Method($this, 'url'), 
-            'crsf' => new \Twig_Function_Method($this,'crsf'),
+            'url'  => new \Twig_Function_Method($this, 'url',array(
+            'is_safe' => array('html'))), 
+            'crsf' => new \Twig_Function_Method($this,'crsf',array(
+            'is_safe' => array('html'))), 
             'getcrsfinput' => new \Twig_Function_Method($this,'getcrsfinput',array(
             'is_safe' => array('html'))),
         );
     }
-	
+    
     public function getFilters()
     {
         return array(            
-			'frenchdate' => new \Twig_Filter_Method(  $this, 'getFrenchDate'),
+            'frenchdate' => new \Twig_Filter_Method(  $this, 'getFrenchDate'),
             'trans'=> new \Twig_Filter_Method($this,'trans'),
         );
     }
-	
+    
     /**
      * Function for returning date in french format like Lundi 12 Mai 1999 23:12
      * @param \Datetime $datetime date to convert
