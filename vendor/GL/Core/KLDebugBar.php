@@ -37,9 +37,14 @@ class KLDebugBar extends DebugBar
         $this->addCollector(new ExceptionsCollector());
         try 
         {
-            $db = Capsule::connection("default")->getPdo();
-            $pdo = new TraceablePDO($db);
-            $this->addCollector(new PDOCollector($pdo));
+            $conn = Capsule::connection("default");
+            if($conn!=null)
+            {
+                $db = $conn->getPdo();
+                $pdo = new TraceablePDO($db);
+                $this->addCollector(new PDOCollector($pdo));
+            }
+           
         } 
         catch (Exception $e) 
         {
