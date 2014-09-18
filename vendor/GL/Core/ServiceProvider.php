@@ -20,7 +20,7 @@ class ServiceProvider
     * @param bool $reset whether to forcibly rebuild the entire container
     * @return \Symfony\Component\DependencyInjection\ContainerBuilder
     */
-    public static function GetDependencyContainer($controller,$reset = FALSE) {
+    public static function GetDependencyContainer($controller = "",$reset = FALSE) {
     if ($reset || self::$singleton === NULL) {
     $c = new self();
     self::$singleton = $c->getContainer($controller);
