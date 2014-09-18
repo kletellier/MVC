@@ -66,6 +66,7 @@ class TwigService
         $twigloader = new \Twig_Loader_Filesystem($this->getPathArray());
         $twigenv = new \Twig_Environment($twigloader,$arrcache);        
         $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
+         $twigenv->addExtension(new \GL\Core\TwigDebugBar($this->_container));
         // add shared TwigHelper
         $yaml = new Parser();
         $value = $yaml->parse(file_get_contents(TWIGHELPER)); 
