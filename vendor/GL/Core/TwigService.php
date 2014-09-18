@@ -21,7 +21,14 @@ class TwigService
          $this->_container = null;
      }
      
-     
+     /**
+      * Fix controller value from container
+      * @return void
+      */
+     private function FixController()
+     {        
+        $this->_controller = $this->_container->getParameter('controller');
+     }
     
      /**
      * Function for Twig path searching
@@ -32,6 +39,8 @@ class TwigService
      */
     private function getPathArray()
     {
+        
+
         if(isset($this->_controller))
         {
             $viewctlpath = TWIGPATH . DS . ucfirst($this->_controller);
@@ -41,6 +50,7 @@ class TwigService
         {           
             $arr = array(TWIGPATH);
         }        
+
         return $arr;
     }
     
@@ -52,7 +62,7 @@ class TwigService
     private function getTwigEnvironment()
     {   
         $arrcache = array();
-        
+       
         if(TWIG_CACHE )
         {
             $cachepath = CACHEPATH . DS . 'twig';            
@@ -104,9 +114,11 @@ class TwigService
      */
     public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
     {        
+          
         $stopwatch = new Stopwatch();
         $stopwatch->start('render');
-        $this->setContainer($container);         
+        $this->setContainer($container);  
+        $this->FixController();
         $env = $this->getTwigEnvironment();                 
         $ret =  $env->render($template, $params);
         $event = $stopwatch->stop('render');
