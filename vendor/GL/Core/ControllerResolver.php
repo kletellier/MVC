@@ -16,7 +16,7 @@ use GL\Core\ServiceProvider;
 class ControllerResolver
 {
     protected $_controller;
-    protected $_action;	 
+    protected $_action;  
     protected $_args;
     protected $_errors;
     protected $_container;
@@ -29,7 +29,7 @@ class ControllerResolver
      * @param Array $args Arguments extracted from route
      * 
      */
-	function __construct($controller, $action,$args) 
+  function __construct($controller, $action,$args) 
         {
             $this->_controller = ucfirst($controller);
             $this->_action = $action;
@@ -38,7 +38,7 @@ class ControllerResolver
             // return DI Container
             $this->_container = ServiceProvider::GetDependencyContainer($controller);
             $this->FixController();
-	}
+  }
         
         /**
          * 
@@ -50,13 +50,13 @@ class ControllerResolver
          */
         private function get500Response($message,$file,$line)
         {             
-            ob_clean();
+            ob_clean();            
             $params = array('message'=>$message,'file'=>$file,'line'=>$line,'errors'=>$this->_errors);  
             $this->_controller = "error";
             $this->_action = "error500";
             $this->_args = $params;
             $this->FixController();
-            $this->execute();                
+            return  $this->execute();                
         }
         
          /**
@@ -71,7 +71,7 @@ class ControllerResolver
             $this->_action = "error404";
             $this->_args = array();
             $this->FixController();
-            $this->execute();           
+            return $this->execute();           
         }
         
         /**
@@ -84,7 +84,7 @@ class ControllerResolver
             $this->_action = "error403";
             $this->_args = array();
             $this->FixController();
-            $this->execute(); 
+            return $this->execute(); 
         }
         
         /**
@@ -115,7 +115,8 @@ class ControllerResolver
                     $line = "";                    
                 }
                 
-                $this->get500Response($message, $fichier, $line);                   
+                $response = $this->get500Response($message, $fichier, $line); 
+                $response->send();                  
                 exit(0);
             }
             else
@@ -123,7 +124,8 @@ class ControllerResolver
                 if(!empty($this->_errors) && DEVELOPMENT_ENVIRONMENT)
                 {
                     $message = "Some non fatal error are detecting.";
-                    $this->get500Response($message, "", "");    
+                    $response =$this->get500Response($message, "", "");  
+                    $response->send();  
                     exit(0);
                 }
             }
@@ -214,7 +216,7 @@ class ControllerResolver
         * @return array
         */
         private function RetrieveArguments(array $attributes, array $parameters)
-        {	
+        { 
             $arguments = array();
             foreach ($parameters as $param) 
             {
@@ -237,12 +239,12 @@ class ControllerResolver
         {
             $ret = "";
             try 
-            {				
+            {       
                 $controllerName = $this->getControllerName();
                 $dispatch = $this->getInstance($controllerName);
                 if ((int)method_exists($controllerName, $this->_action)) 
-                {		            
-                    $ret = call_user_func_array(array($dispatch,$this->_action),$this->getArguments($dispatch));				
+                {               
+                    $ret = call_user_func_array(array($dispatch,$this->_action),$this->getArguments($dispatch));        
                 } else 
                 {
                     $ret = "";
@@ -254,43 +256,46 @@ class ControllerResolver
             }
             return $ret;
         }              
-	
+  
       /**
        * Execute action in selected controller (normally return a Response object)
        */
-	function execute()
-	{				 
+      function execute()
+      {        
+            $response = null;
             try 
-            {				
+            {       
                 $controllerName = $this->getControllerName();
-                $dispatch = $this->getInstance($controllerName);                               
+                $dispatch = $this->getInstance($controllerName);  
             
                 if ((int)method_exists($controllerName, $this->_action)) 
-                {	
+                { 
                     // non fatal error handling
                     set_error_handler(array(&$this, 'ErrorHandler'));   
                     // fatal error handling
                     register_shutdown_function(array(&$this,'ShutdownError'));
                     $params = $this->getArguments($dispatch);
-                    call_user_func_array(array($dispatch,$this->_action),$params);                   
+
+                    $response = call_user_func_array(array($dispatch,$this->_action),$params);                   
                 }
                 else 
                 {
-                    $this->get404Response();                   
+                    $response = $this->get404Response();                   
                 } 
             }
             catch(\GL\Core\AccessDeniedHttpException $ad)
             {
-                $this->get403Response();
+                $response = $this->get403Response();
             }
             catch(Exception $ex)
             {                   
-               $this->get500Response($ex->getMessage()  , "", "");  
+               $response = $this->get500Response($ex->getMessage()  , "", "");  
             }
-	}        
-	
-	function __destruct() 
+            return $response;
+     }        
+  
+     function __destruct() 
         {
-		
-	}
+    
+       }
 }

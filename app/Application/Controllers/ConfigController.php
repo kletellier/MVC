@@ -40,7 +40,7 @@ class ConfigController extends Controller
 		
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(DATABASEPATH));		  
-		$this->render('database.html.twig',array('database'=>$value));
+		return $this->render('database.html.twig',array('database'=>$value));
 	}
 
 	public function application()
@@ -76,7 +76,7 @@ class ConfigController extends Controller
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(CONFIGPATH));		
 		 
-		$this->render('application.html.twig',array('application'=>$value));	
+		return $this->render('application.html.twig',array('application'=>$value));	
 	}
 	
 	public function mail()
@@ -112,7 +112,7 @@ class ConfigController extends Controller
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(MAILPATH));		
 		 
-		$this->render('mail.html.twig',array('mail'=>$value));	
+		return $this->render('mail.html.twig',array('mail'=>$value));	
 	}
         
 }

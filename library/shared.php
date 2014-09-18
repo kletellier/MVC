@@ -20,13 +20,13 @@ function setReporting()
 {
     if (DEVELOPMENT_ENVIRONMENT == true) 
     {
-	error_reporting(E_ALL & ~E_ERROR);
-	ini_set('display_errors','On');
+    error_reporting(E_ALL & ~E_ERROR);
+    ini_set('display_errors','On');
     } 
     else 
     {
-	error_reporting(E_ALL & ~E_ERROR);
-	ini_set('display_errors','Off');
+    error_reporting(E_ALL & ~E_ERROR);
+    ini_set('display_errors','Off');
     }
 }
 
@@ -40,36 +40,42 @@ function setReporting()
  */
 function HandleRequest($url)
 {        
-	$container = ServiceProvider::GetDependencyContainer();  
+    $container = ServiceProvider::GetDependencyContainer();  
     $collection = RouteProvider::GetRouteCollection();  
     $context = new RequestContext();    
     $context->fromRequest($container->get('request'));
     $matcher = new UrlMatcher($collection, $context);   
-        
-	try 
-	{				
-            $parameters = $matcher->match($url); 		
+    $response = null;
+
+    try 
+    {               
+            $parameters = $matcher->match($url);        
             $controller = $parameters['controller'];
             $action = $parameters['action'];                    
-		
-            $cr = new ControllerResolver($controller,$action,$parameters);
-            $cr->execute();		 
-	}
-	catch(ResourceNotFoundException $ex)
-	{
+        
+            $cr = new ControllerResolver($controller,$action,$parameters);             
+            $response = $cr->execute();     
+            
+    }
+    catch(ResourceNotFoundException $ex)
+    {
             ob_clean();
             // return not found controller action
             $cr404 = new ControllerResolver("error", "error404", array());
-            $cr404->execute();            
-	}
-	catch(Exception $e)
-	{       
+            $response = $cr404->execute();            
+    }
+    catch(Exception $e)
+    {       
             ob_clean();
             // return error controller action
              $params = array('message'=>$e->getMessage(),'file'=>'','line'=>'','errors'=>array()); 
              $cr500 = new ControllerResolver("error", "error500", $params);
-             $cr500->execute();           
-	}
+             $response = $cr500->execute();           
+    }
+
+    if ($response instanceof Response) {
+        $response->send();
+    }
 }  
 
 ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 

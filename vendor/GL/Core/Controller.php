@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
     protected $_controller;
-    protected $_action;	 
+    protected $_action;  
     protected $_cookies;
     
     /**
@@ -97,21 +97,21 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     public function getRouteName()
       { 
             $name = "";
-            $collection = RouteProvider::GetRouteCollection();	
+            $collection = RouteProvider::GetRouteCollection();  
             $request = $this->_container->get('request');
             $url = null;
             if($request->get('url'))
             {
                     $url = $request->get('url');
             } 
-            $url = '/'.$url;		
-            $context = new RequestContext();			
+            $url = '/'.$url;        
+            $context = new RequestContext();            
             $context->fromRequest($request);
-            $matcher = new UrlMatcher($collection, $context);			 
+            $matcher = new UrlMatcher($collection, $context);            
             try 
-            {				
-                $parameters = $matcher->match($url); 	 				
-                $name = $parameters['_route'];				   
+            {               
+                $parameters = $matcher->match($url);                    
+                $name = $parameters['_route'];                 
             }
             catch(ResourceNotFoundException $ex)
             {
@@ -124,7 +124,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
 
             return $name;
       }
-	
+    
      /**
       * Add global parameters to parameters array passed to view
       * 
@@ -171,13 +171,9 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         // inject all parameters in array
         // use extract function instead of manually extracting
         extract($this->GetGlobalVariables($inc_parameters));
-        /*foreach($inc_parameters as $keytmp => $valtmp)
-        {
-            $$keytmp = $valtmp;
-        }*/
         $ts = new PhpTemplateService($this->container);
-        $ret = $ts->getPathTemplate($view);		 
-        require($ret);		 	
+        $ret = $ts->getPathTemplate($view);      
+        require($ret);          
     }
          
     /**
@@ -190,7 +186,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     function renderText($text,$status = 200, $headers = array('Content-Type' => 'text/html'))
     {
         $response = $this->getResponse($text,$status,$headers);             
-        $response->send();
+        return $response;
     }
 
     /**
@@ -205,9 +201,8 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html') )
     {  
         $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
-        //$buf = $this->getTwigEnvironment()->render($template,$params);
         $response = $this->getResponse($buf,$status,$headers);
-        $response->send();
+        return $response;
     }
     
     /**
@@ -276,7 +271,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     {
         $response = new Response(json_encode($var));
         $response->headers->set('Content-Type', 'application/json');
-        $response->send();
+        return $response;
     }
     
     /**
@@ -314,7 +309,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         if($url!="")
         {
             $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
-            $response->send();
+            return $response;
         }
     }
     

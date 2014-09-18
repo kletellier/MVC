@@ -8,13 +8,13 @@ class DefaultController extends Controller
 	public function hello($name)
 	{                              
 		$text = "Hello " .$name . " !";
-		$this->render('index.html.twig',array('text'=>$text));	
+		return $this->render('index.html.twig',array('text'=>$text));	
 	}
 	
 	public function testdb()
 	{
 		$test = \Application\Models\Test::all();
-		$this->renderJSON($test);
+		return $this->renderJSON($test);
 	
 	}
         
@@ -34,7 +34,7 @@ class DefaultController extends Controller
             
             $contents = $objPHPExcel->GetBuffer();
 
-            $this->renderText($contents, "200", array('Content-Type' => 'application/vnd.ms-excel','Content-Disposition' => 'attachment; filename=excelfile.xls '));
+            return $this->renderText($contents, "200", array('Content-Type' => 'application/vnd.ms-excel','Content-Disposition' => 'attachment; filename=excelfile.xls '));
           
         }
         
@@ -46,7 +46,7 @@ class DefaultController extends Controller
             $pdf->SetFont('Arial','B',16);
             $pdf->Cell(40,10,'Hello World !');
             $buffer = $pdf->GetBuffer();	
-            $this->renderText($buffer, "200", array('Content-Type' => 'application/pdf','Content-Disposition' => 'attachment; filename=pdffile.pdf '));
+            return $this->renderText($buffer, "200", array('Content-Type' => 'application/pdf','Content-Disposition' => 'attachment; filename=pdffile.pdf '));
         }
         
 }
