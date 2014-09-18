@@ -17,7 +17,8 @@
         "symfony/filesystem": "2.6.*@dev",          
         "symfony/config": "2.6.*@dev",
         "symfony/console": "2.6.*@dev",
-        "psr/log": "1.0.*@dev"       
+        "psr/log": "1.0.*@dev",
+        "maximebf/debugbar": "1.*"         
     },
     "autoload": {
         "psr-0": {
@@ -26,5 +27,15 @@
             "Fpdf" : "vendor/",
             "PHPExcel" : "vendor/PHPExcel/Classes/"
             } 
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php app/console debugbar:install",
+            "php app/console cache:clear"
+        ],
+        "post-update-cmd": [
+            "php app/console debugbar:install",
+            "php app/console cache:clear"
+        ]
     }
 }

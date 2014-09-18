@@ -267,7 +267,11 @@ class ControllerResolver
             {       
                 $controllerName = $this->getControllerName();
                 $dispatch = $this->getInstance($controllerName);  
-            
+                if(DEVELOPMENT_ENVIRONMENT)
+                {
+                   $this->_container->get('debug')["messages"]->addMessage("Controller : " . $controllerName);
+                   $this->_container->get('debug')["messages"]->addMessage("Action : " . $this->_action);  
+                }  
                 if ((int)method_exists($controllerName, $this->_action)) 
                 { 
                     // non fatal error handling

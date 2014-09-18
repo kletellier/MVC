@@ -10,7 +10,7 @@ define('ROOT', dirname(dirname(__FILE__)));
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('DATABASEPATH',ROOT . DS . 'config'.DS.'database.yml'); // Path to database configuration
 define('SECURITYPATH',ROOT . DS . 'config'.DS.'security.yml'); // Path to security configuration
-
+define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // path to debugbar resource
 /**
  * Enable autoload
  */
@@ -22,6 +22,8 @@ use GL\Command\ModelCommand;
 use GL\Command\ModelsCommand;
 use GL\Command\SecurityCommand;
 use GL\Command\UserCommand;
+use GL\Command\DebugBarCommand;
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -30,4 +32,5 @@ $application->add(new ModelCommand);
 $application->add(new ModelsCommand);
 $application->add(new SecurityCommand);
 $application->add(new UserCommand);
+$application->add(new DebugBarCommand);
 $application->run();

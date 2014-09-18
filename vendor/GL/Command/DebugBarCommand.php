@@ -11,34 +11,31 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
 
-class CacheCommand extends Command
+class DebugBarCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('cache:clear')
-            ->setDescription('Clear all twig cache files') 
+            ->setName('debugbar:install')
+            ->setDescription('Install all assets for debug bar') 
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $output->writeln('Clear Twig cache files');
-        $fs = new Filesystem();
-
-        try 
-        {
-                $path = CACHEPATH . DS . "twig";
-                $finder = new Finder();
-                $iterator = $finder->files()->name('*.php')->in($path);
-                $fs->remove($iterator);	
-                $fs->remove($path);		
-                $fs->mkdir($path);
-                $fs->chmod($path,0777,0000,true);
+    {	
+		$output->writeln('Install PhpDebugBar Assets');
+		$fs = new Filesystem();
+		$originDir = DEBUGBAR;
+		$targetDir = ROOT . DS . "public" . DS . "dbg";
+		
+		try 
+        {		
+			$fs->mkdir($targetDir, 0777);
+			$fs->mirror($originDir, $targetDir, Finder::create()->ignoreDotFiles(false)->in($originDir)); 		 
         } 
         catch (IOExceptionInterface $e) 
         {
-                $output->writeln('Error : ' . $e->getMessage());
+            $output->writeln('Error : ' . $e->getMessage());
         }		 
         $output->writeln('finished');
     }

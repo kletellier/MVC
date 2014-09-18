@@ -67,6 +67,9 @@ class ServiceProvider
         $container->register('translator','\GL\Core\Translator');
         // Inject Security Service
         $container->register('security','\GL\Core\SecurityService')->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin');
+        // Inject DebugBar
+        $container->register('debug','\GL\Core\KLDebugBar');
+
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
         $loader->load('services.yml');
