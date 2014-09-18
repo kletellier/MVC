@@ -309,7 +309,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         if($url!="")
         {
             $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
-            return $response;
+            $response->send();
         }
     }
     
