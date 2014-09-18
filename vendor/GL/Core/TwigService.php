@@ -32,8 +32,15 @@ class TwigService
      */
     private function getPathArray()
     {
-        $viewctlpath = TWIGPATH . DS . ucfirst($this->_controller);
-        $arr = array($viewctlpath,TWIGPATH);
+        if(isset($this->_controller))
+        {
+            $viewctlpath = TWIGPATH . DS . ucfirst($this->_controller);
+            $arr = array($viewctlpath,TWIGPATH);
+        }
+        else
+        {           
+            $arr = array(TWIGPATH);
+        }        
         return $arr;
     }
     
