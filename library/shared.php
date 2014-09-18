@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use GL\Core\ServiceProvider;
 
 /**
  * Enable/Disable error reporting to output buffer
@@ -39,11 +40,11 @@ function setReporting()
  */
 function HandleRequest($url)
 {        
-	$collection = RouteProvider::GetRouteCollection();	
-	$context = new RequestContext();
-        $request = Request::createFromGlobals();
-	$context->fromRequest($request);
-	$matcher = new UrlMatcher($collection, $context);
+	$container = ServiceProvider::GetDependencyContainer();  
+    $collection = RouteProvider::GetRouteCollection();  
+    $context = new RequestContext();    
+    $context->fromRequest($container->get('request'));
+    $matcher = new UrlMatcher($collection, $context);   
         
 	try 
 	{				
