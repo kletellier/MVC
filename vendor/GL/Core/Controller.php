@@ -88,6 +88,24 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     {
         return $this->container->get('session');
     }
+
+    /**
+     * Add Log in debug bar
+     * @param string $str string to be added by message
+     * @return void
+     */
+    public function log($str,$withdate = false)
+    {
+        $message = "";
+        if($withdate)
+        {
+            list($usec, $sec) = explode(' ', microtime());  
+            $usec = str_replace("0.", ".", $usec);  
+            $message = date('H:i:s', $sec) . $usec. " : ";
+        }
+        $message.=$str;
+        $this->container->get('debug')["messages"]->addMessage($message);
+    }
     
     /**
      * Get actual route name
