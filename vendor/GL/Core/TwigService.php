@@ -113,19 +113,31 @@ class TwigService
      * @param array $params parameters array for template
      */
     public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
-    {        
-          
-        $stopwatch = new Stopwatch();
-        $stopwatch->start('render');
-        $this->setContainer($container);  
-        $this->FixController();
-        $env = $this->getTwigEnvironment();                 
-        $ret =  $env->render($template, $params);
-        $event = $stopwatch->stop('render');
-        if(DEVELOPMENT_ENVIRONMENT)
+    {   
+        $ret = "";
+        try 
         {
-            echo "<!-- generated  twig  ".$event->getDuration()." ms -->";
-        }        
+            $stopwatch = new Stopwatch();
+            $stopwatch->start('render');
+            $this->setContainer($container);  
+            $this->FixController();
+            $env = $this->getTwigEnvironment();                 
+            $ret =  $env->render($template, $params);
+            $event = $stopwatch->stop('render');
+            if(DEVELOPMENT_ENVIRONMENT)
+            {
+                echo "<!-- generated  twig  ".$event->getDuration()." ms -->";
+            }        
+        } 
+        catch (\Twig_Error $e) 
+        {
+            if($container!=null)
+            {
+                $container->get('debug')["exceptions"]->addException($e);
+            }
+           throw new \Exception($e->getMessage());
+        }
+        
         return $ret;
     }
 }
