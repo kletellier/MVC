@@ -35,9 +35,10 @@ class KLDebugBar extends DebugBar
         $this->addCollector(new TimeDataCollector());
         $this->addCollector(new MemoryCollector());
         $this->addCollector(new ExceptionsCollector());
+ 
         try 
         {
-            $conn = Capsule::connection("default");
+            $conn= Capsule::connection("default");
             if($conn!=null)
             {
                 $db = $conn->getPdo();
@@ -48,8 +49,8 @@ class KLDebugBar extends DebugBar
         } 
         catch (\PDOException $e) 
         {
-            
-        }
+            $this['exceptions']->addException($e);            
+        } 
        
     }
 }
