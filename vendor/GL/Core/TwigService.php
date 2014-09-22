@@ -131,8 +131,9 @@ class TwigService
         } 
         catch (\Twig_Error $e) 
         {
-            if($container!=null)
+            if($container!=null && DEVELOPMENT_ENVIRONMENT)
             {
+
                 $container->get('debug')["exceptions"]->addException($e);
             }
            throw new \Exception($e->getMessage());
