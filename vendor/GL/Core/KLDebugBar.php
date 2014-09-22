@@ -46,7 +46,7 @@ class KLDebugBar extends DebugBar
             }
            
         } 
-        catch (Exception $e) 
+        catch (\PDOException $e) 
         {
             
         }
