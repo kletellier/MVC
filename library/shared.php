@@ -51,12 +51,13 @@ function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfo
 {
     $resp = $response;
     try {
-        $content = $resp->getContent();
+        
         $headers = $resp->headers;
         $ct = $headers->get('Content-Type');
         
         if(strtolower($ct)=="text/html")
         {
+            $content = $resp->getContent();
             // add debugbar before <html> closure tag
             $debugbar = $container->get('debug');
             $renderer = $debugbar->getJavascriptRenderer();
@@ -101,7 +102,7 @@ function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfo
 function HandleRequest($url)
 {        
     $container = ServiceProvider::GetDependencyContainer();  
-    $collection = RouteProvider::GetRouteCollection();  
+    $collection = $container->get('routes'); 
     $context = new RequestContext();    
     $context->fromRequest($container->get('request'));
     $matcher = new UrlMatcher($collection, $context);   
