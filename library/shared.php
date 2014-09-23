@@ -112,7 +112,10 @@ function HandleRequest($url)
             $parameters = $matcher->match($url);        
             $controller = $parameters['controller'];
             $action = $parameters['action'];                    
-       
+            if(DEVELOPMENT_ENVIRONMENT)
+            {
+               $container->get('debug')["messages"]->addMessage("Route : " . $parameters["_route"]);                      
+            } 
             $cr = new ControllerResolver($controller,$action,$parameters);    
                   
             $response = $cr->execute();     
