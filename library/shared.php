@@ -30,6 +30,66 @@ function setReporting()
     }
 }
 
+function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+{
+    $resp = $response;
+    try {
+        
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            AddDebugBar($response,$container);
+        }
+        
+        
+    } catch (Exception $e) {
+        
+    }
+    return $resp;
+}
+
+function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+{
+    $resp = $response;
+    try {
+        $content = $resp->getContent();
+        $headers = $resp->headers;
+        $ct = $headers->get('Content-Type');
+        
+        if(strtolower($ct)=="text/html")
+        {
+            // add debugbar before <html> closure tag
+            $debugbar = $container->get('debug');
+            $renderer = $debugbar->getJavascriptRenderer();
+            $url = BASE_PATH . "/dbg";
+            $renderer->setBaseUrl($url);
+
+            $dbghd = $renderer->renderHead();
+            $dbgct = $renderer->render();
+            $buf = "";
+            // test if </head> if present
+            if (strpos($content, '</head>') !== false)
+            {
+                $head = $dbghd."</head>";
+                $content=str_replace("</head>", $head, $content);
+            }
+            else
+            {
+                $buf.=$dbghd;
+            }
+     
+            $buf.=$dbgct."</html>";
+            $content=str_replace("</html>", $buf, $content);
+
+            $resp->setContent($content);
+        }        
+        
+    } 
+    catch (Exception $e) 
+    {
+        
+    }
+    return $resp;
+}
 
 /**
  * Routing function
@@ -52,11 +112,9 @@ function HandleRequest($url)
             $parameters = $matcher->match($url);        
             $controller = $parameters['controller'];
             $action = $parameters['action'];                    
-            $cr = new ControllerResolver($controller,$action,$parameters);      
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-                $container->get('debug')['time']->startMeasure('execute','Execute');
-            }       
+       
+            $cr = new ControllerResolver($controller,$action,$parameters);    
+                  
             $response = $cr->execute();     
             
     }
@@ -77,7 +135,8 @@ function HandleRequest($url)
     }
 
     if ($response instanceof Response) {
-        $response->send();
+        // prepare response
+        filterResponse($response,$container)->send();
     }
 }  
 
