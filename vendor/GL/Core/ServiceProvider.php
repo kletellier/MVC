@@ -39,8 +39,6 @@ class ServiceProvider
     {
         $container = new ContainerBuilder();
         
-        // create variable controller
-        $container->setParameter("controller", $controller);
         // Inject mailer
         $container->register('mailer', '\GL\Core\Mailer');
         // Inject Request
@@ -50,7 +48,7 @@ class ServiceProvider
         // Inject Request helper
         $container->register('request_helper', '\GL\Core\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')));
         // Inject Twig Service
-        $container->register('twig','\GL\Core\TwigService')->addArgument('%controller%');
+        $container->register('twig','\GL\Core\TwigService');
         // Inject RouteCollection
         $container->register('routes', '\Symfony\Component\Routing\RouteCollection')
         ->setFactoryClass('\GL\Core\RouteProvider')
@@ -73,6 +71,8 @@ class ServiceProvider
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
         $loader->load('services.yml');
+
+        $container->compile();
         
         return $container;  
     }

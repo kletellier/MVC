@@ -13,10 +13,10 @@ class PhpTemplateService
      protected $_controller;
      protected $_container;
      
-	 function __construct($container)
+	 function __construct($container,$controller="")
 	 {
 		 $this->_container = $container;
-		 $this->_controller = $this->_container->getParameter('controller');           
+		 $this->_controller = $controller;           
 	 }     
     
      /**

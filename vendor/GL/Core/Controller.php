@@ -189,7 +189,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         // inject all parameters in array
         // use extract function instead of manually extracting
         extract($this->GetGlobalVariables($inc_parameters));
-        $ts = new PhpTemplateService($this->container);
+        $ts = new PhpTemplateService($this->container,$this->_controller);
         $ret = $ts->getPathTemplate($view);      
         require($ret);          
     }
@@ -218,7 +218,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html') )
     {  
-        $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
+        $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
         $response = $this->getResponse($buf,$status,$headers);
         return $response;
     }
@@ -277,7 +277,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderHtmlTemplate($template,$params = array())
     {         
-        return  $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container);
+        return  $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
     } 
     
     /**

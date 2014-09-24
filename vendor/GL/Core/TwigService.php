@@ -15,19 +15,19 @@ class TwigService
      protected $_controller;
      protected $_container;
      
-     function __construct($ctl)
+     function __construct($controller = "")
      {
-         $this->_controller = $ctl;   
+         $this->_controller = $controller;   
          $this->_container = null;
      }
      
      /**
-      * Fix controller value from container
+      * set Controller name
       * @return void
       */
-     private function FixController()
+     private function setController($controller = "")
      {        
-        $this->_controller = $this->_container->getParameter('controller');
+        $this->_controller = $controller;
      }
     
      /**
@@ -112,7 +112,7 @@ class TwigService
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
+    public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null,$controller="")
     {   
         $ret = "";
         try 
@@ -120,7 +120,7 @@ class TwigService
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
             $this->setContainer($container);  
-            $this->FixController();
+            $this->setController($controller);
             $env = $this->getTwigEnvironment();                 
             $ret =  $env->render($template, $params);
             $event = $stopwatch->stop('render');

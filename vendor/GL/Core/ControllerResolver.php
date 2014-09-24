@@ -36,9 +36,8 @@ class ControllerResolver
             $this->_args = $args;
             $this->_errors = array();
             // return DI Container
-            $this->_container = ServiceProvider::GetDependencyContainer($controller);
-            $this->FixController();
-  }
+            $this->_container = ServiceProvider::GetDependencyContainer($controller);             
+      }
         
         /**
          * 
@@ -54,8 +53,7 @@ class ControllerResolver
             $params = array('message'=>$message,'file'=>$file,'line'=>$line,'errors'=>$this->_errors);  
             $this->_controller = "error";
             $this->_action = "error500";
-            $this->_args = $params;
-            $this->FixController();
+            $this->_args = $params;           
             return  $this->execute();                
         }
         
@@ -69,8 +67,7 @@ class ControllerResolver
             ob_clean();
             $this->_controller = "error";
             $this->_action = "error404";
-            $this->_args = array();
-            $this->FixController();
+            $this->_args = array();             
             return $this->execute();           
         }
         
@@ -82,18 +79,11 @@ class ControllerResolver
             ob_clean();
             $this->_controller = "error";
             $this->_action = "error403";
-            $this->_args = array();
-            $this->FixController();
+            $this->_args = array();             
             return $this->execute(); 
         }
         
-        /**
-         * Fix controller parameter in DI container
-         */
-        private function FixController()
-        {
-            $this->_container->setParameter("controller", $this->_controller);
-        }
+         
         
      /**
       * Fatal error handler
