@@ -36,7 +36,7 @@ class ControllerResolver
             $this->_args = $args;
             $this->_errors = array();
             // return DI Container
-            $this->_container = ServiceProvider::GetDependencyContainer($controller);             
+            $this->_container = ServiceProvider::GetDependencyContainer();             
       }
         
         /**
