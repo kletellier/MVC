@@ -2,7 +2,7 @@
 
 namespace GL\Core;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -101,7 +101,7 @@ class TwigService
      * 
      * @param \GL\Core\ContainerInterface $container DI contrainer to embed in TwigHelper
      */
-     private function setContainer(\Symfony\Component\DependencyInjection\ContainerBuilder $container = null)
+     private function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
      {
          $this->_container = $container;
      }
@@ -112,7 +112,7 @@ class TwigService
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\ContainerBuilder $container = null,$controller="")
+    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="")
     {   
         $ret = "";
         try 

@@ -3,7 +3,7 @@
 namespace GL\Core;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\ServiceProvider;
 

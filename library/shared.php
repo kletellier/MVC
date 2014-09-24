@@ -9,7 +9,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route; 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\ServiceProvider;
 
@@ -30,7 +30,7 @@ function setReporting()
     }
 }
 
-function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\Container $container)
 {
     $resp = $response;
     try {
@@ -47,7 +47,7 @@ function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Sy
     return $resp;
 }
 
-function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\Container $container)
 {
     $resp = $response;
     try {
