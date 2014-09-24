@@ -23,7 +23,8 @@
     "autoload": {
         "psr-0": {
             "Application" : "app/",
-            "GL" : "vendor/",            
+            "GL" : "vendor/",       
+            "DI" : "cache/",     
             "Fpdf" : "vendor/",
             "PHPExcel" : "vendor/PHPExcel/Classes/"
             } 
