@@ -100,7 +100,7 @@ class ControllerResolver
                                 
                 if(!DEVELOPMENT_ENVIRONMENT)
                 {
-                    $message = "Oops fatal error happens...";
+                    $message = $this->trans('error.oops',"Oops fatal error happens...");
                     $fichier = "";
                     $line = "";                    
                 }
@@ -113,7 +113,7 @@ class ControllerResolver
             {
                 if(!empty($this->_errors) && DEVELOPMENT_ENVIRONMENT)
                 {
-                    $message = "Some non fatal error are detecting.";
+                    $message = $this->trans('error.snf',"Some non fatal error are detecting....");
                     $response =$this->get500Response($message, "", "");  
                     $response->send();  
                     exit(0);
@@ -138,18 +138,18 @@ class ControllerResolver
             {
                 case E_NOTICE:                   
                 case E_USER_NOTICE:
-                    $errors = "<b>Notice</b>";
+                    $errors = "<b>" . $this->trans('error.notice','Notice') . "</b>";
                     break;
                 case E_WARNING:
                 case E_USER_WARNING:
-                    $errors = "<b>Warning</b>";
+                    $errors = "<b>" . $this->trans('error.warning','Warning') . "</b>";
                     break;
                 case E_ERROR:
                 case E_USER_ERROR:
-                    $errors = "<b>Fatal Error</b>";
+                    $errors = "<b>" . $this->trans('error.fatal','Fatal error') . "</b>";
                     break;
                 default:
-                    $errors = "<b>Error</b>";
+                    $errors = "<b>" . $this->trans('error.error','Error') . "</b>";
                     break;
             }
             
@@ -157,7 +157,29 @@ class ControllerResolver
             $arr = array('message'=>$message,'line'=>$errline,'file'=>$errfile);                
             array_push($this->_errors,$arr);            
             return true;
-        }    
+        }  
+
+
+        /**
+         * Translate error message
+         * @param string $code message code to translate
+         * @param string $default default value to display
+         * @return string string translated in locale
+         */
+        function trans($code,$default)
+        {
+          $ret = $default;
+          if($this->_container!=null)
+          {
+            $ts = $this->_container->get('translator');
+            $tmp = $ts->translate($code);
+            if($tmp!="")
+            {
+              $ret=$tmp;
+            }
+          }
+          return $ret;
+        }  
         
       /**
        * 

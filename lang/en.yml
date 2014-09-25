@@ -16,6 +16,12 @@ error:
     404message : "Page not found ! "
     500title : "500 Error"
     500warnings : "Warnings"
+    notice: "Notice"
+    error: "Error"
+    warning: "Warning"
+    fatal: "Fatal error"
+    oops : "Oops fatal error happens..."
+    snf : "Some non fatal error are detecting."
 configuration:
     title: "Application configuration"
     debug : "Debug mode : "
