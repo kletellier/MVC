@@ -10,7 +10,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
  * Load Twig Environment
  *
  */
-class TwigService
+class TwigService implements TemplateServiceInterface
 {
      protected $_controller;
      protected $_container;
