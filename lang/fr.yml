@@ -26,7 +26,8 @@ configuration:
     title: "Configuration globale"
     debug : "Mode debug : "
     rootpath : "Racine du site"
-    twigcache : "Activer le cache Twig : "
+    engine : "Moteur de template : "
+    twigcache : "Activer le cache des template : "
     reload : "Toujours recharger les templates :"
     locale : "Traduction"
 databasecfg:

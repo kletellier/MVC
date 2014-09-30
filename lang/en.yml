@@ -26,8 +26,9 @@ configuration:
     title: "Application configuration"
     debug : "Debug mode : "
     rootpath : "Web rootpath"
-    twigcache : "Enable Twig cache : "
-    reload : "Always reload twig template:"
+    engine : "Template engine : "
+    twigcache : "Enable template cache : "
+    reload : "Always reload template:"
     locale : "locale"
 databasecfg:
     title : "Database configuration"

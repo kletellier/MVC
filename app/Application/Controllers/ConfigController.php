@@ -58,10 +58,11 @@ class ConfigController extends Controller
 			 $webpath = $request->get('webpath');
 			 $locale = $request->get('locale') != "" ? $request->get('locale') : "en";
 			 $cache = ($request->get('twigcache')=='1');
+			 $engin = $request->get('engine') != "" ? $request->get('engine') : "twig";
 			 $alwaysreload = ($request->get('alwaysreload')=='1');
 			 
-			 $twigarr = array('cache'=>$cache,'alwaysreload'=>$alwaysreload);			 
-			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'twig'=>$twigarr,'locale'=>$locale);
+			 $twigarr = array('engine'=>$engine,'cache'=>$cache,'alwaysreload'=>$alwaysreload);			 
+			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'template'=>$twigarr,'locale'=>$locale);
 			 
 			 $dumper = new Dumper();
 

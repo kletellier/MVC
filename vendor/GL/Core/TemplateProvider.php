@@ -29,13 +29,12 @@ class TemplateProvider
             $exist = $fs->exists(array($path));
 
             if($exist)
-            {
-                // add shared TwigHelper
+            {               
                 $yaml = new Parser();
                 $value = $yaml->parse(file_get_contents(TEMPLATECONF)); 
                 foreach($value as $name => $th)
                 {
-                    $this->arr['name'] = $th['class'];                    
+                    $this->arr[$name] = $th['class'];                    
                 }
             }           
         } 
@@ -56,6 +55,11 @@ class TemplateProvider
             {
                 $class =  $this->arr[TEMPLATE_ENGINE];
                 $ret = new $class;
+            }
+            else
+            {
+                echo "Template engine ". TEMPLATE_ENGINE . "is not defined";
+                die();                
             }
         } catch (Exception $e) {
             
