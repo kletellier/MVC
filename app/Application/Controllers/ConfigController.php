@@ -40,7 +40,7 @@ class ConfigController extends Controller
 		
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(DATABASEPATH));		  
-		return $this->render('database.html.twig',array('database'=>$value));
+		return $this->renderTwig('database.html.twig',array('database'=>$value));
 	}
 
 	public function application()
@@ -77,7 +77,7 @@ class ConfigController extends Controller
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(CONFIGPATH));		
 		 
-		return $this->render('application.html.twig',array('application'=>$value));	
+		return $this->renderTwig('application.html.twig',array('application'=>$value));	
 	}
 	
 	public function mail()
@@ -113,7 +113,15 @@ class ConfigController extends Controller
 		$yaml = new Parser();
 		$value = $yaml->parse(file_get_contents(MAILPATH));		
 		 
-		return $this->render('mail.html.twig',array('mail'=>$value));	
+		return $this->renderTwig('mail.html.twig',array('mail'=>$value));	
 	}
-        
+      
+    private function renderTwig($tpl,$params,$code=200)
+    {
+
+        $tw = new \GL\Core\TwigService();
+        $html = $tw->render($tpl,$params,\GL\Core\ServiceProvider::GetDependencyContainer(),$this->_controller);
+        $response = new \Symfony\Component\HttpFoundation\Response($html, $code, array('Content-Type' => 'text/html'));         
+        return $response;
+    }  
 }
