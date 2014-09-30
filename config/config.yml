@@ -1,6 +1,7 @@
 debug: true
 webpath: http://localhost
-twig:
+template:
+    engine: twig
     cache: false
     alwaysreload: true
 locale: en

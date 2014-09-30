@@ -43,12 +43,12 @@ class TwigService implements TemplateServiceInterface
 
         if(isset($this->_controller))
         {
-            $viewctlpath = TWIGPATH . DS . ucfirst($this->_controller);
-            $arr = array($viewctlpath,TWIGPATH);
+            $viewctlpath = TEMPLATEPATH . DS . ucfirst($this->_controller);
+            $arr = array($viewctlpath,TEMPLATEPATH);
         }
         else
         {           
-            $arr = array(TWIGPATH);
+            $arr = array(TEMPLATEPATH);
         }        
 
         return $arr;
@@ -63,7 +63,7 @@ class TwigService implements TemplateServiceInterface
     {   
         $arrcache = array();
        
-        if(TWIG_CACHE )
+        if(TEMPLATE_CACHE )
         {
             $cachepath = CACHEPATH . DS . 'twig';            
             $arrcache['cache'] =  $cachepath;

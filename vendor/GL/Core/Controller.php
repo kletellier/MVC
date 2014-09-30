@@ -218,7 +218,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html') )
     {  
-        $buf = $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+        $buf = $this->get('template')->getTemplateService()->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
         $response = $this->getResponse($buf,$status,$headers);
         return $response;
     }
@@ -277,7 +277,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderHtmlTemplate($template,$params = array())
     {         
-        return  $this->get('twig')->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+        return  $this->get('template')->getTemplateService()->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
     } 
     
     /**

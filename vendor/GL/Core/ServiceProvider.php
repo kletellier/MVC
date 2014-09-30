@@ -73,7 +73,7 @@ class ServiceProvider
         // Inject Request helper
         $container->register('request_helper', 'GL\Core\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')));
         // Inject Twig Service
-        $container->register('twig','GL\Core\TwigService');
+        $container->register('template','GL\Core\TemplateProvider');
         // Inject RouteCollection
         $container->register('routes', 'Symfony\Component\Routing\RouteCollection')
         ->setFactoryClass('GL\Core\RouteProvider')
