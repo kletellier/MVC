@@ -1,0 +1,2 @@
+twig:
+    class: \GL\Core\TwigService
