@@ -328,6 +328,9 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         if($url!="")
         {
             $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
+            foreach ($this->_cookies as $cookie) {
+                $response->headers->setCookie($cookie);
+            } 
             $response->send();
         }
     }
