@@ -47,18 +47,22 @@ class TemplateProvider
         return $ret;
     }
 
-    public function getTemplateService()
+    public function getTemplateService($eng="")
     {
         $ret = null;
+        // spécify engine or use default
+         
+        $engine = ($eng == "") ? TEMPLATE_ENGINE : $eng;
+
         try {
-            if(isset($this->arr[TEMPLATE_ENGINE]))
+            if(isset($this->arr[$engine]))
             {
-                $class =  $this->arr[TEMPLATE_ENGINE];
+                $class =  $this->arr[$engine];
                 $ret = new $class;
             }
             else
             {
-                echo "Template engine ". TEMPLATE_ENGINE . "is not defined";
+                echo "Template engine ". $engine . " is not defined";
                 die();                
             }
         } catch (Exception $e) {
@@ -66,7 +70,6 @@ class TemplateProvider
         }
         return $ret;
     }
-
      
     
 }
