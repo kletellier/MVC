@@ -16,6 +16,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     protected $_controller;
     protected $_action;  
     protected $_cookies;
+    protected $_cookiestodelete;
     
     /**
      * Controller constructor
@@ -28,6 +29,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         $this->_controller = ucfirst($controller);
         $this->_action = $action;
         $this->_cookies = array();
+        $this->_cookiestodelete = array();
     }
     
     /**
@@ -164,7 +166,10 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         $response = new Response($content, $status, $headers);
         foreach ($this->_cookies as $cookie) {
             $response->headers->setCookie($cookie);
-        }         
+        }        
+        foreach ($this->_cookiestodelete as $cookie) {
+                $response->headers->clearCookie($cookie);
+            }  
         return $response;
     }
 
@@ -176,6 +181,16 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     public function addCookie( \Symfony\Component\HttpFoundation\Cookie $cookie)
     {
         array_push($this->_cookies, $cookie);
+    }
+
+    /**
+     * Cookie to remove in response
+     * @param string $cookie cookie name to delete
+     * @return void
+     */
+    public function removeCookie($cookie)
+    {
+        array_push($this->_cookiestodelete,$cookie);
     }
     
     /**
@@ -328,8 +343,11 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         if($url!="")
         {
             $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
-            foreach ($this->_cookies as $cookie) {
+             foreach ($this->_cookies as $cookie) {
                 $response->headers->setCookie($cookie);
+            } 
+            foreach ($this->_cookiestodelete as $cookie) {
+                $response->headers->clearCookie($cookie);
             } 
             $response->send();
         }
