@@ -228,6 +228,20 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Load user from his email adresse
+	 * @param string $mail email address
+	 * @return User instance
+	 */
+	public function userFromMail($mail)
+	{
+		$ret = null;
+		 
+		$inst = $this->getInstance();
+		$ret = $inst->where('email','=',$mail)->first();		 
+		return $ret;
+	}
+
+	/**
 	 * Login by remenberme token
 	 * @param string $token rememberme token stored in cookie
 	 * @return boolean
