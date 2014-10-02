@@ -242,6 +242,20 @@ class ##modelname## extends Model {
 	}
 
 	/**
+	 * Load user from his temporary key
+	 * @param string $key temporary key stored in key column
+	 * @return User instance
+	 */
+	public function userFromKey($key)
+	{
+		$ret = null;
+		 
+		$inst = $this->getInstance();
+		$ret = $inst->where('key','=',$key)->first();		 
+		return $ret;
+	}
+
+	/**
 	 * Login by remenberme token
 	 * @param string $token rememberme token stored in cookie
 	 * @return boolean
