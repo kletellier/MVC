@@ -92,6 +92,10 @@ class ServiceProvider
         $container->register('security','GL\Core\SecurityService')->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin');
         // Inject DebugBar
         $container->register('debug','GL\Core\KLDebugBar');
+         // Inject Pdo Object
+        $container->register('pdo', 'PDO')
+        ->setFactoryClass('GL\Core\DbHelper')
+        ->setFactoryMethod('getPdo');   
 
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));

@@ -92,6 +92,15 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     }
 
     /**
+     * Return actual database connection PDO object 
+     * @return PDO object
+     */
+    public function getPdo()
+    {
+        return $this->container->get('pdo');
+    }
+
+    /**
      * Add Log in debug bar
      * @param string $str string to be added by message
      * @return void
