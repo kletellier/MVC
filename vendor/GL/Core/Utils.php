@@ -27,6 +27,32 @@ class Utils
         $path = $basepath . $partial;
         return $path;
     }
+
+    /**
+     * Get Url from routename and parameters array
+     * @param string $routename route name defined in routes.yml
+     * @param array $params parameters array
+     * @return string url
+     */
+    public static function route($routename,$params = array())
+    {
+        $rc = \GL\Core\ServiceProvider::GetDependencyContainer()->get('routes');
+        $route = $rc->get($routename);
+
+        $url = "";
+        if($route!=null)
+        {
+            $pattern = $route->getPattern();
+            $url = \GL\Core\Utils::url($pattern);
+            // replace parameters by provided array
+            foreach($params as $key => $value)
+            {
+                $str = '{'.$key.'}';
+                $url = str_replace($str, $value, $url);
+            }
+        }
+        return $url;
+    }
     
 }
 

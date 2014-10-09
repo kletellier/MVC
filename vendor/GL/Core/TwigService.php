@@ -91,7 +91,7 @@ class TwigService implements TemplateServiceInterface
           $twigenv->addExtension(new \Twig_Extension_Debug());  
         }
         $twigenv->addTokenParser(new \GL\Core\TwigRenderToken());
-
+        $twigenv->addTokenParser(new \GL\Core\TwigRouteToken());
 
         return $twigenv;
     }
