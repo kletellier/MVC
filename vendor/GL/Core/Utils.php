@@ -52,6 +52,12 @@ class Utils
                     $str = '{'.$key.'}';
                     $url = str_replace($str, $value, $url);
                 }
+                 // in case of optionnal parameters in last, remove last slash
+                $sep = "/";                
+                if(substr($url, -1)==$sep)
+                {
+                    $url = substr($url,0, -1);
+                }
             }
         } catch (Exception $e) {
             
