@@ -36,21 +36,27 @@ class Utils
      */
     public static function route($routename,$params = array())
     {
-        $rc = \GL\Core\ServiceProvider::GetDependencyContainer()->get('routes');
-        $route = $rc->get($routename);
-
         $url = "";
-        if($route!=null)
-        {
-            $pattern = $route->getPattern();
-            $url = \GL\Core\Utils::url($pattern);
-            // replace parameters by provided array
-            foreach($params as $key => $value)
+        try {
+            $rc = \GL\Core\ServiceProvider::GetDependencyContainer()->get('routes');
+            $route = $rc->get($routename);
+
+            
+            if($route!=null)
             {
-                $str = '{'.$key.'}';
-                $url = str_replace($str, $value, $url);
+                $pattern = $route->getPattern();
+                $url = \GL\Core\Utils::url($pattern);
+                // replace parameters by provided array
+                foreach($params as $key => $value)
+                {
+                    $str = '{'.$key.'}';
+                    $url = str_replace($str, $value, $url);
+                }
             }
+        } catch (Exception $e) {
+            
         }
+        
         return $url;
     }
     
