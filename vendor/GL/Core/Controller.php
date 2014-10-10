@@ -101,6 +101,15 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     }
 
     /**
+     * Return request is postback (form validation)
+     * @return boolean
+     */
+    public function isPostBack()
+    {
+        return $this->getRequest()->getMethod()=="POST" ? true : false;
+    }
+
+    /**
      * Add Log in debug bar
      * @param string $str string to be added by message
      * @return void
