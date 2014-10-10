@@ -338,20 +338,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
        
         try 
         {
-             // get Symfony\Component\Routing\RouteCollection
-            $rc = $this->get('routes');
-            $route = $rc->get($routename);
-            if($route!=null)
-            {
-                $pattern = $route->getPattern();
-                $url = \GL\Core\Utils::url($pattern);
-                // replace parameters by provided array
-                foreach($params as $key => $value)
-                {
-                    $str = '{'.$key.'}';
-                    $url = str_replace($str, $value, $url);
-                }
-            }
+            $url = \GL\Core\Utils::route($routename,$params);            
         }
         catch (Exception $e )
         {
