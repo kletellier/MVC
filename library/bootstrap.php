@@ -4,6 +4,7 @@
  */
 define('TEMPLATEPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
 define('TEMPLATECONF',ROOT . DS . 'config'.DS.'templates.yml'); // Path to twig views
+define('CONFIGDIR',ROOT.DS.'config'); // path to config directory
 define('CONFIGPATH',ROOT . DS . 'config'.DS.'config.yml'); // Path to config file
 define('ROUTEPATH',ROOT . DS . 'config'.DS.'routes.yml'); // Path to route definition
 define('MAILPATH',ROOT . DS . 'config'.DS.'mail.yml'); // Path to mail configuration
