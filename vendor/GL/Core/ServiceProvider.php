@@ -96,6 +96,8 @@ class ServiceProvider
         $container->register('pdo', 'PDO')
         ->setFactoryClass('GL\Core\DbHelper')
         ->setFactoryMethod('getPdo');   
+        // Inject Config
+        $container->register('config','GL\Core\Config');
 
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
