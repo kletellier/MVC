@@ -3,7 +3,6 @@
 namespace GL\Core;
 
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
@@ -78,8 +77,8 @@ class TwigService implements TemplateServiceInterface
         $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
          $twigenv->addExtension(new \GL\Core\TwigDebugBar($this->_container));
         // add shared TwigHelper
-        $yaml = new Parser();
-        $value = $yaml->parse(file_get_contents(TWIGHELPER)); 
+        $config = new Config('twig');
+        $value = $config->load(); 
         foreach($value as $name => $th)
         {
             $class = $th['class'];

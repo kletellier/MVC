@@ -1,7 +1,7 @@
 <?php 
 namespace GL\Core;
 
-use Symfony\Component\Yaml\Parser;
+use GL\Core\Config; 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
  
@@ -24,14 +24,14 @@ class TemplateProvider
         $ret = false;
         try 
         {
-            $path = TEMPLATECONF; 
+            $config = new Config('templates');
+            $path = $config->getPath(); 
             $fs = new Filesystem();
             $exist = $fs->exists(array($path));
 
             if($exist)
-            {               
-                $yaml = new Parser();
-                $value = $yaml->parse(file_get_contents(TEMPLATECONF)); 
+            {  
+                $value = $config->load(); 
                 foreach($value as $name => $th)
                 {
                     $this->arr[$name] = $th['class'];                    

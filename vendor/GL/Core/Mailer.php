@@ -1,8 +1,7 @@
 <?php
 
 namespace GL\Core;
-
-use Symfony\Component\Yaml\Parser;
+ 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 
@@ -85,10 +84,10 @@ class Mailer
      * Get all mail smtp parameters from config/mail.yml
      */
     private function getParams()
-    {
-        $yaml = new Parser();
-	$value = $yaml->parse(file_get_contents(MAILPATH));
-        $arr = $value["mail"];
+    { 
+        $loader = new Config('mail');
+        $value = $loader->load();
+	    $arr = $value["mail"];
         if($arr!=null)
         {
             $this->_server = $arr["server"];

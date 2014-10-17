@@ -5,7 +5,7 @@ namespace GL\Core;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route; 
 use GL\Core\RouteParser;
-use Symfony\Component\Yaml\Parser;
+use GL\Core\Config;
 
 class RouteProvider
 {
@@ -20,8 +20,8 @@ class RouteProvider
         // create Symfony routing route collection
         $collection = new RouteCollection();
         // read routes.yml
-        $yaml = new Parser();
-        $value = $yaml->parse(file_get_contents(ROUTEPATH));
+        $config = new Config('routes');
+        $value = $config->load();
 
         // fill collection
         foreach($value as $name => $rte)

@@ -30,7 +30,7 @@ class Config
      * Get absolute path of the config file
      * @return string path
      */
-    private function getPath()
+    public function getPath()
     {
         return CONFIGDIR . DS . $this->configname . ".yml";
     }

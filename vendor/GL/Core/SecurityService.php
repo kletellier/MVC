@@ -3,10 +3,10 @@
 namespace GL\Core;
 
 use GL\Core\DbHelper as DB;
-use Symfony\Component\Yaml\Parser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
+use GL\Core\Config;
 
 class SecurityService
 {
@@ -41,8 +41,8 @@ class ##modelname## extends Model {
 	{
 		try 
 		{
-			$yaml = new Parser();
-			$value = $yaml->parse(file_get_contents(SECURITYPATH));
+			$yaml = new Config('security');
+			$value = $yaml->load();
 			$this->config = $value;
 			$this->tablename = isset($this->config['security']['table']) ? $this->config['security']['table'] : 'users';
 			$this->tokensalt = $this->config['cookie']['token'];

@@ -8,11 +8,11 @@
  * AUTORELOADCACHE :recreate twig cache for each request
  */
 
-use Symfony\Component\Yaml\Parser;
+use GL\Core\Config;
 
 // loading configuration from config/config.yml
-$yaml = new Parser();
-$value = $yaml->parse(file_get_contents(CONFIGPATH));
+$loader = new Config('config');
+$value = $loader->load();
 
 define('DEVELOPMENT_ENVIRONMENT',$value['debug']);
 define('BASE_PATH',$value['webpath']);

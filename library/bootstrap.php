@@ -3,20 +3,13 @@
  * Loading path constant
  */
 define('TEMPLATEPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
-define('TEMPLATECONF',ROOT . DS . 'config'.DS.'templates.yml'); // Path to twig views
 define('CONFIGDIR',ROOT.DS.'config'); // path to config directory
-define('CONFIGPATH',ROOT . DS . 'config'.DS.'config.yml'); // Path to config file
-define('ROUTEPATH',ROOT . DS . 'config'.DS.'routes.yml'); // Path to route definition
-define('MAILPATH',ROOT . DS . 'config'.DS.'mail.yml'); // Path to mail configuration
-define('DATABASEPATH',ROOT . DS . 'config'.DS.'database.yml'); // Path to database configuration
-define('SECURITYPATH',ROOT . DS . 'config'.DS.'security.yml'); // Path to security configuration
 define('UPLOADPATH',ROOT . DS . 'uploads'); // Path to upload directory
 define('PUBLICPATH',ROOT. DS . 'public'); // Path to public directory (directory open to the web)
 define('FPDF_FONTPATH',ROOT .DS . 'vendor' . DS . 'Fpdf' . DS .'font' .DS); // Font directory for FPDF
 define('TMPPATH',ROOT . DS . 'tmp'); // Temporary path (using for xls export)
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
-define('TWIGHELPER',ROOT . DS . 'config'.DS.'twig.yml'); // DI service definition directory  path
 define('DICACHE',ROOT.DS.'cache'.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
 
 /**

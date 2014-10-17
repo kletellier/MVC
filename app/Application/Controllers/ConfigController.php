@@ -2,8 +2,7 @@
 namespace Application\Controllers;
 
 use GL\Core\Controller as Controller;
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Dumper;
+use GL\Core\Config;
 
 class ConfigController extends Controller
 {
@@ -15,7 +14,7 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\AccessDeniedHttpException;
 		}
-		 
+		$config = new Config('database'); 
 		if($request->getMethod()=="POST")
 		{
 			 $server = $request->get('server');
@@ -26,20 +25,12 @@ class ConfigController extends Controller
 			 
 			 $array  = array('server'=>$server,'port'=>$port,'database'=>$database,'user'=>$user,'password'=>$password);
 			 $arr = array();
-			 $arr["default"] = $array;
+			 $arr["default"] = $array;			 
 			 
-			 $dumper = new Dumper();
-
-			 $yamltxt = $dumper->dump($arr,2);
+			 $config->save($arr);			 
+		}		
 		 
-			 if( file_put_contents(DATABASEPATH, $yamltxt)==FALSE)
-			 {
-				throw new \Exception('Error');
-			 }
-		}
-		
-		$yaml = new Parser();
-		$value = $yaml->parse(file_get_contents(DATABASEPATH));		  
+		$value = $config->load();	  
 		return $this->renderTwig('database.html.twig',array('database'=>$value));
 	}
 
@@ -51,7 +42,7 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\AccessDeniedHttpException;
 		}
-		 
+		$config = new Config('config'); 
 		if($request->getMethod()=="POST")
 		{
 			 $debug = ($request->get('debug')=='1');
@@ -64,19 +55,10 @@ class ConfigController extends Controller
 			 $twigarr = array('engine'=>$engine,'cache'=>$cache,'alwaysreload'=>$alwaysreload);			 
 			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'template'=>$twigarr,'locale'=>$locale);
 			 
-			 $dumper = new Dumper();
-
-			 $yamltxt = $dumper->dump($array,2);
-		 
-			 if( file_put_contents(CONFIGPATH, $yamltxt)==FALSE)
-			 {
-				throw new \Exception('Error');
-			 }
+			 $config->save($array);	
 		}
 		
-		$yaml = new Parser();
-		$value = $yaml->parse(file_get_contents(CONFIGPATH));		
-		 
+		$value = $config->load();			 
 		return $this->renderTwig('application.html.twig',array('application'=>$value));	
 	}
 	
@@ -88,7 +70,7 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\AccessDeniedHttpException;
 		}
-		 
+		 $config = new Config('mail'); 
 		if($request->getMethod()=="POST")
 		{
 			 $server = $request->get('server');
@@ -100,19 +82,10 @@ class ConfigController extends Controller
 			 $arr = array();
 			 $arr["mail"] = $array;
 			 
-			 $dumper = new Dumper();
-
-			 $yamltxt = $dumper->dump($arr,2);
-		 
-			 if( file_put_contents(MAILPATH, $yamltxt)==FALSE)
-			 {
-				throw new \Exception('Error');
-			 }
+			 $config->save($arr);
 		}
 		
-		$yaml = new Parser();
-		$value = $yaml->parse(file_get_contents(MAILPATH));		
-		 
+		$value = $config->load();		 
 		return $this->renderTwig('mail.html.twig',array('mail'=>$value));	
 	}
       
