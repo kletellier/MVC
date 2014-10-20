@@ -72,6 +72,14 @@ class DbHelper {
         $queryraw = Capsule::connection($connection)->raw($query);
         return Capsule::connection($connection)->select($queryraw);
     }
+ 
+    public static function selectPDO($query,$connection="default")
+    {
+    	$pdo = Capsule::connection($connection)->getPdo();
+    	$q = $pdo->prepare($query);
+    	$q->execute();
+     	return $q->fetchAll(\PDO::FETCH_OBJ); 
+    }
     
      /**
      * Execute raw insert query
