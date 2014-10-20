@@ -75,7 +75,7 @@ class TwigService implements TemplateServiceInterface
         $twigloader = new \Twig_Loader_Filesystem($this->getPathArray());
         $twigenv = new \Twig_Environment($twigloader,$arrcache);        
         $twigenv->addExtension(new \GL\Core\TwigHelper($this->_container));
-         $twigenv->addExtension(new \GL\Core\TwigDebugBar($this->_container));
+        
         // add shared TwigHelper
         $config = new Config('twig');
         $value = $config->load(); 
@@ -87,6 +87,7 @@ class TwigService implements TemplateServiceInterface
         //$twigenv->addExtension(new \Application\Shared\SharedTwigHelper($this->_container));
         if(DEVELOPMENT_ENVIRONMENT)
         {
+          $twigenv->addExtension(new \GL\Core\TwigDebugBar($this->_container));
           $twigenv->addExtension(new \Twig_Extension_Debug());  
         }
         $twigenv->addTokenParser(new \GL\Core\TwigRenderToken());
