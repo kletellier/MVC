@@ -28,7 +28,7 @@ class Utils
         return $path;
     }
 
-    /**
+     /**
      * Get Url from routename and parameters array
      * @param string $routename route name defined in routes.yml
      * @param array $params parameters array
@@ -46,11 +46,17 @@ class Utils
             {
                 $pattern = $route->getPattern();
                 $url = \GL\Core\Utils::url($pattern);
+                $defaults = $route->getDefaults();
                 // replace parameters by provided array
                 foreach($params as $key => $value)
                 {
                     $str = '{'.$key.'}';
                     $url = str_replace($str, $value, $url);
+                }
+                // use defaults parameters
+                foreach ($defaults as $key => $value) {
+                   $str = '{'.$key.'}';
+                   $url = str_replace($str, $value, $url);
                 }
                  // in case of optionnal parameters in last, remove last slash
                 $sep = "/";                
