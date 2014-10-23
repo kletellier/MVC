@@ -250,7 +250,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      * @param array $headers Http-Headers in key value type
      * @param string template engine to use, blank use default defined in config.yml
      */
-    function render($template,$params, $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
+    function render($template,$params = array(), $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
     {  
         $buf = $this->get('template')->getTemplateService($engine)->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
         $response = $this->getResponse($buf,$status,$headers);
