@@ -163,7 +163,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
             return $name;
       }
     
-     /**
+    /**
       * Add global parameters to parameters array passed to view
       * 
       * @param array $arr actual parameters array
@@ -171,8 +171,18 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
       */
     private function GetGlobalVariables($arr)
     {
+        $ret = array();
+        $class = "\Application\Shared\GlobalFunction";
+        if(class_exists($class))
+        {
             $exc = new \Application\Shared\GlobalFunction($arr,$this->container);
-            return $exc->execute();
+            $ret = $exc->execute();
+        }
+        else
+        {
+            $ret = $arr;
+        }
+        return $ret;               
     }
 
     /**
