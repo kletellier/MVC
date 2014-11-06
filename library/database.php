@@ -3,13 +3,13 @@
  * Start Eloquent ORM
  */
 use Illuminate\Database\Capsule\Manager as Capsule;  
-use GL\Core\Config;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * Load database configuration from config/database.yml 
  */
-$yaml = new Config("database");
-$value = $yaml->load();
+$yaml = new Parser();
+$value = $yaml->parse(file_get_contents(DATABASEPATH));
         
 $capsule = new Capsule;
  
@@ -24,9 +24,16 @@ foreach($value as $name => $conn)
             $connstr.=":".$port;
             }
     }
-    
+
+    $type = isset($conn["type"]) ? $conn["type"] : "mysql";
+    $allowed = array('mysql','sqlite');
+    if(!in_array($type, $allowed))
+    {
+        echo $type." database not allowed.";
+        die();       
+    }
     $capsule->addConnection( array(
-    'driver'    => 'mysql',
+    'driver'    => $type,
     'host'      => $connstr,
     'database'  => $conn["database"],
     'username'  => $conn["user"],
@@ -34,7 +41,7 @@ foreach($value as $name => $conn)
     'charset'   => 'utf8',
     'collation' => 'utf8_general_ci',
     'prefix'    => ''
-    ),$name);        	 
+    ),$name);            
 }
 
 $capsule->setAsGlobal();
