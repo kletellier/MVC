@@ -4,12 +4,13 @@
  */
 use Illuminate\Database\Capsule\Manager as Capsule;  
 use Symfony\Component\Yaml\Parser;
+use GL\Core\Config;
 
 /**
  * Load database configuration from config/database.yml 
  */
-$yaml = new Parser();
-$value = $yaml->parse(file_get_contents(DATABASEPATH));
+$yaml = new Config("database");
+$value = $yaml->load();
         
 $capsule = new Capsule;
  
