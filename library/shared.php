@@ -107,7 +107,12 @@ function HandleRequest($url)
     $context->fromRequest($container->get('request'));
     $matcher = new UrlMatcher($collection, $context);   
     $response = null;
-
+    // instantiate Security Service for autologin
+    $ss = $container->get('security');
+    if(DEVELOPMENT_ENVIRONMENT)
+    {
+       $container->get('debug')["messages"]->addMessage("Security Session Id : " . $container->get('session')->get('session.id'));                      
+    } 
     try 
     {               
             $parameters = $matcher->match($url);        
