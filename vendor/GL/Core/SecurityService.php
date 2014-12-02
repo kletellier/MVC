@@ -19,16 +19,16 @@ class SecurityService
 	protected $cookiename;
 	protected $cookieduration;
 	protected $model = '<?php
- 
-namespace Application\Models;
 
-use Illuminate\Database\Eloquent\Model; 
+	namespace Application\Models;
 
-class ##modelname## extends Model {
-	protected $table = "##tablename##";	 
-    public $timestamps = true;
-	 
-}';
+	use Illuminate\Database\Eloquent\Model; 
+
+	class ##modelname## extends Model {
+		protected $table = "##tablename##";	 
+		public $timestamps = true;
+
+	}';
 
 	public function __construct(\Symfony\Component\HttpFoundation\Session\Session $session,\Symfony\Component\HttpFoundation\Request $request)
 	{
@@ -97,7 +97,15 @@ class ##modelname## extends Model {
 	private function getInstance()
 	{
 		$name = "Application\\Models\\".ucfirst($this->tablename);
-		return new $name();
+		if(class_exists($name))
+		{
+			return new $name();
+		}
+		else
+		{
+			return null;
+		}
+		
 	}
 
 
@@ -235,7 +243,7 @@ class ##modelname## extends Model {
 	public function userFromMail($mail)
 	{
 		$ret = null;
-		 
+
 		$inst = $this->getInstance();
 		$ret = $inst->where('email','=',$mail)->first();		 
 		return $ret;
@@ -249,7 +257,7 @@ class ##modelname## extends Model {
 	public function userFromKey($key)
 	{
 		$ret = null;
-		 
+
 		$inst = $this->getInstance();
 		$ret = $inst->where('key','=',$key)->first();		 
 		return $ret;
@@ -282,23 +290,29 @@ class ##modelname## extends Model {
 	 */
 	public function autologin()
 	{
+		
 		$id = $this->session->get('session.id');
-		if($id=="")
-		{
-			$inst = $this->getInstance();
-			$token = $this->request->cookies->get($this->cookiename); 
-			if($token!="")
+		try {
+			if($id=="")
 			{
-				$user = $inst->where('remember_token','=',$token)->first();
-				if($user!=null)
-				{		 	
-					$this->session->set('session.id',$user->id);
-					$this->session->save();
-					$user->nblogin+=1;				 
-					$user->save();			 
-				}
-			}			
-		}		
+				$inst = $this->getInstance();
+				$token = $this->request->cookies->get($this->cookiename); 
+				if($token!="")
+				{
+					$user = $inst->where('remember_token','=',$token)->first();
+					if($user!=null)
+					{		 	
+						$this->session->set('session.id',$user->id);
+						$this->session->save();
+						$user->nblogin+=1;				 
+						$user->save();			 
+					}
+				}			
+			}
+		} catch (Exception $e) {
+			
+		}
+
 	}
 
 	/**
@@ -463,18 +477,18 @@ class ##modelname## extends Model {
 		{
 			$sch->create($tablename, function($table)
 			{
-			    $table->increments('id');
-			    $table->string('login')->unique();
-			    $table->string('password');
-			    $table->string('salt');
-			    $table->string('email')->unique();
-			    $table->text('roles');
-			    $table->string('key');
-			    $table->integer('enabled')->default(0);
-			    $table->rememberToken();
-			    $table->integer('profile')->default(-1);
-			    $table->integer('nblogin')->default(0);
-			    $table->timestamps();
+				$table->increments('id');
+				$table->string('login')->unique();
+				$table->string('password');
+				$table->string('salt');
+				$table->string('email')->unique();
+				$table->text('roles');
+				$table->string('key');
+				$table->integer('enabled')->default(0);
+				$table->rememberToken();
+				$table->integer('profile')->default(-1);
+				$table->integer('nblogin')->default(0);
+				$table->timestamps();
 			});
 			// create model file
 			$this->createModel($tablename,ucfirst($tablename));
@@ -491,18 +505,18 @@ class ##modelname## extends Model {
 	{
 		try {
 			$nmodel = $this->model;
-            $nmodel = str_replace('##modelname##',$mode,$nmodel);
-            $nmodel = str_replace('##tablename##',$tablename,$nmodel);             		
+			$nmodel = str_replace('##modelname##',$mode,$nmodel);
+			$nmodel = str_replace('##tablename##',$tablename,$nmodel);             		
 
-            $path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
+			$path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
 
-            $filename = $path.$mode.".php";
-            file_put_contents($filename,$nmodel);	
+			$filename = $path.$mode.".php";
+			file_put_contents($filename,$nmodel);	
 
 		} catch (Exception $e) {
 			
 		}
 	}
- 
+
 
 }
