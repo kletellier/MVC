@@ -321,7 +321,16 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderHtmlTemplate($template,$params = array())
     {         
-        return  $this->get('template')->getTemplateService()->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+        $fnparams = null;
+        if($executeglobal)
+        {
+            $fnparams  = $this->GetGlobalVariables($params);
+        }
+        else
+        {
+            $fnparams  = $params;
+        }
+        return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller);
     } 
     
     /**
