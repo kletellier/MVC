@@ -319,7 +319,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      * @param array $params Twig parameters array
      * @return string Html string buffer
      */
-    function renderHtmlTemplate($template,$params = array())
+    function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
     {         
         $fnparams = null;
         if($executeglobal)
