@@ -47,4 +47,32 @@ class RequestHelper
     {
        return in_array($this->_request->getClientIp(), array('127.0.0.1', 'fe80::1', '::1'));
     }
+
+    /**
+     * Get current route parameters in array 
+     * @return array (controller,action,parameters and _route)
+     */
+    function getCurrentRoute()
+    {
+        $container = ServiceProvider::GetDependencyContainer();  
+        $collection = $container->get('routes'); 
+        $context = new RequestContext();    
+        $context->fromRequest($this->_request);
+        $matcher = new UrlMatcher($collection, $context);
+        $url = null;
+        if($this->_request->get('url'))
+        {
+            $url = $this->_request->get('url');
+        } 
+        $url = '/'.$url; 
+        $parameters = null;
+        try 
+        {
+            $parameters = $matcher->match($url); 
+        } catch (ResourceNotFoundException $e) 
+        {
+            
+        }
+        return $parameters;  
+    }
 }
