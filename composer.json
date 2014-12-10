@@ -18,7 +18,8 @@
         "symfony/config": "2.6.*@dev",
         "symfony/console": "2.6.*@dev",
         "psr/log": "1.0.*@dev",
-        "maximebf/debugbar": "1.*"         
+        "maximebf/debugbar": "1.*",
+        "mobiledetect/mobiledetectlib": "dev-master"        
     },
     "autoload": {
         "psr-0": {
