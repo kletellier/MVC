@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config;
 
-class SecurityService
+
+class SecurityService implements SecurityServiceInterface
 {
 	protected $request;
 	protected $session;

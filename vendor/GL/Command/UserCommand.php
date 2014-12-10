@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Question\Question;
 use GL\Core\SecurityService;
+use GL\Core\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,6 +29,7 @@ class UserCommand extends Command
     {       
         try 
         {
+
             $helper = $this->getHelper('question');
             $question = new Question('Please enter the login : ', '');
             $login = $helper->ask($input, $output, $question);
@@ -57,8 +59,11 @@ class UserCommand extends Command
             {
                 $arroles = explode(",", $roles);
             }
-
-            $ss = new SecurityService(new Session(),new Request());
+            // récupération de la config securité
+            $cfgsecu = new Config('security');
+            $values = $cfgsecu->load();
+            $class =   $values['security']['classes'];
+            $ss = new $class(new Session(),new Request());
             $output->writeln('Create user');
             $ss->userCreate($login,$email,$password,$arroles);			
 		 

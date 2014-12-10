@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use GL\Core\Config;
 
 class ServiceProvider
 {
@@ -63,7 +64,12 @@ class ServiceProvider
     private function createContainer()
     {
         $container = new ContainerBuilder();
-            
+
+        // récupération de la config securité
+        $cfgsecu = new Config('security');
+        $values = $cfgsecu->load();
+        $class =   $values['security']['classes'];
+
         // Inject mailer
         $container->register('mailer', 'GL\Core\Mailer');
         // Inject Request
@@ -89,7 +95,7 @@ class ServiceProvider
         // Inject translator service
         $container->register('translator','GL\Core\Translator');
         // Inject Security Service
-        $container->register('security','GL\Core\SecurityService')->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin');
+        $container->register('security',$class)->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin');
         // Inject DebugBar
         $container->register('debug','GL\Core\KLDebugBar');
          // Inject Pdo Object

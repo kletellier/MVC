@@ -1,4 +1,5 @@
-security:     
+security:
+     classes : "\GL\Core\SecurityService"
      roles : [ ADMIN , USER , TRUSTED_USER ]
      table : users
 cookie:
