@@ -163,7 +163,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
             return $name;
       }
     
-    /**
+     /**
       * Add global parameters to parameters array passed to view
       * 
       * @param array $arr actual parameters array
@@ -262,7 +262,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function render($template,$params = array(), $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
     {  
-        $buf = $this->get('template')->getTemplateService($engine)->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+        $buf = $this->getHtmlBuffer($template,$params);
         $response = $this->getResponse($buf,$status,$headers);
         return $response;
     }
@@ -319,19 +319,21 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      * @param array $params Twig parameters array
      * @return string Html string buffer
      */
-    function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
+    function renderHtmlTemplate($template,$params = array())
     {         
-        $fnparams = null;
-        if($executeglobal)
-        {
-            $fnparams  = $this->GetGlobalVariables($params);
-        }
-        else
-        {
-            $fnparams  = $params;
-        }
-        return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller);
+        return $this->getHtmlBuffer($template,$params);
     } 
+
+    /**
+     * Return HTML from template parsing
+     * @param string $template file name
+     * @param array $params parameters to submit at template
+     * @return string html return of template parsing
+     */
+    private function getHtmlBuffer($template,$params = array())
+    {
+       return  $this->get('template')->getTemplateService()->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+    }
     
     /**
      * Return a Json Response
