@@ -58,6 +58,11 @@ class TemplateProvider
             if(isset($this->arr[$engine]))
             {
                 $class =  $this->arr[$engine];
+                if(!class_exists($class))
+                {
+                    echo "Template engine class ". $class . " does not exist";
+                    die();
+                }
                 $ret = new $class;
             }
             else
