@@ -13,11 +13,11 @@ class PhpTemplateService
      protected $_controller;
      protected $_container;
      
-	 function __construct($container,$controller="")
-	 {
-		 $this->_container = $container;
-		 $this->_controller = $controller;           
-	 }     
+     function __construct($container,$controller="")
+     {
+         $this->_container = $container;
+         $this->_controller = $controller;           
+     }     
     
      /**
      * Function for Template path searching
@@ -28,8 +28,8 @@ class PhpTemplateService
      */
     private function getPathArray()
     {
-        $viewctlpath = TWIGPATH . DS . ucfirst($this->_controller);
-        $arr = array($viewctlpath,TWIGPATH);
+        $viewctlpath = TEMPLATEPATH . DS . ucfirst($this->_controller);
+        $arr = array($viewctlpath,TEMPLATEPATH);
         return $arr;
     }
     
@@ -39,8 +39,8 @@ class PhpTemplateService
      * @return string Path of template finded
      */
     public function getPathTemplate($template)
-    {		
-        $str = "";	
+    {       
+        $str = "";  
         foreach($this->getPathArray() as $folder )
         {
             $finder = new Finder();
@@ -51,6 +51,11 @@ class PhpTemplateService
                 break;
             }
              if($str!=""){break;}
+        }
+        if($str=="")
+        {
+            echo "Unable to find template file : ".$template;
+            die();
         }
         return $str;
     }
