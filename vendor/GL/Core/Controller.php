@@ -319,9 +319,10 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      * @param array $params Twig parameters array
      * @return string Html string buffer
      */
-    function renderHtmlTemplate($template,$params = array())
+    function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
     {         
-        return $this->getHtmlBuffer($template,$params);
+        
+        return $this->getHtmlBuffer($template,$params,$executeglobal);
     } 
 
     /**
@@ -330,9 +331,18 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      * @param array $params parameters to submit at template
      * @return string html return of template parsing
      */
-    private function getHtmlBuffer($template,$params = array())
+    private function getHtmlBuffer($template,$params = array(), $executeglobal=true)
     {
-       return  $this->get('template')->getTemplateService()->render($template,$this->GetGlobalVariables($params),$this->container,$this->_controller);
+        $fnparams = null;
+        if($executeglobal)
+        { 
+            $fnparams = $this->GetGlobalVariables($params);
+        }
+        else
+        {
+            $fnparams = $params;
+        }
+       return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller);
     }
     
     /**
