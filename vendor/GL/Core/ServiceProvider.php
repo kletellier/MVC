@@ -52,7 +52,7 @@ class ServiceProvider
             } 
             else 
             {            
-                $container = $this->createContainer();
+                $container = $this->createContainer();                 
                 $dumper = new PhpDumper($container);
                 file_put_contents($file, $dumper->dump(array('class'=>'ServiceContainer','namespace'=>'DI\Container')));
             }
@@ -65,10 +65,26 @@ class ServiceProvider
     {
         $container = new ContainerBuilder();
 
-        // récupération de la config securité
+        // retrieve security class 
         $cfgsecu = new Config('security');
         $values = $cfgsecu->load();
         $class =   $values['security']['classes'];
+        // test if class exist and implement interface
+        if(!class_exists($class))
+        {
+            echo "security class : " . $class. " does not exist";
+            die();
+        }
+        else
+        {
+            // test if class implement interface
+            $classref = new \ReflectionClass($class);             
+            if(!$classref->implementsInterface('\GL\Core\SecurityServiceInterface'))
+            {
+              echo "class ".$class." does not implement SecurityServiceInterface";
+              die();
+            }           
+        }
 
         // Inject mailer
         $container->register('mailer', 'GL\Core\Mailer');
