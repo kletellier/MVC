@@ -145,17 +145,56 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
       */
     private function GetGlobalVariables($arr)
     {
-        $ret = array();
-        $class = "\Application\Shared\GlobalFunction";
-        if(class_exists($class))
-        {
-            $exc = new \Application\Shared\GlobalFunction($arr,$this->container);
-            $ret = $exc->execute();
-        }
-        else
-        {
-            $ret = $arr;
-        }
+        $ret = $arr;
+        // get actual route
+        $route = $this->getActualRouteName();
+        $cfg = new Config("functions");
+        $fnArray = $cfg->load();
+
+        foreach ($fnArray as $key => $value) {
+
+            if($value["type"]=="global")
+            {
+                $bExecute = false;
+                // for each global function defined
+
+                $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
+                $class = $value["class"];
+                // test if class exist
+                if(!class_exists($class))
+                {
+                    echo "class " . $class . " does not exist";
+                    die();
+                }
+                // test if interface is implemented
+                 // test if class implement interface
+                $classref = new \ReflectionClass($class);             
+                if(!$classref->implementsInterface('\GL\Core\GlobalFunctionInterface'))
+                {
+                  echo "class ".$class." does not implement GlobalFunctionInterface";
+                  die();
+                }      
+                // test if route is allowed
+                if(isset($arrRoutes))
+                {
+                    // function restricted to specified routes in arrRoutes
+                    if(in_array($route, $arrRoutes))
+                    {
+                        $bExecute = true;
+                    }
+                }
+                else
+                {
+                    // function executed for all routes
+                    $bExecute = true;
+                }
+                if($bExecute)
+                {
+                    $exc = new $class($ret,$this->container);
+                    $ret = $exc->execute();
+                }
+            }     
+        }         
         return $ret;               
     }
 
