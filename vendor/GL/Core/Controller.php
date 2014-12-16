@@ -126,42 +126,16 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         $message.=$str;
         $this->container->get('debug')["messages"]->addMessage($message);
     }
-    
-    /**
-     * Get actual route name
-     * 
-     * @return string actual route
-     */
-    public function getRouteName()
-      { 
-            $name = "";
-            $collection = RouteProvider::GetRouteCollection();  
-            $request = $this->_container->get('request');
-            $url = null;
-            if($request->get('url'))
-            {
-                    $url = $request->get('url');
-            } 
-            $url = '/'.$url;        
-            $context = new RequestContext();            
-            $context->fromRequest($request);
-            $matcher = new UrlMatcher($collection, $context);            
-            try 
-            {               
-                $parameters = $matcher->match($url);                    
-                $name = $parameters['_route'];                 
-            }
-            catch(ResourceNotFoundException $ex)
-            {
-                $name = "";          
-            }
-            catch(Exception $e)
-            {       
-               $name = "";      
-            } 
 
-            return $name;
+     /**
+       * Return actual route
+       * @return string
+       */
+      public function getActualRouteName()
+      {      
+        return $this->get('request_helper')->getCurrentRoute()["_route"];
       }
+        
     
      /**
       * Add global parameters to parameters array passed to view
