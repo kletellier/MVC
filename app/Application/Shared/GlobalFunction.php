@@ -12,7 +12,7 @@ class GlobalFunction
     protected $_vals;
     protected $_container;		 
 
-    public function __construct($array = array(),ContainerInterface $container = null)
+    public function __construct(array $array = array(),ContainerInterface $container = null)
     {
        $this->_vals = $array;
        $this->_container = $container;		    
