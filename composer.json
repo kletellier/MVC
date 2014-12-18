@@ -45,5 +45,5 @@
             "php app/console cache:clear"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
