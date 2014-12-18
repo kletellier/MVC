@@ -1,4 +1,6 @@
 {
+    "name": "kletellier/mvc",
+    "description": "A small MVC framework based on Symfony component and Eloquent ORM",
     "config": {
         "vendor-dir": "plugins"
     },
