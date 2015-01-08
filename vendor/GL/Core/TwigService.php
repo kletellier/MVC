@@ -112,7 +112,7 @@ class TwigService implements TemplateServiceInterface
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="",$htmlmode=false
+    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="",$htmlmode=false)
     {   
         $ret = "";
         try 
