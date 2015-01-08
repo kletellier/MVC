@@ -121,8 +121,18 @@ class TwigService implements TemplateServiceInterface
             $stopwatch->start('render');
             $this->setContainer($container);  
             $this->setController($controller);
-            $env = $this->getTwigEnvironment();                 
-            $ret =  $env->render($template, $params);
+            $env = $this->getTwigEnvironment();  
+            if(DEVELOPMENT_ENVIRONMENT)
+            {
+                $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
+                $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug));             
+                $ret =  $envdebug->render($template, $params);
+            }
+            else
+            {
+                $ret =  $env->render($template, $params);
+            }
+            
             $event = $stopwatch->stop('render');
             if(DEVELOPMENT_ENVIRONMENT)
             {
