@@ -195,8 +195,16 @@ class Mailer
 
         $mailer = \Swift_Mailer::newInstance($transport);
 
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $container = \GL\Core\ServiceProvider::GetDependencyContainer();
+            $debug = $container->get('debug');
+            $debug['messages']->aggregate(new \DebugBar\Bridge\SwiftMailer\SwiftLogCollector($mailer));
+            $debug->addCollector(new \DebugBar\Bridge\SwiftMailer\SwiftMailCollector($mailer));
+        }
+
         $message = \Swift_Message::newInstance() 
-          ->setSubject($this->_subject)			 
+          ->setSubject($this->_subject)          
           ->setFrom($this->_from)         
           ->setBody($this->_body)  ;
         if($this->_isHtml)
