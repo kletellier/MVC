@@ -112,7 +112,7 @@ class TwigService implements TemplateServiceInterface
      * @param string $template template path
      * @param array $params parameters array for template
      */
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="")
+    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="",$htmlmode=false
     {   
         $ret = "";
         try 
@@ -122,7 +122,7 @@ class TwigService implements TemplateServiceInterface
             $this->setContainer($container);  
             $this->setController($controller);
             $env = $this->getTwigEnvironment();  
-            if(DEVELOPMENT_ENVIRONMENT)
+            if(DEVELOPMENT_ENVIRONMENT && $htmlmode==false)
             {
                 $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
                 $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug));             
