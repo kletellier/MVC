@@ -325,7 +325,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     }
 
 
-    /**
+     /**
      * Function render html text with Twig template parsing 
      * 
      * @param string $template Twig template to parse
@@ -335,16 +335,17 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
     {         
         
-        return $this->getHtmlBuffer($template,$params,$executeglobal);
+        return $this->getHtmlBuffer($template,$params,$executeglobal,true);
     } 
 
     /**
      * Return HTML from template parsing
      * @param string $template file name
      * @param array $params parameters to submit at template
-     * @return string html return of template parsing
+     * @param bool $htmlmode internal for rendering htmltemplate (render mode)
+     * @return string html return of template parsing     * 
      */
-    private function getHtmlBuffer($template,$params = array(), $executeglobal=true)
+    private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
     {
         $fnparams = null;
         if($executeglobal)
@@ -355,7 +356,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         {
             $fnparams = $params;
         }
-       return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller);
+       return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller,$htmlmode);
     }
     
     /**
