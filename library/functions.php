@@ -17,6 +17,20 @@ if ( ! function_exists('ddump'))
 	}
 }
 
+if ( ! function_exists('gdump'))
+{
+	  /**
+	 * Dump the passed variables and end the script.
+	 *
+	 * @param  mixed
+	 * @return void
+	 */
+	function gdump()
+	{	 
+		array_map(function($x) {    \GL\Core\Debug::dump($x) ;   }, func_get_args()); die;	 
+	}
+}
+
 if ( ! function_exists('sdump'))
 {
 	  /**
