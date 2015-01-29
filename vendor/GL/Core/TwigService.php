@@ -136,7 +136,7 @@ class TwigService implements TemplateServiceInterface
             $event = $stopwatch->stop('render');
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                echo "<!-- generated  twig  ".$event->getDuration()." ms -->";
+                echo "<!-- generated  twig  ".$event->getDuration()." ms -->\r\n";
             }        
         } 
         catch (\Twig_Error $e) 
