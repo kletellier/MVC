@@ -24,7 +24,8 @@
         "symfony/console": "2.6.*@dev",
         "psr/log": "1.0.*@dev",
         "maximebf/debugbar": "1.*",
-        "mobiledetect/mobiledetectlib": "dev-master"        
+        "mobiledetect/mobiledetectlib": "dev-master",
+        "symfony/var-dumper": "2.7.*@dev"   
     },
     "autoload": {
         "psr-0": {
