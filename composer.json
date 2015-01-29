@@ -33,7 +33,8 @@
             "DI" : "cache/",     
             "Fpdf" : "vendor/",
             "PHPExcel" : "vendor/PHPExcel/Classes/"
-            } 
+            },
+        "files": ["library/functions.php"]
     },
     "scripts": {
         "post-install-cmd": [
