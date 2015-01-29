@@ -163,7 +163,7 @@ class SecurityService implements SecurityServiceInterface
 			$inst->salt = uniqid();
 			$inst->password = $this->encryptPassword($inst->salt,$password);
 			$inst->roles = json_encode($roles);
-			$inst->enabled = 1;
+			$inst->enabled = 0;
 			$inst->key = uniqid();			
 			$inst->save();
 			$ret = $inst->id;
