@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\ServiceProvider;
-
+use GL\Core\Config;
 /**
  * Enable/Disable error reporting to output buffer
  */
