@@ -30,6 +30,60 @@ function setReporting()
     }
 }
 
+
+function executeBefores(\Symfony\Component\DependencyInjection\Container $container,$route)
+{
+
+    $cfg = new Config("functions");
+    $fnArray = $cfg->load();
+ 
+    foreach ($fnArray as $key => $value) {
+
+        if($value["type"]=="before")
+        {
+            $bExecute = false;
+            // for each global function defined
+
+            $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
+            $class = $value["class"];
+            // test if class exist
+            if(!class_exists($class))
+            {
+                echo "class " . $class . " does not exist";
+                die();
+            }
+            // test if interface is implemented
+             // test if class implement interface
+            $classref = new \ReflectionClass($class);             
+            if(!$classref->implementsInterface('\GL\Core\BeforeFunctionInterface'))
+            {
+              echo "class ".$class." does not implement BeforeFunctionInterface";
+              die();
+            }      
+            // test if route is allowed
+            if(isset($arrRoutes))
+            {
+                // function restricted to specified routes in arrRoutes
+                if(in_array($route, $arrRoutes))
+                {
+                    $bExecute = true;
+                }
+            }
+            else
+            {
+                // function executed for all routes
+                $bExecute = true;
+            }
+            if($bExecute)
+            {
+                $exc = new $class($container);
+                $ret = $exc->execute();
+            }
+        }     
+    }   
+    return $ret;
+}
+
 function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\Container $container)
 {
     $resp = $response;
@@ -123,7 +177,8 @@ function HandleRequest($url)
                $container->get('debug')["messages"]->addMessage("Route : " . $parameters["_route"]);                      
             } 
             $cr = new ControllerResolver($controller,$action,$parameters);    
-                  
+            // adding executebefore functions
+            executeBefores($container,$parameters["_route"]);            
             $response = $cr->execute();     
             
     }
