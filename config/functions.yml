@@ -1,3 +1,6 @@
 global:
       type: global
       class: "Application\Shared\GlobalFunction"
+before:
+      type: before
+      class: "Application\Shared\BeforeFunction"
