@@ -288,6 +288,14 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         throw new \GL\Core\AccessDeniedHttpException;
     }
 
+    /*
+    * Throw 404 error
+    */
+    function is404()
+    {
+        throw new \GL\Core\NotFoundHttpException;
+    }
+
     /**
      * Function to allow access to logged user and test roles
      * @param array $roles array of roles allowed to access resource

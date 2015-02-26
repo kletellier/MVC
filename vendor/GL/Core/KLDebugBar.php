@@ -21,6 +21,7 @@ use DebugBar\DataCollector\PDO\TraceablePDO;
 use DebugBar\DataCollector\PDO\PDOCollector;
 use PDO;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use GL\Core\RouteDataCollector;
 
 /**
  * Debug bar subclass which adds all included collectors
@@ -34,8 +35,9 @@ class KLDebugBar extends DebugBar
         $this->addCollector(new RequestDataCollector());
         $this->addCollector(new TimeDataCollector());
         $this->addCollector(new MemoryCollector());
+        $this->addCollector(new RouteDataCollector());
         $this->addCollector(new ExceptionsCollector());
- 
+        
         try 
         {
             $conn= Capsule::connection("default");

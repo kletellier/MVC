@@ -303,6 +303,10 @@ class ControllerResolver
             {
                 $response = $this->get403Response();
             }
+            catch(\GL\Core\NotFoundHttpException $nf)
+            {
+                $response = $this->get404Response();
+            }
             catch(Exception $ex)
             {                   
                $response = $this->get500Response($ex->getMessage()  , "", "");  
