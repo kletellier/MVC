@@ -7,6 +7,7 @@ set_time_limit(0);
  */
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__))); 
+define('TEMPLATEPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
 define('CONFIGDIR',ROOT.DS.'config'); // path to config directory
 define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // path to debugbar resource
@@ -22,6 +23,7 @@ use GL\Command\ModelsCommand;
 use GL\Command\SecurityCommand;
 use GL\Command\UserCommand;
 use GL\Command\DebugBarCommand;
+use GL\Command\ControllerCommand;
 
 use Symfony\Component\Console\Application;
 
@@ -32,4 +34,5 @@ $application->add(new ModelsCommand);
 $application->add(new SecurityCommand);
 $application->add(new UserCommand);
 $application->add(new DebugBarCommand);
+$application->add(new ControllerCommand);
 $application->run();
