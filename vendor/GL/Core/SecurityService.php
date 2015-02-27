@@ -19,6 +19,8 @@ class SecurityService implements SecurityServiceInterface
 	protected $tokensalt;
 	protected $cookiename;
 	protected $cookieduration;
+	protected $userlogged;
+
 	protected $model = '<?php
 
 	namespace Application\Models;
@@ -163,7 +165,7 @@ class SecurityService implements SecurityServiceInterface
 			$inst->salt = uniqid();
 			$inst->password = $this->encryptPassword($inst->salt,$password);
 			$inst->roles = json_encode($roles);
-			$inst->enabled = 0;
+			$inst->enabled = 1;
 			$inst->key = uniqid();			
 			$inst->save();
 			$ret = $inst->id;
@@ -231,6 +233,7 @@ class SecurityService implements SecurityServiceInterface
 				$this->session->save();
 				$user->nblogin+=1;				 
 				$user->save();
+				$this->userlogged = $user;
 			}
 		}
 		return $ret;
@@ -280,7 +283,8 @@ class SecurityService implements SecurityServiceInterface
 			$this->session->set('session.id',$user->id);
 			$this->session->save();
 			$user->nblogin+=1;				 
-			$user->save();			 
+			$user->save();		
+			$this->userlogged = $user;	 
 		}
 		return $user;
 	}
@@ -306,7 +310,8 @@ class SecurityService implements SecurityServiceInterface
 						$this->session->set('session.id',$user->id);
 						$this->session->save();
 						$user->nblogin+=1;				 
-						$user->save();			 
+						$user->save();		
+						$this->userlogged = $user;	 
 					}
 				}			
 			}
@@ -326,9 +331,14 @@ class SecurityService implements SecurityServiceInterface
 		try {
 			$inst = $this->getInstance();
 			$id = $this->session->get('session.id');
-			if($id!="")
+			if($id!="" && $this->userlogged==null)
 			{
-				$ret = $inst->find($id);				 
+				$ret = $inst->find($id);
+				$this->userlogged = $ret;				 
+			}
+			else
+			{
+				$ret = $this->userlogged;
 			}
 			
 		} catch (Exception $e) {
@@ -461,6 +471,7 @@ class SecurityService implements SecurityServiceInterface
 	 */
 	public function logout()
 	{
+		$this->userlogged = null;
 		$this->session->set('session.id',"");
 		$this->session->save();
 	}
