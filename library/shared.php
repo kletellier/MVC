@@ -49,7 +49,7 @@ function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Sy
 
 function executeBefores(\Symfony\Component\DependencyInjection\Container $container,$route)
 {
-
+    $ret = false;
     $cfg = new Config("functions");
     $fnArray = $cfg->load();
  
