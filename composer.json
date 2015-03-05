@@ -47,5 +47,7 @@
             "php app/console cache:clear"
         ]
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "optimize-autoloader": true,
+    "preferred-install":"dist"
 }
