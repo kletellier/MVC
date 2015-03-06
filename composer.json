@@ -25,15 +25,15 @@
         "psr/log": "1.0.*@dev",
         "maximebf/debugbar": "1.*",
         "mobiledetect/mobiledetectlib": "dev-master",
-        "symfony/var-dumper": "2.7.*@dev"   
+        "symfony/var-dumper": "2.7.*@dev",
+        "itbz/fpdf": "dev-master",
+        "phpoffice/phpexcel": "dev-master" 
     },
     "autoload": {
         "psr-0": {
             "Application" : "app/",
             "GL" : "vendor/",       
-            "DI" : "cache/",     
-            "Fpdf" : "vendor/",
-            "PHPExcel" : "vendor/PHPExcel/Classes/"
+            "DI" : "cache/"
             },
         "files": ["library/functions.php"]
     },

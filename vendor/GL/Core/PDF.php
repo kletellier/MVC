@@ -5,7 +5,7 @@ namespace GL\Core;
 /**
  * Class PDF Wrapper extend FPDF
  */
-class PDF extends \Fpdf\Fpdf
+class PDF extends \fpdf\Fpdf
 {
     /**
      * 
