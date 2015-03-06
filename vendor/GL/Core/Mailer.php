@@ -20,6 +20,7 @@ class Mailer
     private $_body;
     private $_isHtml;
     private $_attach;
+    private $_disable;
  
     /**
      * Constructor
@@ -36,6 +37,7 @@ class Mailer
             $this->_body = "";
             $this->_isHtml = false;
             $this->_attach = array();
+            $this->_disable = 0;
             $this->getParams();
     }
     
@@ -94,6 +96,10 @@ class Mailer
             $this->_port = $arr["port"];
             $this->_user = $arr["user"];
             $this->_password = $arr["password"];
+            if(isset($arr["disable"]))
+            {
+                $this->_disable = $arr['disable'];
+            }
         }
     }
     
@@ -215,7 +221,11 @@ class Mailer
         $this->getTo($message);
         // ajout des pièces jointes
         $this->getAttachment($message);   
-        $result = $mailer->send($message);        
+        $result = 0;
+        if($this->_disable==0)
+        {
+            $result = $mailer->send($message);   
+        }             
         return ($result>=1);
     }
         
