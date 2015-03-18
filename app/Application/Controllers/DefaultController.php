@@ -45,7 +45,7 @@ class DefaultController extends Controller
             $pdf->AddPage();
             $pdf->SetFont('Arial','B',16);
             $pdf->Cell(40,10,'Hello World !');
-            $buffer = $pdf->GetBuffer();	
+            $buffer = $pdf->GetOuput();	
             return $this->renderText($buffer, "200", array('Content-Type' => 'application/pdf','Content-Disposition' => 'attachment; filename=pdffile.pdf '));
         }
         
