@@ -26,7 +26,7 @@
         "maximebf/debugbar": "1.*",
         "mobiledetect/mobiledetectlib": "dev-master",
         "symfony/var-dumper": "2.7.*@dev",
-        "itbz/fpdf": "dev-master",
+        "tecnick.com/tcpdf": "dev-master",
         "phpoffice/phpexcel": "dev-master" 
     },
     "autoload": {
