@@ -8,6 +8,13 @@ namespace GL\Core;
 class PDF extends \fpdf\Fpdf
 {
 
+
+
+   function setCursor($x,$y)
+   {
+    $this->SetY($y);
+    $this->SetX($x);
+   }
     
     /**
 * Draws text within a box defined by width = w, height = h, and aligns
