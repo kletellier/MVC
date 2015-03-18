@@ -20,7 +20,7 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF and PHPEx
 	* Eloquent
 * PhpOfffice
 	* PhpExcel
-* Fpdf
+* TCPDF
 * Twig
 * Swiftmailer
 * PSR Log
@@ -142,7 +142,7 @@ The controller can return Html ou ```Symfony/Component/HttpFoundation/Response``
 By using 
 
 ```php
-$this->render(«Hello») ;
+return $this->render(«Hello») ;
 
 ```
 
@@ -162,7 +162,7 @@ $this->redirect(«routename»,array(« param »=> value)) ; // routename is a route 
 And also you have render function for using Twig Template engine.
 
 ```php
-$this->render('index.html.twig',array(« params »=> « value »)) ;
+return $this->render('index.html.twig',array(« params »=> « value »)) ;
 ```
 
 The render function submit all params provided in array to the template file index.html.twig.
@@ -178,7 +178,7 @@ Render function return an ```Symfony/Component/HttpFoundation/Response```, you c
 If you only want the Html, you can use :
 
 ```php
-$this->renderHtmlTemplate('index.html.twig',array(« params »=> « value »)) ;
+return $this->renderHtmlTemplate('index.html.twig',array(« params »=> « value »)) ;
 ```
 
 That return only raw Html.
@@ -212,7 +212,7 @@ You can add your own method in Twig with ```app/Application/Shared/SharedTwigHel
 If you doesn't want use Twig you can put PHP file in views folder and use 
 
 ```php
-$this->renderPHP('index.php',array(« params »=> « value »)) ;
+return $this->renderPHP('index.php',array(« params »=> « value »)) ;
 ```
 
 it works as an include file.
@@ -230,7 +230,7 @@ You have many services on each container :
 * request_helper : ```GL\Core\RequestHelper``` instance.
 * twig : Twig Environnment instance.
 * routes : ```Symfony\Component\Routing\RouteCollection``` all routes defined in ```config/routes.yml```.
-* pdf : ```GL\Core\PDF``` instance, wrapper of fPDF.
+* pdf : ```GL\Core\PDF``` instance, wrapper of TCPDF.
 * excel : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
 * session : ```Symfony\Component\HttpFoundation\Session\Session``` instance.
 * crsf : ```GL\Core\FormCrsf``` instance.
@@ -299,9 +299,9 @@ For SwiftMailer :
 
 [Swiftmailer] (http://swiftmailer.org/docs/introduction.html)
 
-For Fpdf :
+For TCPDF :
 
-[fpdf] (http://www.fpdf.org/)
+[TCPDF] (http://www.tcpdf.org/)
 
 For PHPExcel :
 
