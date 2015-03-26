@@ -374,7 +374,16 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderJSON($var)
     {
-        $response = new Response(json_encode($var));
+        $json = json_encode($var);
+        if($json==FALSE)
+        {
+            if(DEVELOPMENT_ENVIRONMENT)
+            {
+                $this->container->get('debug')["messages"]->addMessage(json_last_error());
+            }            
+            $json = "";
+        }
+        $response = new Response($json);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
