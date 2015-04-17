@@ -1,7 +1,7 @@
 <?php 
   
-use GL\Core\RouteProvider;
-use GL\Core\ControllerResolver;
+use GL\Core\Routing\RouteProvider;
+use GL\Core\Controller\ControllerResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -11,8 +11,8 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
-use GL\Core\ServiceProvider;
-use GL\Core\Config;
+use GL\Core\DI\ServiceProvider;
+use GL\Core\Config\Config;
 /**
  * Enable/Disable error reporting to output buffer
  */
@@ -71,7 +71,7 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
             // test if interface is implemented
              // test if class implement interface
             $classref = new \ReflectionClass($class);             
-            if(!$classref->implementsInterface('\GL\Core\BeforeFunctionInterface'))
+            if(!$classref->implementsInterface('\GL\Core\Controller\BeforeFunctionInterface'))
             {
               echo "class ".$class." does not implement BeforeFunctionInterface";
               die();
@@ -95,7 +95,7 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
                 $exc = new $class($container);
                 $ret = $exc->execute();
             }
-        }     
+        }  
     }   
     return $ret;
 }
@@ -176,10 +176,9 @@ function HandleRequest($url)
             {
                $container->get('debug')["messages"]->addMessage("Route : " . $parameters["_route"]);                      
             } 
-            $cr = new ControllerResolver($controller,$action,$parameters);    
-            executeBefores($container,$parameters["_route"]);      
-            $response = $cr->execute();     
-            
+            $cr = new ControllerResolver($controller,$action,$parameters);              
+            executeBefores($container,$parameters["_route"]);                
+            $response = $cr->execute();                 
     }
     catch(ResourceNotFoundException $ex)
     {

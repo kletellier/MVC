@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class to add global parameters to view parameters
  * Called by controller before rendering
  */
-class GlobalFunction implements \GL\Core\GlobalFunctionInterface
+class GlobalFunction implements \GL\Core\Controller\GlobalFunctionInterface
 { 	
     protected $_vals;
     protected $_container;		 

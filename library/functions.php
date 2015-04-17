@@ -27,7 +27,7 @@ if ( ! function_exists('gdump'))
 	 */
 	function gdump()
 	{	 
-		array_map(function($x) {    \GL\Core\Debug::dump($x) ;   }, func_get_args()); die;	 
+		array_map(function($x) {    \GL\Core\Debug\Debug::dump($x) ;   }, func_get_args()); die;	 
 	}
 }
 

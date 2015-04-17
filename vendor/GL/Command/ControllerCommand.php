@@ -16,7 +16,7 @@ class ControllerCommand extends Command
 	protected $model = '<?php 
 namespace Application\Controllers;
 
-use GL\Core\Controller as Controller;
+use GL\Core\Controller\Controller as Controller;
 
 class ##name##Controller extends Controller
 {

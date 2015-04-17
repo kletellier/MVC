@@ -1,8 +1,8 @@
 <?php 
 namespace Application\Controllers;
 
-use GL\Core\Controller as Controller;
-use GL\Core\Config;
+use GL\Core\Controller\Controller as Controller;
+use GL\Core\Config\Config;
 
 class ConfigController extends Controller
 {
@@ -12,7 +12,7 @@ class ConfigController extends Controller
 		$helper = $this->get('request_helper');
 		if($helper->isLocalClient()==false || DEVELOPMENT_ENVIRONMENT==false)
 		{
-			throw new \GL\Core\AccessDeniedHttpException;
+			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
 		$config = new Config('database'); 
 		if($request->getMethod()=="POST")
@@ -40,7 +40,7 @@ class ConfigController extends Controller
 		$helper = $this->get('request_helper');
 		if($helper->isLocalClient()==false || DEVELOPMENT_ENVIRONMENT==false)
 		{
-			throw new \GL\Core\AccessDeniedHttpException;
+			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
 		$config = new Config('config'); 
 		if($request->getMethod()=="POST")
@@ -68,7 +68,7 @@ class ConfigController extends Controller
 		$helper = $this->get('request_helper');
 		if($helper->isLocalClient()==false || DEVELOPMENT_ENVIRONMENT==false)
 		{
-			throw new \GL\Core\AccessDeniedHttpException;
+			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
 		 $config = new Config('mail'); 
 		if($request->getMethod()=="POST")
@@ -92,8 +92,8 @@ class ConfigController extends Controller
     private function renderTwig($tpl,$params,$code=200)
     {
 
-        $tw = new \GL\Core\TwigService();
-        $html = $tw->render($tpl,$params,\GL\Core\ServiceProvider::GetDependencyContainer(),$this->_controller);
+        $tw = new \GL\Core\Twig\TwigService();
+        $html = $tw->render($tpl,$params,\GL\Core\DI\ServiceProvider::GetDependencyContainer(),$this->_controller);
         $response = new \Symfony\Component\HttpFoundation\Response($html, $code, array('Content-Type' => 'text/html'));         
         return $response;
     }  

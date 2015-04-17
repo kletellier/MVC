@@ -1,7 +1,7 @@
 <?php 
 namespace Application\Controllers;
 
-use GL\Core\Controller as Controller;
+use GL\Core\Controller\Controller as Controller;
 
 class DefaultController extends Controller
 {
@@ -42,8 +42,7 @@ class DefaultController extends Controller
         {
             // get PDF service from DI container
             $pdf = $this->get('pdf');
-            $pdf->AddPage();
-            $pdf->SetFont('Arial','B',16);
+            $pdf->AddPage();            
             $pdf->Cell(40,10,'Hello World !');
             $buffer = $pdf->GetOuput();	
             return $this->renderText($buffer, "200", array('Content-Type' => 'application/pdf','Content-Disposition' => 'attachment; filename=pdffile.pdf '));

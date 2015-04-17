@@ -4,7 +4,7 @@
  */
 use Illuminate\Database\Capsule\Manager as Capsule;  
 use Symfony\Component\Yaml\Parser;
-use GL\Core\Config;
+use GL\Core\Config\Config;
 
 /**
  * Load database configuration from config/database.yml 

@@ -4,7 +4,7 @@ namespace Application\Shared;
 use Symfony\Component\DependencyInjection\ContainerInterface; 
 
 
-class BeforeFunction implements \GL\Core\BeforeFunctionInterface
+class BeforeFunction implements \GL\Core\Controller\BeforeFunctionInterface
 { 	
     protected $_container;		 
 
@@ -14,8 +14,7 @@ class BeforeFunction implements \GL\Core\BeforeFunctionInterface
     }
 
     public function execute()
-    {
-        
+    {         
         return true;
     }
 }

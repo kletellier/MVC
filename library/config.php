@@ -8,7 +8,7 @@
  * AUTORELOADCACHE :recreate twig cache for each request
  */
 
-use GL\Core\Config;
+use GL\Core\Config\Config;
 
 // loading configuration from config/config.yml
 $loader = new Config('config');
