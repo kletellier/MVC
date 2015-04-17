@@ -89,17 +89,13 @@ class ServiceProvider
         // Inject mailer
         $container->register('mailer', 'GL\Core\Mailer');
         // Inject Request
-        $container->register('request', 'Symfony\Component\HttpFoundation\Request')
-        ->setFactoryClass('Symfony\Component\HttpFoundation\Request')
-        ->setFactoryMethod('createFromGlobals');         
+        $container->register('request', 'Symfony\Component\HttpFoundation\Request')->setFactory("Symfony\Component\HttpFoundation\Request::createFromGlobals");
         // Inject Request helper
         $container->register('request_helper', 'GL\Core\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')));
         // Inject Twig Service
         $container->register('template','GL\Core\TemplateProvider');
         // Inject RouteCollection
-        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')
-        ->setFactoryClass('GL\Core\RouteProvider')
-        ->setFactoryMethod('GetRouteCollection');   
+        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')->setFactory("GL\Core\RouteProvider::GetRouteCollection");          
         // Inject FPDF Wrapper
         $container->register('pdf', 'GL\Core\PDF');
         // Inject PHPExcel Wrapper
@@ -115,9 +111,7 @@ class ServiceProvider
         // Inject DebugBar
         $container->register('debug','GL\Core\KLDebugBar');
          // Inject Pdo Object
-        $container->register('pdo', 'PDO')
-        ->setFactoryClass('GL\Core\DbHelper')
-        ->setFactoryMethod('getPdo');   
+        $container->register('pdo', 'PDO')->setFactory("GL\Core\DbHelper::getPdo");         
         // Inject Config
         $container->register('config','GL\Core\Config');
         // Inject DbHelper
