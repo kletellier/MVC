@@ -44,8 +44,8 @@ class Utils
             
             if($route!=null)
             {
-                $pattern = $route->getPattern();
-                $url = \GL\Core\Utils::url($pattern);
+                $pattern = $route->getPath();                 
+                $url = \GL\Core\Helpers\Utils::url($pattern);
                 $defaults = $route->getDefaults();
                 // replace parameters by provided array
                 foreach($params as $key => $value)
