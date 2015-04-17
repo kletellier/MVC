@@ -130,7 +130,7 @@ If no route matched, 404 action of ErrorController was executed.
 
 ### controller
 
-All your controller are class that inherit from ```\GL\Core\Controller```.
+All your controller are class that inherit from ```\GL\Core\Controller\Controller```.
 You must store this file with a normalized name as ControllernameController.php in the ```/app/Application/Controllers``` folder.
  
 In our example DefaultController.php. 
@@ -225,17 +225,21 @@ Each controller instance own his DI container, you can retrieve each service on 
 
 You have many services on each container :
 
-* mailer : ```\GL\Core\Mailer``` instance, a wrapper of SwiftMailer.
+* mailer : ```\GL\Core\Tools\Mailer``` instance, a wrapper of SwiftMailer.
 * request : ```Symfony\Component\HttpFoundation\Request``` instance.
-* request_helper : ```GL\Core\RequestHelper``` instance.
-* twig : Twig Environnment instance.
+* request_helper : ```GL\Core\Helpers\RequestHelper``` instance.
+* template : ```GL\Core\Templating\TemplateProvider``` instance.
 * routes : ```Symfony\Component\Routing\RouteCollection``` all routes defined in ```config/routes.yml```.
-* pdf : ```GL\Core\PDF``` instance, wrapper of TCPDF.
-* excel : ```GL\Core\Excel``` instance, wrapper of PhpExcel.
+* pdf : ```GL\Core\Tools\PDF``` instance, wrapper of TCPDF.
+* excel : ```GL\Core\Tools\Excel``` instance, wrapper of PhpExcel.
 * session : ```Symfony\Component\HttpFoundation\Session\Session``` instance.
-* crsf : ```GL\Core\FormCrsf``` instance.
-* translator : ```GL\Core\Translator``` instance.
-* security : ```GL\Core\SecurityService``` instance.
+* crsf : ```GL\Core\Security\FormCrsf``` instance.
+* translator : ```GL\Core\Config\Translator``` instance.
+* security : ```GL\Core\Security\SecurityService``` instance.
+* debug : ```GL\Core\Debug\KLDebugBar``` instance (debug bar).
+* pdo : PDO instance of started database.
+* config : ```GL\Core\Config\Config``` instance for reading yml config files.
+* db : ```GL\Core\Helpers\DbHelper``` instance for database interactions.
 
 You can add your own services in DI container by adding reference in ```config/services.yml```.
 
