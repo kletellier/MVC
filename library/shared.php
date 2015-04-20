@@ -145,6 +145,23 @@ function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfo
     return $resp;
 }
 
+function startMeasure($id,$text)
+{
+    if(DEVELOPMENT_ENVIRONMENT)
+    {
+        $container = ServiceProvider::GetDependencyContainer();
+        $container->get('debug')['time']->startMeasure($id, $text);
+    }
+}
+
+function stopMeasure($id)
+{
+    if(DEVELOPMENT_ENVIRONMENT)
+    {
+        $container = ServiceProvider::GetDependencyContainer();
+        $container->get('debug')['time']->stopMeasure($id);
+    }
+}
 /**
  * Routing function
  * 
@@ -154,14 +171,20 @@ function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfo
  */
 function HandleRequest($url)
 {        
-    $container = ServiceProvider::GetDependencyContainer();  
+    $container = ServiceProvider::GetDependencyContainer();       
+    startMeasure('getroutes', 'Get Routes');     
     $collection = $container->get('routes'); 
+    stopMeasure('getroutes');
+    startMeasure('initrouting', 'Init Routing');    
     $context = new RequestContext();    
     $context->fromRequest($container->get('request'));
     $matcher = new UrlMatcher($collection, $context);   
     $response = null;
-    // instantiate Security Service for autologin
+    stopMeasure('initrouting');
+    startMeasure('security', 'Start security');
     $ss = $container->get('security');
+    stopMeasure('security');
+    
     if(DEVELOPMENT_ENVIRONMENT)
     {
        $container->get('debug')['routes']->setRoutes($collection);        
@@ -169,16 +192,25 @@ function HandleRequest($url)
     } 
     try 
     {               
-            $parameters = $matcher->match($url);        
+            startMeasure('routing', 'Routing');            
+            $parameters = $matcher->match($url); 
+            stopMeasure('routing');  
+            startMeasure('resolving', 'Resolving controller');
             $controller = $parameters['controller'];
             $action = $parameters['action'];                    
             if(DEVELOPMENT_ENVIRONMENT)
             {
                $container->get('debug')["messages"]->addMessage("Route : " . $parameters["_route"]);                      
             } 
-            $cr = new ControllerResolver($controller,$action,$parameters);              
-            executeBefores($container,$parameters["_route"]);                
-            $response = $cr->execute();                 
+            $cr = new ControllerResolver($controller,$action,$parameters);  
+            stopMeasure('resolving'); 
+            startMeasure('before', 'Execute before');                                   
+            executeBefores($container,$parameters["_route"]);  
+            stopMeasure('before'); 
+            startMeasure('execute', 'Execute action');                        
+            $response = $cr->execute(); 
+            stopMeasure('execute'); 
+                           
     }
     catch(ResourceNotFoundException $ex)
     {
@@ -196,10 +228,12 @@ function HandleRequest($url)
              $response = $cr500->execute();           
     }
 
+    startMeasure('filtering', 'Filtering response'); 
+     
     if ($response instanceof Response) {
         // prepare response
         filterResponse($response,$container)->send();
-    }
+    }     
 }  
 
 ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
