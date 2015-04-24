@@ -372,6 +372,10 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
     {
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $this->get('debug')["time"]->startMeasure('global','Insert global variables');
+        }
         $fnparams = null;
         if($executeglobal)
         { 
@@ -381,7 +385,10 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         {
             $fnparams = $params;
         }
-        
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $this->get('debug')["time"]->stopMeasure('global');
+        }
        return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller,$htmlmode);
     }
     

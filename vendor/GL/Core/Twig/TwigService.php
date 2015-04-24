@@ -121,12 +121,22 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             $stopwatch->start('render');
             $this->setContainer($container);  
             $this->setController($controller);
-            $env = $this->getTwigEnvironment();
-            if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
+            if(DEVELOPMENT_ENVIRONMENT)
             {
+                $container->get('debug')["time"]->startMeasure('inittwig','Init Twig Environnment');
+            }
+            $env = $this->getTwigEnvironment();
+            if(DEVELOPMENT_ENVIRONMENT)
+            {
+                $container->get('debug')["time"]->stopMeasure('inittwig');
+            }
+            if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
+            {                
                 $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
-                $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug));             
+                $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug)); 
+                $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
                 $ret =  $envdebug->render($template, $params);
+                $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
             }
             else
             {
@@ -148,7 +158,7 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             }
            throw new \Exception($e->getMessage());
         }
-        
+         
         return $ret;
     }
 }
