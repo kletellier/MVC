@@ -238,12 +238,13 @@ function HandleRequest($url)
 
 ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
 setReporting();
-$end_boot_time = microtime(true);
 if(DEVELOPMENT_ENVIRONMENT)
-{    
-    $boot_time = $end_boot_time - $start_boot_time;
+{        
     $container = ServiceProvider::GetDependencyContainer(); 
+    $end_boot_time = microtime(true);
+    $boot_time = $end_boot_time - $start_boot_time;
     $container->get('debug')['messages']->addMessage("Booting time : $boot_time sec");
+    $container->get('debug')['time']->addMeasure("Booting time",$start_boot_time,$end_boot_time);
 }
 HandleRequest($url);  
 
