@@ -15,6 +15,12 @@ class Utils
     {
         $sep = "/";
         $basepath = BASE_PATH;
+        if($basepath=="")
+        {
+            // search in request
+            $req = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('request');            
+            $basepath = $req->getBaseUrl();
+        }
         if(substr($basepath, -1)!=$sep)
         {
             $basepath = $basepath.$sep;

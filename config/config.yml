@@ -1,5 +1,5 @@
 debug: true
-webpath: http://localhost
+webpath: ''
 template:
     engine: twig
     cache: false
