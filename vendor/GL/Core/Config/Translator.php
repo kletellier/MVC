@@ -22,8 +22,15 @@ class Translator
         $this->loadFile();
     }
 
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
     public function setLocale($locale)
     {
+        $dbg = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('debug');
+        $dbg["messages"]->addMessage("Loading translation $locale");
         $this->locale = $locale;
         $this->loadFile();
     }

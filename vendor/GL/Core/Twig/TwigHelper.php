@@ -62,7 +62,10 @@ class TwigHelper extends \Twig_Extension
         $trans = $this->container->get('translator');
         if($locale!=LOCALE){$trans->setLocale($locale);}
         $session = $this->container->get('session');
-        if($locale!=$session->get('twig.locale')){$trans->setLocale($session->get('twig.locale'));}
+        if($session->get('twig.locale')!="")
+        {
+            if($trans->getLocale()!=$session->get('twig.locale')){$trans->setLocale($session->get('twig.locale'));}
+        }        
         return $trans->translate($text);
     }
         
