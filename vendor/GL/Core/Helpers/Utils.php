@@ -18,8 +18,8 @@ class Utils
         if($basepath=="")
         {
             // search in request
-            $req = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('request');            
-            $basepath = $req->getBaseUrl();
+            $req = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('request');    
+            $basepath = $req->getSchemeAndHttpHost();             
         }
         if(substr($basepath, -1)!=$sep)
         {
