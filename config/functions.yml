@@ -4,3 +4,7 @@ global:
 before:
       type: before
       class: "Application\Shared\BeforeFunction"
+filter:
+      type: filter
+      class: "GL\Core\Debug\DebugInject"
+      scope: "dev"

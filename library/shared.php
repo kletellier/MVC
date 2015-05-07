@@ -33,16 +33,71 @@ function setReporting()
 function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\Container $container)
 {
     $resp = $response;
-    try {
-        
-        if(DEVELOPMENT_ENVIRONMENT)
+    $ret = false;
+    $cfg = new Config("functions");
+    $fnArray = $cfg->load();
+    if(isset($fnArray))
+    {
+        foreach ($fnArray as $key => $value) 
         {
-            AddDebugBar($response,$container);
-        }
-        
-        
-    } catch (Exception $e) {
-        
+
+            if($value["type"]=="filter")
+            {
+                $execute = false;
+                // for each global function defined
+                $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
+                $scope = (isset($value["scope"])) ? $value["scope"] : "all";
+                $class = $value["class"];
+
+                // test if class exist
+                if(!class_exists($class))
+                {
+                    echo "class " . $class . " does not exist";
+                    die();
+                }
+                // test if interface is implemented
+                 // test if class implement interface
+                $classref = new \ReflectionClass($class);             
+                if(!$classref->implementsInterface('\GL\Core\Controller\FilterResponseInterface'))
+                {
+                  echo "class ".$class." does not implement FilterResponseInterface";
+                  die();
+                }      
+                // test if route is allowed
+                if(isset($arrRoutes))
+                {
+                    // function restricted to specified routes in arrRoutes
+                    if(in_array($route, $arrRoutes))
+                    {
+                        $bExecute = true;
+                    }
+                }
+                else
+                {
+                    // function executed for all routes
+                    $bExecute = true;
+                }
+
+                if($scope!="all" && $bExecute)                
+                {
+                    $bExecute = false;
+                    if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
+                    {
+                        $bExecute = true;
+                    }
+                    if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
+                    {
+                        $bExecute = true;
+                    }                                       
+                }
+ 
+                if($bExecute)
+                {
+                    $exc = new $class($resp,$container);                    
+                    $resp = $exc->execute();
+                }
+            }  
+        } 
     }
     return $resp;
 }
@@ -54,99 +109,68 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
     $fnArray = $cfg->load();
     if(isset($fnArray))
     {
-        foreach ($fnArray as $key => $value) {
-
-        if($value["type"]=="before")
+        foreach ($fnArray as $key => $value) 
         {
-            $bExecute = false;
-            // for each global function defined
-
-            $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
-            $class = $value["class"];
-            // test if class exist
-            if(!class_exists($class))
+            if($value["type"]=="before")
             {
-                echo "class " . $class . " does not exist";
-                die();
-            }
-            // test if interface is implemented
-             // test if class implement interface
-            $classref = new \ReflectionClass($class);             
-            if(!$classref->implementsInterface('\GL\Core\Controller\BeforeFunctionInterface'))
-            {
-              echo "class ".$class." does not implement BeforeFunctionInterface";
-              die();
-            }      
-            // test if route is allowed
-            if(isset($arrRoutes))
-            {
-                // function restricted to specified routes in arrRoutes
-                if(in_array($route, $arrRoutes))
+                $bExecute = false;
+                // for each global function defined
+                $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
+                $scope = (isset($value["scope"])) ? $value["scope"] : "all";
+                $class = $value["class"];
+                // test if class exist
+                if(!class_exists($class))
                 {
+                    echo "class " . $class . " does not exist";
+                    die();
+                }
+                // test if interface is implemented
+                 // test if class implement interface
+                $classref = new \ReflectionClass($class);             
+                if(!$classref->implementsInterface('\GL\Core\Controller\BeforeFunctionInterface'))
+                {
+                  echo "class ".$class." does not implement BeforeFunctionInterface";
+                  die();
+                }      
+                // test if route is allowed
+                if(isset($arrRoutes))
+                {
+                    // function restricted to specified routes in arrRoutes
+                    if(in_array($route, $arrRoutes))
+                    {
+                        $bExecute = true;
+                    }
+                }
+                else
+                {
+                    // function executed for all routes
                     $bExecute = true;
                 }
-            }
-            else
-            {
-                // function executed for all routes
-                $bExecute = true;
-            }
-            if($bExecute)
-            {
-                $exc = new $class($container);
-                $ret = $exc->execute();
-            }
-        }  
-    } 
+                if($scope!="all" && $bExecute)                
+                {
+                    $bExecute = false;
+                    if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
+                    {
+                        $bExecute = true;
+                    }
+                    if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
+                    {
+                        $bExecute = true;
+                    }                                       
+                }
+                if($bExecute)
+                {
+                    $exc = new $class($container);
+                    $ret = $exc->execute();
+                }
+            }  
+        } 
     }
       
     return $ret;
 }
 
-function AddDebugBar(\Symfony\Component\HttpFoundation\Response $response,\Symfony\Component\DependencyInjection\Container $container)
-{
-    $resp = $response;
-    try {
-        
-        $headers = $resp->headers;
-        $ct = $headers->get('Content-Type');
-        
-        if(strtolower($ct)=="text/html")
-        {
-            $content = $resp->getContent();
-            // add debugbar before <html> closure tag
-            $debugbar = $container->get('debug');
-            $renderer = $debugbar->getJavascriptRenderer();
-            $url = BASE_PATH . "/dbg";
-            $renderer->setBaseUrl($url);
-
-            $dbghd = $renderer->renderHead();
-            $dbgct = $renderer->render();
-            $buf = "";
-            // test if </head> if present
-            if (strpos($content, '</head>') !== false)
-            {
-                $head = $dbghd."</head>";
-                $content=str_replace("</head>", $head, $content);
-            }
-            else
-            {
-                $buf.=$dbghd;
-            }
-     
-            $buf.=$dbgct."</html>";
-            $content=str_replace("</html>", $buf, $content);
-
-            $resp->setContent($content);
-        }        
-        
-    } 
-    catch (Exception $e) 
-    {
-        
-    }
-    return $resp;
-}
+ 
 
 function startMeasure($id,$text)
 {
