@@ -32,7 +32,7 @@ class DebugInject implements \GL\Core\Controller\FilterResponseInterface
                 // add debugbar before <html> closure tag
                 $debugbar = $this->_container->get('debug');
                 $renderer = $debugbar->getJavascriptRenderer();
-                $url = BASE_PATH . "/dbg";
+                $url = \GL\Core\Helpers\Utils::url("/dbg");
                 $renderer->setBaseUrl($url);
 
                 $dbghd = $renderer->renderHead();
