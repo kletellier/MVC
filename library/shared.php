@@ -52,8 +52,9 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
     $ret = false;
     $cfg = new Config("functions");
     $fnArray = $cfg->load();
- 
-    foreach ($fnArray as $key => $value) {
+    if(isset($fnArray))
+    {
+        foreach ($fnArray as $key => $value) {
 
         if($value["type"]=="before")
         {
@@ -96,7 +97,9 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
                 $ret = $exc->execute();
             }
         }  
-    }   
+    } 
+    }
+      
     return $ret;
 }
 
