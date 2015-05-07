@@ -19,7 +19,7 @@ class Utils
         {
             // search in request
             $req = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('request');    
-            $basepath = $req->getSchemeAndHttpHost();             
+            $basepath = $req->getSchemeAndHttpHost().$req->getBasePath();             
         }
         if(substr($basepath, -1)!=$sep)
         {
