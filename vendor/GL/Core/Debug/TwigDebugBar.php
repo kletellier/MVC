@@ -15,7 +15,7 @@ Class TwigDebugBar extends \Twig_Extension
 		$this->container = $container;
 		$this->debugbar = $this->container->get('debug');
 		$this->renderer = $this->debugbar->getJavascriptRenderer();
-		$url = BASE_PATH . "/dbg";
+		$url = \GL\Core\Helpers\Utils::url("/dbg");
 		$this->renderer->setBaseUrl($url);
 	}
 
