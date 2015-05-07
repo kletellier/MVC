@@ -153,52 +153,66 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
 
         $cfg = new Config("functions");
         $fnArray = $cfg->load();
-        
-        foreach ($fnArray as $key => $value) {
-
-            if($value["type"]=="global")
+        if(isset($fnArray))
+        {
+            foreach ($fnArray as $key => $value) 
             {
-                $bExecute = false;
-                // for each global function defined
-
-                $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
-                $class = $value["class"];
-                // test if class exist
-                if(!class_exists($class))
+                if($value["type"]=="global")
                 {
-                    echo "class " . $class . " does not exist";
-                    die();
-                }
-                // test if interface is implemented
-                 // test if class implement interface
-                $classref = new \ReflectionClass($class);             
-                if(!$classref->implementsInterface('\GL\Core\Controller\GlobalFunctionInterface'))
-                {
-                  echo "class ".$class." does not implement GlobalFunctionInterface";
-                  die();
-                }      
-                // test if route is allowed
-                if(isset($arrRoutes))
-                {
-                    // function restricted to specified routes in arrRoutes
-                    if(in_array($route, $arrRoutes))
+                    $bExecute = false;
+                    // for each global function defined
+                    $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
+                    $scope = (isset($value["scope"])) ? $value["scope"] : "all";
+                    $class = $value["class"];
+                    // test if class exist
+                    if(!class_exists($class))
                     {
+                        echo "class " . $class . " does not exist";
+                        die();
+                    }
+                    // test if interface is implemented
+                     // test if class implement interface
+                    $classref = new \ReflectionClass($class);             
+                    if(!$classref->implementsInterface('\GL\Core\Controller\GlobalFunctionInterface'))
+                    {
+                      echo "class ".$class." does not implement GlobalFunctionInterface";
+                      die();
+                    }      
+                    // test if route is allowed
+                    if(isset($arrRoutes))
+                    {
+                        // function restricted to specified routes in arrRoutes
+                        if(in_array($route, $arrRoutes))
+                        {
+                            $bExecute = true;
+                        }
+                    }
+                    else
+                    {
+                        // function executed for all routes
                         $bExecute = true;
                     }
-                }
-                else
-                {
-
-                    // function executed for all routes
-                    $bExecute = true;
-                }
-                if($bExecute)
-                {                    
-                    $exc = new $class($ret,$this->container);
-                    $ret = $exc->execute();
-                }
-            }     
-        }         
+                    if($scope!="all" && $bExecute)                
+                    {
+                        $bExecute = false;
+                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
+                        {
+                            $bExecute = true;
+                        }
+                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
+                        {
+                            $bExecute = true;
+                        }                                       
+                    }
+                    if($bExecute)
+                    {                    
+                        $exc = new $class($ret,$this->container);
+                        $ret = $exc->execute();
+                    }
+                }     
+            }    
+        }
+             
         return $ret;               
     }
 
