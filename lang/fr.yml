@@ -10,8 +10,10 @@ global:
     line : "Ligne"
     message : "Message"
 error:
+    401title : "Erreur 401"
+    401message : "Authentification nécessaire"
     403title : "Erreur 403"
-    403message : "Non autorisé"
+    403message : "Accès interdit"
     404title : "Erreur 404"
     404message : "Page non trouvée ! "
     500title : "Erreur 500"

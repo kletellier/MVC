@@ -83,7 +83,17 @@ class ControllerResolver
             return $this->execute(); 
         }
         
-         
+          /**
+         * Return Errror 401 response
+         */
+        private function get401Response()
+        {
+            ob_clean();
+            $this->_controller = "error";
+            $this->_action = "error401";
+            $this->_args = array();             
+            return $this->execute(); 
+        }
         
      /**
       * Fatal error handler
@@ -304,6 +314,10 @@ class ControllerResolver
 
             }
             catch(\GL\Core\Exception\AccessDeniedHttpException $ad)
+            {
+                $response = $this->get401Response();
+            }
+            catch(\GL\Core\Exception\AccessForbiddenHttpException $ad)
             {
                 $response = $this->get403Response();
             }

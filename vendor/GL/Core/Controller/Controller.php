@@ -312,11 +312,19 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     }
     
     /**
-     * Throw unauthorized error 403
+     * Throw unauthorized error 401
      */
     function isUnauthorized()
     {
         throw new \GL\Core\Exception\AccessDeniedHttpException;
+    }
+
+    /**
+     * Throw unauthorized error 403
+     */
+    function isForbidden()
+    {
+        throw new \GL\Core\Exception\AccessForbiddenHttpException;
     }
 
     /*
@@ -356,7 +364,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
                 }             
                 if(!$allowed)
                 {
-                    $this->isUnauthorized();
+                    $this->isForbidden();
                 }   
             }
         }       

@@ -8,11 +8,11 @@
 
 namespace GL\Core\Exception;
 
-class AccessDeniedHttpException extends HttpException
+class AccessForbiddenHttpException extends HttpException
 {
    
     public function __construct($message = null, \Exception $previous = null, $code = 0)
     {
-        parent::__construct(401, $message, $previous, array(), $code);
+        parent::__construct(403, $message, $previous, array(), $code);
     }
 }
