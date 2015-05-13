@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\DI\ServiceProvider;
 use GL\Core\Config\Config;
+use Assert\Assertion;
+
 /**
  * Enable/Disable error reporting to output buffer
  */
@@ -48,21 +50,9 @@ function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Sy
                 $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                 $scope = (isset($value["scope"])) ? $value["scope"] : "all";
                 $class = $value["class"];
-
                 // test if class exist
-                if(!class_exists($class))
-                {
-                    echo "class " . $class . " does not exist";
-                    die();
-                }
-                // test if interface is implemented
-                 // test if class implement interface
-                $classref = new \ReflectionClass($class);             
-                if(!$classref->implementsInterface('\GL\Core\Controller\FilterResponseInterface'))
-                {
-                  echo "class ".$class." does not implement FilterResponseInterface";
-                  die();
-                }      
+                Assertion::ClassExists($class);
+                Assertion::implementsInterface($class,'\GL\Core\Controller\FilterResponseInterface');                   
                 // test if route is allowed
                 if(isset($arrRoutes))
                 {
@@ -118,20 +108,9 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
                 $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                 $scope = (isset($value["scope"])) ? $value["scope"] : "all";
                 $class = $value["class"];
-                // test if class exist
-                if(!class_exists($class))
-                {
-                    echo "class " . $class . " does not exist";
-                    die();
-                }
-                // test if interface is implemented
-                 // test if class implement interface
-                $classref = new \ReflectionClass($class);             
-                if(!$classref->implementsInterface('\GL\Core\Controller\BeforeFunctionInterface'))
-                {
-                  echo "class ".$class." does not implement BeforeFunctionInterface";
-                  die();
-                }      
+                // test if class exist and implements interface
+                Assertion::ClassExists($class);
+                Assertion::implementsInterface($class,'\GL\Core\Controller\BeforeFunctionInterface');    
                 // test if route is allowed
                 if(isset($arrRoutes))
                 {

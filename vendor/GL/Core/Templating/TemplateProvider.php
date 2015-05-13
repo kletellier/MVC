@@ -4,7 +4,8 @@ namespace GL\Core\Templating;
 use GL\Core\Config\Config; 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
- 
+use Assert\Assertion;
+
 class TemplateProvider  
 {   
 
@@ -52,24 +53,14 @@ class TemplateProvider
         $ret = null;
         // spécify engine or use default         
         $engine = ($eng == "") ? TEMPLATE_ENGINE : $eng;  
-        try {
-            if(isset($this->arr[$engine]))
-            {
-                $class =  $this->arr[$engine];
-
-                if(!class_exists($class))
-                {
-                    echo "Template engine class ". $class . " does not exist";
-                    die();
-                }
-                $ret = new $class;
-            }
-            else
-            {
-                echo "Template engine ". $engine . " is not defined";
-                die();                
-            }
-        } catch (Exception $e) {
+        try 
+        {
+            Assertion::keyIsset($this->arr,$engine,"Template engine $engine  is not defined");           
+            $class =  $this->arr[$engine];
+            Assertion::ClassExists($class);
+            $ret = new $class;          
+        } 
+        catch (Exception $e) {
             
         }
 

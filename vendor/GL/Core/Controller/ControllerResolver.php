@@ -325,6 +325,10 @@ class ControllerResolver
             {
                 $response = $this->get404Response();
             }
+            catch(AssertionFailedException $eex)
+            {               
+               $response = $this->get500Response($eex->getMessage()  , "", "");  
+            }   
             catch(Exception $ex)
             {                   
                $response = $this->get500Response($ex->getMessage()  , "", "");  

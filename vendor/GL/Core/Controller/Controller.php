@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Route;
 use GL\Core\Routing\RouteProvider;
 use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config\Config;
+use Assert\Assertion;
 
 abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
@@ -164,20 +165,9 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
                     $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                     $scope = (isset($value["scope"])) ? $value["scope"] : "all";
                     $class = $value["class"];
-                    // test if class exist
-                    if(!class_exists($class))
-                    {
-                        echo "class " . $class . " does not exist";
-                        die();
-                    }
-                    // test if interface is implemented
-                     // test if class implement interface
-                    $classref = new \ReflectionClass($class);             
-                    if(!$classref->implementsInterface('\GL\Core\Controller\GlobalFunctionInterface'))
-                    {
-                      echo "class ".$class." does not implement GlobalFunctionInterface";
-                      die();
-                    }      
+                    // test if class exist and implements interface
+                    Assertion::ClassExists($class);
+                    Assertion::implementsInterface($class,'\GL\Core\Controller\GlobalFunctionInterface');                       
                     // test if route is allowed
                     if(isset($arrRoutes))
                     {

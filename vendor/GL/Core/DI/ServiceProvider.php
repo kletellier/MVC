@@ -9,7 +9,8 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use GL\Core\Config\Config;
-
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 class ServiceProvider
 {
 
@@ -70,21 +71,16 @@ class ServiceProvider
         $values = $cfgsecu->load();
         $class =   $values['security']['classes'];
         // test if class exist and implement interface
-        if(!class_exists($class))
+        try 
         {
-            echo "security class : " . $class. " does not exist";
+            Assertion::ClassExists($class);
+            Assertion::implementsInterface($class,'\GL\Core\Security\SecurityServiceInterface');   
+        } 
+        catch (AssertionFailedException $e) 
+        {
+            echo $e->getMessage();
             die();
-        }
-        else
-        {
-            // test if class implement interface
-            $classref = new \ReflectionClass($class);             
-            if(!$classref->implementsInterface('\GL\Core\Security\SecurityServiceInterface'))
-            {
-              echo "class ".$class." does not implement SecurityServiceInterface";
-              die();
-            }           
-        }
+        }                
 
         // Inject mailer
         $container->register('mailer', 'GL\Core\Tools\Mailer');
