@@ -42,10 +42,10 @@ function filterResponse(\Symfony\Component\HttpFoundation\Response $response,\Sy
     {
         foreach ($fnArray as $key => $value) 
         {
-
+            $route = $container->get('request_helper')->getCurrentRoute()['_route'];
             if($value["type"]=="filter")
             {
-                $execute = false;
+                $bExecute = false;
                 // for each global function defined
                 $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                 $scope = (isset($value["scope"])) ? $value["scope"] : "all";
@@ -99,6 +99,7 @@ function executeBefores(\Symfony\Component\DependencyInjection\Container $contai
     $fnArray = $cfg->load();
     if(isset($fnArray))
     {
+        $route = $container->get('request_helper')->getCurrentRoute()['_route'];           
         foreach ($fnArray as $key => $value) 
         {
             if($value["type"]=="before")
