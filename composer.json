@@ -16,7 +16,7 @@
         "twig/twig":"1.*",
         "symfony/dependency-injection": "2.8.*@dev",
         "symfony/stopwatch": "2.8.*@dev",
-        "swiftmailer/swiftmailer": "5.2.*@dev",     
+        "swiftmailer/swiftmailer": "5.4.*@dev",     
         "symfony/class-loader": "2.8.*@dev",
         "symfony/finder": "2.8.*@dev",
         "symfony/filesystem": "2.8.*@dev",          
