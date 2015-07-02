@@ -16,6 +16,8 @@ class Mailer
     private $_port;
     private $_from;
     private $_to;
+    private $_cc;
+    private $_bcc;
     private $_subject;
     private $_body;
     private $_isHtml;
@@ -33,6 +35,8 @@ class Mailer
             $this->_password = "";
             $this->_from = array();
             $this->_to = array();
+            $this->_cc = array();
+            $this->_bcc = array();
             $this->_subject = "";
             $this->_body = "";
             $this->_isHtml = false;
@@ -46,7 +50,7 @@ class Mailer
      * 
      * @param Swift_Message $message Swift message instance
      */
-    private function getAttachment($message)
+    private function getAttachment(\Swift_Message $message)
     {
         foreach($this->_attach as $tmp)
         {
@@ -61,8 +65,9 @@ class Mailer
      * 
      * @param Swift_Message $message Swift message instance
      */
-    private function getTo($message)
-    {                
+    private function getTo(\Swift_Message $message)
+    {            
+        // ajout destinataire    
         foreach($this->_to as $mail)
         {
             $tmp = explode("::",$mail);
@@ -79,7 +84,43 @@ class Mailer
                     $message->addTo($mailtmp);
                 }                 
             }
-        }          
+        }  
+        // ajout copie
+        foreach($this->_cc as $mail)
+        {
+            $tmp = explode("::",$mail);
+            {
+                $mailtmp = $tmp[0];
+                $nomtmp = "";
+                if(isset($tmp[1]))
+                {
+                    $nomtmp= $tmp[1];                    
+                    $message->addCc($mailtmp,$nomtmp);
+                }
+                else
+                {
+                    $message->addCc($mailtmp);
+                }                 
+            }
+        } 
+        // ajout copie cachée
+        foreach($this->_bcc as $mail)
+        {
+            $tmp = explode("::",$mail);
+            {
+                $mailtmp = $tmp[0];
+                $nomtmp = "";
+                if(isset($tmp[1]))
+                {
+                    $nomtmp= $tmp[1];                    
+                    $message->addBcc($mailtmp,$nomtmp);
+                }
+                else
+                {
+                    $message->addBcc($mailtmp);
+                }                 
+            }
+        }       
     }
     
     /**
@@ -89,7 +130,7 @@ class Mailer
     { 
         $loader = new Config('mail');
         $value = $loader->load();
-	    $arr = $value["mail"];
+        $arr = $value["mail"];
         if($arr!=null)
         {
             $this->_server = $arr["server"];
@@ -159,6 +200,36 @@ class Mailer
         }
         array_push($this->_to,$val);
     }
+
+    /**
+     * Add copy 
+     * @param string $to recipient mail
+     * @param string $toname recipient name 
+     */
+    public function addCc($cc,$ccname="")
+    {
+        $val = $cc;
+        if($ccname!="")
+        {
+            $val.="::".$ccname;
+        }
+        array_push($this->_cc,$val);
+    }
+
+    /**
+     * Add blinded copy 
+     * @param string $to recipient mail
+     * @param string $toname recipient name 
+     */
+    public function addBcc($bcc,$bccname="")
+    {
+        $val = $bcc;
+        if($bccname!="")
+        {
+            $val.="::".$bccname;
+        }
+        array_push($this->_bcc,$val);
+    }
    
     /**
      * Add attachment to mail
@@ -200,14 +271,6 @@ class Mailer
         }
 
         $mailer = \Swift_Mailer::newInstance($transport);
-
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $container = \GL\Core\ServiceProvider::GetDependencyContainer();
-            $debug = $container->get('debug');
-            $debug['messages']->aggregate(new \DebugBar\Bridge\SwiftMailer\SwiftLogCollector($mailer));
-            $debug->addCollector(new \DebugBar\Bridge\SwiftMailer\SwiftMailCollector($mailer));
-        }
 
         $message = \Swift_Message::newInstance() 
           ->setSubject($this->_subject)          
