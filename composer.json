@@ -28,7 +28,8 @@
         "symfony/var-dumper": "2.7.*@dev",
         "tecnick.com/tcpdf": "dev-master",
         "phpoffice/phpexcel": "dev-master",
-        "beberlei/assert": "2.3.*@dev"
+        "beberlei/assert": "2.3.*@dev",
+        "danielstjules/stringy": "~1.9"
     },
     "autoload": {
         "psr-0": {
