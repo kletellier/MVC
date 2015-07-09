@@ -72,7 +72,7 @@ class ##modelname## extends Model {
 					}
 				} 
 				
-				$modelname =  Stringy::create($name)->UpperCamelize()->__toString();
+				$modelname =  Stringy::create($name)->upperCamelize()->__toString();
 
 				$nmodel = $this->model;
 				$nmodel = str_replace('##modelname##',$modelname,$nmodel);
