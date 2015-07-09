@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Question\Question;
+use Stringy\Stringy;
 
 use PDO;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -71,7 +72,7 @@ class ##modelname## extends Model {
 					}
 				} 
 				
-				$modelname =  ucfirst($name);
+				$modelname =  Stringy::create($name)->UpperCamelize()->__toString();
 
 				$nmodel = $this->model;
 				$nmodel = str_replace('##modelname##',$modelname,$nmodel);
