@@ -24,6 +24,11 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
     {
         return "##key##";
     } 
+
+    public function getDescription()
+    {
+        return "##description##";
+    }
    
     public function up()
     {
@@ -79,7 +84,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         return Stringy::create($key)->slugify()->upperCamelize()->__toString();
     }
 
-	 public function create($key)
+	 public function create($key,$description)
     {
     	$ret = false;
     	try 
@@ -88,7 +93,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
     		$keys = $this->getSlugKeyName($key);
 	        $classname = $keys."Migration";
 	        $filename = MIGRATIONPATH . DS . $classname .".php";
-	        $classtxt = Stringy::create($this->migration_model)->replace("##date##",$prefix)->replace('##classname##',$classname)->replace('##key##',$keys)->__toString();
+	        $classtxt = Stringy::create($this->migration_model)->replace("##description##",$description)->replace("##date##",$prefix)->replace('##classname##',$classname)->replace('##key##',$keys)->__toString();
 	        file_put_contents($filename, $classtxt);
 	        Assertion::file($filename);
 	        $ret = true;
@@ -166,6 +171,24 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
     		$this->run($instance,"down");
     	}
     }
+
+    public function MigrationList()
+    {
+        $files = $this->getMigrationFiles();
+        $classes = array();
+        foreach ($files as $file) 
+        {
+            $filename = $file->getFilename();            
+            $classname = $this->getClassName($filename);           
+            $fqn =  "\Migrations\\$classname"; 
+            
+            $classes[] = $inst = new $fqn;  
+        }
+        
+        return $classes;
+    }
+
+
 
     private function run($instance,$type="up")
     {

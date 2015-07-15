@@ -34,13 +34,19 @@ class MigrationCreateCommand extends Command
             {
                 throw new \Exception("you must specify migration key");
             }
+            $question = new Question('Please enter a description : ', '');
+            $description = $helper->ask($input, $output, $question);
+            if($description=="")
+            {
+                throw new \Exception("you must specify an description");
+            }
             // test if key exist
             $migrator = new Migrator();
             if($migrator->testExist($key))
             {
                 throw new \Exception("Key was already created");
             }
-            $ret = $migrator->create($key);   
+            $ret = $migrator->create($key,$description);   
             $keyslug = "";
             if($ret)
             {
