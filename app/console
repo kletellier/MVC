@@ -31,6 +31,7 @@ use GL\Command\DebugBarCommand;
 use GL\Command\ControllerCommand;
 use GL\Command\MigrationCommand;
 use GL\Command\MigrationCreateCommand;
+use GL\Command\MigrationRollbackCommand;
 
 use Symfony\Component\Console\Application;
 
@@ -44,4 +45,5 @@ $application->add(new DebugBarCommand);
 $application->add(new ControllerCommand);
 $application->add(new MigrationCommand);
 $application->add(new MigrationCreateCommand);
+$application->add(new MigrationRollbackCommand);
 $application->run();
