@@ -9,12 +9,10 @@ use GL\Core\Migration\MigrationModel;
 use Symfony\Component\Finder\Finder;
 use Stringy\Stringy;
 use Carbon\Carbon;
-use Pinq\ITraversable, Pinq\Traversable;
-use Pinq;
 
 class Migrator
 {
-	protected $migration_model = '<?php
+    protected $migration_model = '<?php
  
 namespace Migrations;
 
@@ -52,9 +50,9 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
  
 }';
 
-	private function createBaseMigration()
-	{
-		$sch = DB::getSchema();         
+    private function createBaseMigration()
+    {
+        $sch = DB::getSchema();         
         $tablename = "migrations";
              
         if(!$sch->hasTable($tablename))
@@ -70,7 +68,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
             });
             
         }
-	}
+    }
 
     private function getMigrationFiles()
     {
@@ -89,53 +87,62 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         return Stringy::create($key)->slugify()->upperCamelize()->__toString();
     }
 
-	 public function create($key,$description)
+     public function create($key,$description)
     {
-    	$ret = false;
-    	try 
-    	{
-    		$prefix = Carbon::now()->format('YmdHis');
-    		$keys = $this->getSlugKeyName($key);
-	        $classname = $keys."Migration";
-	        $filename = MIGRATIONPATH . DS . $classname .".php";
-	        $classtxt = Stringy::create($this->migration_model)->replace("##description##",$description)->replace("##date##",$prefix)->replace('##classname##',$classname)->replace('##key##',$keys)->__toString();
-	        file_put_contents($filename, $classtxt);
-	        Assertion::file($filename);
-	        $ret = true;
-    	} catch (\Exception $e) {
-    		$ret = false;
-    	}
-    	catch(AssertionFailedException $ex)
-    	{
-    		$ret = false;
-    	}
+        $ret = false;
+        try 
+        {
+            $prefix = Carbon::now()->format('YmdHis');
+            $keys = $this->getSlugKeyName($key);
+            $classname = $keys."Migration";
+            $filename = MIGRATIONPATH . DS . $classname .".php";
+            $classtxt = Stringy::create($this->migration_model)->replace("##description##",$description)->replace("##date##",$prefix)->replace('##classname##',$classname)->replace('##key##',$keys)->__toString();
+            file_put_contents($filename, $classtxt);
+            Assertion::file($filename);
+            $ret = true;
+        } catch (\Exception $e) {
+            $ret = false;
+        }
+        catch(AssertionFailedException $ex)
+        {
+            $ret = false;
+        }
        
-    	return $ret;
+        return $ret;
     }
 
-	public function testExist($key)
-	{
-		$test = MigrationModel::where("migration","=",$key)->get();
-		return (count($test)>0);
-	}
+    public function testExist($key)
+    {
+        $test = MigrationModel::where("migration","=",$key)->get();
+        return (count($test)>0);
+    }
     
+    private function cmp($a,$b)
+    {
+        if ($a->getCreationDate() == $b->getCreationDate()) 
+        {
+            return 0;
+        }
+        return ($a->getCreationDate() < $b->getCreationDate()) ? 1 : -1;
+    }
 
     public function migrateAll()
     {
-    	 
-    	$files = $this->getMigrationFiles();
+         
+        $files = $this->getMigrationFiles();
         $classes = array();
-		foreach ($files as $file) 
-		{
-			$filename = $file->getFilename();			 
-			$classname = $this->getClassName($filename);           
-		    $fqn =  "\Migrations\\$classname";	
-            $classes[] = new $fqn;  
-		}
-        // tri en fonction de la fonction getCreationDate
-        $classetrie = Traversable::from($classes)->orderByAscending(function ($row) {return $row->getCreationDate();});        
-        foreach ($classetrie as   $value) 
+        foreach ($files as $file) 
         {
+            $filename = $file->getFilename();            
+            $classname = $this->getClassName($filename);           
+            $fqn =  "\Migrations\\$classname";  
+            $classes[] = new $fqn;  
+        }
+        // sort with getCreationTable
+        usort($classes,array($this, 'cmp'));
+         
+        foreach ($classes as $value) 
+        {           
             $this->run($value,"up");          
         }
 
@@ -168,13 +175,13 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
 
     public function rollback($key)
     {
-    	$migration = MigrationModel::where('migration','=',$key)->first();
-    	if($migration!=null)
-    	{
-    		$class = $migration->class;
+        $migration = MigrationModel::where('migration','=',$key)->first();
+        if($migration!=null)
+        {
+            $class = $migration->class;
             $instance = new $class;
-    		$this->run($instance,"down");
-    	}
+            $this->run($instance,"down");
+        }
     }
 
     public function MigrationList()
@@ -197,7 +204,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
 
     private function run($instance,$type="up")
     {
-    	// test if class exist and implement interface
+        // test if class exist and implement interface
         try 
         {
             $class = get_class($instance);
@@ -213,7 +220,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
             // find max batch id version
             if(count($migrations)>0)
             {
-            	$max = $migrations->max('db_version');
+                $max = $migrations->max('db_version');
             }
 
             $batchid = $max+1;
@@ -223,33 +230,33 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
             $exec = MigrationModel::where('migration','=',$id)->first();
             $bExec = true;
             if($exec!=null)
-            {            	            	 
-            	if($exec->status==$type)
-            	{
-            		// always executed
-            		$bExec = false;
-            	}   
+            {                                
+                if($exec->status==$type)
+                {
+                    // always executed
+                    $bExec = false;
+                }   
             }             
 
             if($bExec)
             {
-            	$instance->$type();
-	        	// insert in db 
-	        	if($exec==null)
-	        	{
-	        		$exec = new MigrationModel();	
-	        	}        	
-	        	$exec->class = $class;
-	        	$exec->migration = $id;
-	        	$exec->status = $type;
-	        	$exec->db_version = $batchid;
-	        	$exec->save();
+                $instance->$type();
+                // insert in db 
+                if($exec==null)
+                {
+                    $exec = new MigrationModel();   
+                }           
+                $exec->class = $class;
+                $exec->migration = $id;
+                $exec->status = $type;
+                $exec->db_version = $batchid;
+                $exec->save();
             }           
 
         } 
         catch (\Exception $ex)
         {
-        	echo $ex;             
+            echo $ex;             
         }
         catch (AssertionFailedException $e) 
         {
