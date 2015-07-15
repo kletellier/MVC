@@ -20,6 +20,11 @@ namespace Migrations;
 
 class ##classname## implements \GL\Core\Migration\MigrationInterface
 {    
+    private function getSchema()
+    {
+        return \GL\Core\Helpers\DbHelper::getSchema();
+    }
+
     public function getUniqueTag()
     {
         return "##key##";
