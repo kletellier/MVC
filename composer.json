@@ -30,7 +30,6 @@
         "phpoffice/phpexcel": "dev-master",
         "beberlei/assert": "2.3.*@dev",        
         "danielstjules/stringy": "~1.9",
-        "timetoogo/pinq": "~3.1",
         "nesbot/carbon": "~1.14"
     },
     "autoload": {
