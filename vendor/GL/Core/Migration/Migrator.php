@@ -185,7 +185,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
             // find max batch id version
             if(count($migrations)>0)
             {
-            	$max = $migrations->max('batch');
+            	$max = $migrations->max('db_version');
             }
 
             $batchid = $max+1;
