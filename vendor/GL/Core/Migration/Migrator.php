@@ -62,13 +62,30 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         }
 	}
 
+    private function getMigrationFiles()
+    {
+        $finder = new Finder();
+        $finder->name('*Migration.php')->sortByName();
+        return $finder->in(MIGRATIONPATH);
+    }
+
+    private function getClassName($filename)
+    {
+        return Stringy::create($filename)->removeRight(".php")->__toString();
+    }
+
+    public function getSlugKeyName($key)
+    {
+        return Stringy::create($key)->slugify()->upperCamelize()->__toString();
+    }
+
 	 public function create($key)
     {
     	$ret = false;
     	try 
     	{
     		$prefix = Carbon::now()->format('YmdHis');
-    		$keys = Stringy::create($key)->slugify()->upperCamelize()->__toString();
+    		$keys = $this->getSlugKeyName($key);
 	        $classname = $keys."Migration";
 	        $filename = MIGRATIONPATH . DS . $classname .".php";
 	        $classtxt = Stringy::create($this->migration_model)->replace("##date##",$prefix)->replace('##classname##',$classname)->replace('##key##',$keys)->__toString();
@@ -91,22 +108,17 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
 		$test = MigrationModel::where("migration","=",$key)->get();
 		return (count($test)>0);
 	}
+    
 
-    public function __construct()
-    {
-    	$this->createBaseMigration();
-    }
-
-    public function migrate()
+    public function migrateAll()
     {
     	 
-    	$finder = new Finder();
-		$finder->name('*Migration.php')->sortByName();
+    	$files = $this->getMigrationFiles();
         $classes = array();
-		foreach ($finder->in(MIGRATIONPATH) as $file) 
+		foreach ($files as $file) 
 		{
 			$filename = $file->getFilename();			 
-			$classname = Stringy::create($filename)->removeRight(".php")->__toString();           
+			$classname = $this->getClassName($filename);           
 		    $fqn =  "\Migrations\\$classname";	
             $classes[] = new $fqn;  
 		}
@@ -114,9 +126,34 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         $classetrie = Traversable::from($classes)->orderByAscending(function ($row) {return $row->getCreationDate();});        
         foreach ($classetrie as   $value) 
         {
-            $this->run(get_class($value),"up");          
+            $this->run($value,"up");          
         }
 
+    }
+
+    public function migrate($key)
+    {
+        try 
+        {
+            $files = $this->getMigrationFiles();
+            foreach ($files as $file) 
+            {
+                $filename = $file->getFilename();            
+                $classname = $this->getClassName($filename);           
+                $fqn =  "\Migrations\\$classname";  
+                $inst = new $fqn;
+                if($inst->getUniqueTag()=="key")
+                {
+                     $this->run($inst,"up"); 
+                     break; 
+                }
+            }     
+             
+        } 
+        catch (Exception $e) 
+        {
+            
+        }
     }
 
     public function rollback($key)
@@ -125,20 +162,21 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
     	if($migration!=null)
     	{
     		$class = $migration->class;
-    		$this->run($class,"down");
+            $instance = new $class;
+    		$this->run($instance,"down");
     	}
     }
 
-    private function run($class,$type="up")
+    private function run($instance,$type="up")
     {
     	// test if class exist and implement interface
         try 
         {
+            $class = get_class($instance);
+
             Assertion::ClassExists($class);
             Assertion::implementsInterface($class,'\GL\Core\Migration\MigrationInterface');   
-
-            // instantiate class
-            $instance = new $class;
+             
             $max = 0;
             
             // get all migrations in db
@@ -191,5 +229,9 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         }            
     }
 
+    public function __construct()
+    {
+        $this->createBaseMigration();
+    }
 }
      

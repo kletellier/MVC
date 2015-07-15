@@ -26,7 +26,7 @@ class MigrationCommand extends Command
         try 
         {
             $migrator = new Migrator();
-            $migrator->migrate();        
+            $migrator->migrateAll();        
         } 
         catch (\Exception $e) 
         {
