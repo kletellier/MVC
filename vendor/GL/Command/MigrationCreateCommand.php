@@ -40,9 +40,15 @@ class MigrationCreateCommand extends Command
             {
                 throw new \Exception("Key was already created");
             }
-            $ret = $migrator->create($key);    
-            $message = ($ret==true) ? "Migration created": "Error during creating";
+            $ret = $migrator->create($key);   
+            $keyslug = "";
+            if($ret)
+            {
+               $keyslug = $migrator->getSlugKeyName($key);
+            } 
+            $message = ($ret==true) ? "Migration $keyslug created": "Error during creating";
             $output->writeln($message);
+            
         } 
         catch (\Exception $e) 
         {
