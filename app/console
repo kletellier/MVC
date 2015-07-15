@@ -32,7 +32,7 @@ use GL\Command\ControllerCommand;
 use GL\Command\MigrationCommand;
 use GL\Command\MigrationCreateCommand;
 use GL\Command\MigrationRollbackCommand;
-
+use GL\Command\MigrationListCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -46,4 +46,5 @@ $application->add(new ControllerCommand);
 $application->add(new MigrationCommand);
 $application->add(new MigrationCreateCommand);
 $application->add(new MigrationRollbackCommand);
+$application->add(new MigrationListCommand);
 $application->run();
