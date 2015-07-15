@@ -13,6 +13,7 @@ define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
 define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // path to debugbar resource
 define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
 define('DICACHE',ROOT.DS.'cache'.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
+define('MIGRATIONPATH',ROOT . DS . "app" . DS . "Migrations"); // Migration script path
 
 /**
  * Enable autoload
@@ -28,6 +29,8 @@ use GL\Command\SecurityCommand;
 use GL\Command\UserCommand;
 use GL\Command\DebugBarCommand;
 use GL\Command\ControllerCommand;
+use GL\Command\MigrationCommand;
+use GL\Command\MigrationCreateCommand;
 
 use Symfony\Component\Console\Application;
 
@@ -39,4 +42,6 @@ $application->add(new SecurityCommand);
 $application->add(new UserCommand);
 $application->add(new DebugBarCommand);
 $application->add(new ControllerCommand);
+$application->add(new MigrationCommand);
+$application->add(new MigrationCreateCommand);
 $application->run();

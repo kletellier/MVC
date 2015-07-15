@@ -28,12 +28,14 @@
         "symfony/var-dumper": "2.7.*@dev",
         "tecnick.com/tcpdf": "dev-master",
         "phpoffice/phpexcel": "dev-master",
-        "beberlei/assert": "2.3.*@dev",
-        "danielstjules/stringy": "~1.9"
+        "beberlei/assert": "2.3.*@dev",        
+        "danielstjules/stringy": "~1.9",
+        "timetoogo/pinq": "~3.1"
     },
     "autoload": {
         "psr-0": {
             "Application" : "app/",
+            "Migrations" : "app/",
             "GL" : "vendor/",       
             "DI" : "cache/"
             },
