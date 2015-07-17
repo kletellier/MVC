@@ -112,6 +112,8 @@ class ServiceProvider
         $container->register('config','GL\Core\Config\Config');
         // Inject DbHelper
         $container->register('db','GL\Core\Helpers\DbHelper');
+        // Inject Redis
+        $container->register('redis','GL\Core\Tools\Redis');
 
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
