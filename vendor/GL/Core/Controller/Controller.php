@@ -268,6 +268,18 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
      */
     function renderText($text,$status = 200, $headers = array('Content-Type' => 'text/html'))
     {
+        trigger_error("Deprecated function called, use renderRaw or renderDownload instead of renderText.", E_USER_DEPRECATED);
+    }
+
+     /**
+     * Function render Html 
+     * 
+     * @param String $text Html to send to output Response
+     * @param Integer $status Http Status
+     * @param Array $headers Http-Headers in key value type
+     */
+    function renderRaw($text,$status = 200, $headers = array('Content-Type' => 'text/html'))
+    {
         $response = $this->getResponse($text,$status,$headers);             
         return $response;
     }
