@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF and PHPExcel Wrapper.
+A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF, Redis and PHPExcel Wrapper.
 
 ## Components
 
@@ -24,6 +24,7 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF and PHPEx
 * Twig
 * Swiftmailer
 * PSR Log
+* Predis
 
 ## Objective
 
@@ -240,6 +241,7 @@ You have many services on each container :
 * pdo : PDO instance of started database.
 * config : ```GL\Core\Config\Config``` instance for reading yml config files.
 * db : ```GL\Core\Helpers\DbHelper``` instance for database interactions.
+* redis : ```GL\Core\Tools\Redis``` instance, wrapper of Predis.
 
 You can add your own services in DI container by adding reference in ```config/services.yml```.
 
