@@ -309,7 +309,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
         $array = array();
         $array["Content-Type"] = $mime;
         $array["Content-Disposition"] = "attachment; filename=$filename";
-        return $this->renderText($buffer,200,$array);
+        return $this->renderRaw($buffer,200,$array);
     }
 
     /**
