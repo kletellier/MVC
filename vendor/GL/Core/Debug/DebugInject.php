@@ -48,10 +48,18 @@ class DebugInject implements \GL\Core\Controller\FilterResponseInterface
                 {
                     $buf.=$dbghd;
                 }
-         
-                $buf.=$dbgct."</html>";
-                $content=str_replace("</html>", $buf, $content);
 
+                if (strpos($content, '</body>') !== false)
+                {
+                    $buf = $dbgct."</body>";
+                    $content=str_replace("</body>", $buf, $content);
+                }
+                else
+                {
+                    $buf.=$dbgct."</html>";
+                    $content=str_replace("</html>", $buf, $content);
+                }
+         
                 $resp->setContent($content);
             }       
         
