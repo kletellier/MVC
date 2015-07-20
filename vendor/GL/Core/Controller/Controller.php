@@ -12,6 +12,7 @@ use GL\Core\Routing\RouteProvider;
 use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config\Config;
 use Assert\Assertion;
+use Stringy\Stringy;
 
 abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
 {
@@ -269,6 +270,34 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     {
         $response = $this->getResponse($text,$status,$headers);             
         return $response;
+    }
+
+    /**
+     * Function to force download a file
+     * @param type $buffer data to download
+     * @param type $filename filename
+     * @return response
+     */
+    function renderDownload($buffer,$filename)
+    {  
+        $ext = "";
+        $mime = "application/octet-stream";
+        $dotpos = Stringy::create($filename)->indexOfLast(".");
+
+        if($dotpos!==FALSE)
+        {           
+            if($dotpos<strlen($filename))
+            {
+                $dotpos++;
+            }
+            $ext = Stringy::create($filename)->substr($dotpos)->__toString();
+            $mime = \Hoa\Mime\Mime::getMimeFromExtension($ext);
+        }
+         
+        $array = array();
+        $array["Content-Type"] = $mime;
+        $array["Content-Disposition"] = "attachment; filename=$filename";
+        return $this->renderText($buffer,200,$array);
     }
 
     /**
