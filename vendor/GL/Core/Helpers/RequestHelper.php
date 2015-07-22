@@ -38,6 +38,17 @@ class RequestHelper
         $md = new \Detection\MobileDetect($this->_request->headers->all(),$this->_request->headers->get('User-Agent'));
         return $md->isMobile();
     }
+
+    /**
+     * Function for detecting tablet client with useragent
+     * 
+     * @return bool client is tablet device
+     */
+    function isTablet()
+    {               
+        $md = new \Detection\MobileDetect($this->_request->headers->all(),$this->_request->headers->get('User-Agent'));
+        return $md->isTablet();
+    }
     
     /**
      * Test if client is local
