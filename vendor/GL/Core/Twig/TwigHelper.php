@@ -19,21 +19,18 @@ class TwigHelper extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'url'  => new \Twig_Function_Method($this, 'url',array(
-            'is_safe' => array('html'))), 
-            'crsf' => new \Twig_Function_Method($this,'crsf',array(
-            'is_safe' => array('html'))), 
-            'getcrsfinput' => new \Twig_Function_Method($this,'getcrsfinput',array(
-            'is_safe' => array('html'))),
-        );
+            new \Twig_SimpleFunction('url', array($this,'url'),array('is_safe'=>array('html'))),
+            new \Twig_SimpleFunction('crsf', array($this,'crsf'),array('is_safe'=>array('html'))),
+            new \Twig_SimpleFunction('getcrsfinput', array($this,'getcrsfinput'),array('is_safe'=>array('html'))),           
+        );        
     }
     
     public function getFilters()
-    {
-        return array(            
-            'frenchdate' => new \Twig_Filter_Method(  $this, 'getFrenchDate'),
-            'trans'=> new \Twig_Filter_Method($this,'trans'),
-        );
+    {         
+        return array(       
+                 new \Twig_SimpleFilter('frenchdate', array($this,'getFrenchDate')), 
+                 new \Twig_SimpleFilter('trans', array($this,'trans')),
+            );        
     }
     
     /**
@@ -59,6 +56,7 @@ class TwigHelper extends \Twig_Extension
      */
     public function trans($text,$locale = LOCALE)
     {
+
         $trans = $this->container->get('translator');
         if($locale!=LOCALE){$trans->setLocale($locale);}
         $session = $this->container->get('session');

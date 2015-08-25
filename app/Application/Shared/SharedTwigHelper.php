@@ -18,8 +18,7 @@ class SharedTwigHelper extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'test'  => new \Twig_Function_Method($this, 'test'), 
-            
+            new \Twig_SimpleFunction('test', array($this,'test'),array('is_safe'=>array('html'))),            
         );
     }
 	
