@@ -22,8 +22,8 @@ Class TwigDebugBar extends \Twig_Extension
 	public function getFunctions()
 	{
 		return array(
-			'dbg_render' => new \Twig_Function_Method($this, 'render',  array('is_safe' => array('html'))),
-			'dbg_renderHead'  => new \Twig_Function_Method($this, 'renderHead',  array('is_safe' => array('html')))
+			new \Twig_SimpleFunction('dbg_render', array($this,'render'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('dbg_renderHead', array($this,'renderHead'), array('is_safe' => array('html'))),		 
 		);
 	}
 
