@@ -159,7 +159,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
                 $classname = $this->getClassName($filename);           
                 $fqn =  "\Migrations\\$classname";  
                 $inst = new $fqn;
-                if($inst->getUniqueTag()=="key")
+                if($inst->getUniqueTag()=="$key")
                 {
                      $this->run($inst,"up"); 
                      break; 
