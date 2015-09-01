@@ -29,8 +29,8 @@
         "tecnick.com/tcpdf": "dev-master",
         "phpoffice/phpexcel": "dev-master",
         "beberlei/assert": "2.3.*@dev",                
-        "danielstjules/stringy": "dev-master",
-        "nesbot/carbon": "~1.14",
+        "danielstjules/stringy": "~1.8",
+        "nesbot/carbon": "~1.19",
         "predis/predis": "1.1.*@dev",
         "hoa/mime": "~2.0"
     },
