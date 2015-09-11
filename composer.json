@@ -13,7 +13,7 @@
         "symfony/routing": "2.8.*@dev",
         "symfony/yaml": "2.8.*@dev",
         "illuminate/database": "*",
-        "twig/twig":"1.*",
+        "twig/twig":"1.21",
         "symfony/dependency-injection": "2.8.*@dev",
         "symfony/stopwatch": "2.8.*@dev",
         "swiftmailer/swiftmailer": "5.4.*@dev",     
