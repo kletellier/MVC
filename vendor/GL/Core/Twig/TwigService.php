@@ -130,18 +130,20 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             {
                 $container->get('debug')["time"]->stopMeasure('inittwig');
             }
-            if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
-            {                
-                $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
-                $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug)); 
-                $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
-                $ret =  $envdebug->render($template, $params);
-                $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
-            }
-            else
-            {
+            // if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
+            // {       
+
+            //     $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
+            //     $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug)); 
+
+            //     $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
+            //     $ret =  $envdebug->render($template, $params);
+            //     $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
+            // }
+            // else
+            // {
                 $ret =  $env->render($template, $params);
-            }
+            //}
             
             $event = $stopwatch->stop('render');
             /*if(DEVELOPMENT_ENVIRONMENT)
