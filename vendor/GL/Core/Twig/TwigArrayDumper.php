@@ -16,24 +16,24 @@ class TwigArrayDumper
 
     private function format(\Twig_Profiler_Profile $profile)
     {
-    	$tmp = array();
-    	$tmp["template"] = $profile->getTemplate();
-    	$tmp["name"] = $profile->getTemplate();
+        $tmp = array();
+        $tmp["template"] = $profile->getTemplate();
+        $tmp["name"] = $profile->getName();
         $tmp["duration"] = $profile->getDuration();
-    	$tmp["type"] = $profile->getType();
+        $tmp["type"] = $profile->getType();
         return $tmp;
     }    
 
     private function dumpProfile(\Twig_Profiler_Profile $profile)
     {
-    	$tmp = $this->format($profile);
+        $tmp = $this->format($profile);
         if($tmp["type"]=="template")
         {
             $this->_array[] = $tmp;
-        }    	
-    	foreach ($profile->getProfiles() as $prf) 
-    	{
-    		$this->dumpProfile($prf);
-    	}        
+        }       
+        foreach ($profile->getProfiles() as $prf) 
+        {
+            $this->dumpProfile($prf);
+        }        
     }
 }
