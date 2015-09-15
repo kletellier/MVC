@@ -38,12 +38,19 @@ class TwigDataCollector extends \DebugBar\DataCollector\DataCollector implements
         $dump = $dumper->dump($profile);
  
         foreach ($dump as $tpl) {
-            $accuRenderTime += $tpl['duration'] ;
-            $templates[] = array(
-                'name' => $tpl['template'],
+            if($tpl['type']=="template")
+            {
+                $accuRenderTime += $tpl['duration'] ;
+            }
+
+            if($tpl['type']!="ROOT")
+            {
+                $templates[] = array(
+                'name' => $tpl['type']."::".$tpl['name'],
                 'render_time' => $tpl['duration'] ,
                 'render_time_str' => $this->formatDuration($tpl['duration'] )
-            );
+                );
+            }            
         }
 
         return array(

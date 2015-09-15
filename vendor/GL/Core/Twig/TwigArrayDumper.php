@@ -27,10 +27,8 @@ class TwigArrayDumper
     private function dumpProfile(\Twig_Profiler_Profile $profile)
     {
         $tmp = $this->format($profile);
-        if($tmp["type"]=="template")
-        {
-            $this->_array[] = $tmp;
-        }       
+        $this->_array[] = $tmp;
+            
         foreach ($profile->getProfiles() as $prf) 
         {
             $this->dumpProfile($prf);
