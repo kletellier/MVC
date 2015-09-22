@@ -374,7 +374,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     function AccessTest($roles = array())
     {
         $id = $this->get('session')->get('session.id');
-        if($id=="")
+        if(isset($id) && $id=="")
         {
             $this->isUnauthorized();
         }
@@ -385,13 +385,17 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
                 $allowed = false;
                 $ss = $this->get('security');
                 $userroles = $ss->userRoles();
-                foreach ($roles as $role ) 
+
+                foreach ($roles as $role )   
                 {
-                    if(in_array($role, $userroles))
+                    foreach ($userroles as $roleu) 
                     {
-                        $allowed = true;
-                        break;
-                    }
+                        if($roleu==$role)
+                        {
+                            $allowed = true;
+                            break;
+                        }
+                    }                    
                 }             
                 if(!$allowed)
                 {

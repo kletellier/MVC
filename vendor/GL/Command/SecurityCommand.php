@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use GL\Core\Security\SecurityService;
+use GL\Core\Security\AuthenticationService;
 use GL\Core\Config\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +34,7 @@ class SecurityCommand extends Command
             $class =   $values['security']['classes'];
             $ss = new $class(new Session(),new Request());
             $output->writeln('Create users table and model');
-            $ss->createTable();			 
+            $ss->createTables();			 
         } 
         catch (\Exception $e) 
         {

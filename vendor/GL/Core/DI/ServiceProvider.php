@@ -74,13 +74,13 @@ class ServiceProvider
         try 
         {
             Assertion::ClassExists($class);
-            Assertion::implementsInterface($class,'\GL\Core\Security\SecurityServiceInterface');   
+            Assertion::implementsInterface($class,'\GL\Core\Security\AuthenticationServiceInterface');   
         } 
         catch (AssertionFailedException $e) 
         {
             echo $e->getMessage();
             die();
-        }                
+        }          
 
         // Inject mailer
         $container->register('mailer', 'GL\Core\Tools\Mailer');
@@ -120,7 +120,7 @@ class ServiceProvider
         $loader->load('services.yml');
 
         $container->compile();
-
+        
         return $container;
     }
 }
