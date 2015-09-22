@@ -501,11 +501,19 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 		{
 			// retrieve user logged
 			$user = $this->userLogged();
-			$id = $user->id;
+			if(isset($user))
+			{
+				$id = $user->id;
+			}			
 		}
-		$inst = $this->getUsersRolesInstance(); 
-		$ids = $inst->where('users_id','=',$id)->get(array('roles_id'))->toArray(); 
-		$roles = $this->getRolesInstance()->whereIn('id',$ids)->get();		 
+		$roles = array();
+		if($id!="")
+		{
+			$inst = $this->getUsersRolesInstance(); 
+			$ids = $inst->where('users_id','=',$id)->get(array('roles_id'))->toArray(); 
+			$roles = $this->getRolesInstance()->whereIn('id',$ids)->get();		 
+		}
+		
 		return $roles;
 	}
 
