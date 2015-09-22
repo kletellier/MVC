@@ -718,14 +718,14 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 
 	/**
 	 * Get role instance from is name
-	 * @param type $name 
-	 * @return type
+	 * @param array array of name 
+	 * @return array of roles instance
 	 */
-	public function getRoleFromName($name)
+	public function getRolesFromName($names)
 	{
 		$ret = false;
 		$inst = $this->getRolesInstance();
-		$ret = $inst->where('role','=',$name)->first();
+		$ret = $inst->whereIn('role',$names)->get();
 		return $ret;
 	}
 

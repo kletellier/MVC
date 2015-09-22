@@ -182,8 +182,8 @@ interface AuthenticationServiceInterface
 
 	/**
 	 * Get role instance from is name
-	 * @param type $name 
-	 * @return type
+	 * @param array array of name 
+	 * @return array of roles instance
 	 */
-	public function getRoleFromName($name);
+	public function getRolesFromName($name);
 }
