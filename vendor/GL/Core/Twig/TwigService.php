@@ -136,7 +136,10 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             {       
-                $container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile)); 
+                if(!$container->get('debug')->hasCollector('twig'))
+                {
+                    $container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
+                } 
                 $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
                 $ret =  $env->render($template, $params);
                 $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
