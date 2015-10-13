@@ -1,5 +1,5 @@
 security:
-     classes : "GL\Core\Security\AuthenticationService"
+     classes : GL\Core\Security\AuthenticationService
      roles_table : roles
      users_table : users
      usersroles_table : usersroles
