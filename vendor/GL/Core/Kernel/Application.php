@@ -204,6 +204,9 @@ class Application
             $this->container->get('debug')['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
         }
 
+        $debug_boot_time = microtime(true);
+        $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
+
         ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
         
         $this->startMeasure('getroutes', 'Get Routes');     
