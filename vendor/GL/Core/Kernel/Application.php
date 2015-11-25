@@ -11,12 +11,14 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route; 
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\DI\ServiceProvider;
 use GL\Core\Config\Config;
 use Assert\Assertion;
+use Symfony\Component\Routing\Loader\ClosureLoader;
 
 class Application 
 {   
@@ -202,35 +204,50 @@ class Application
             $boot_time = $end_boot_time - $this->start_time;
             $this->container->get('debug')['messages']->addMessage("Booting time : $boot_time sec");
             $this->container->get('debug')['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
+            $debug_boot_time = microtime(true);
+            $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
         }
-
-        $debug_boot_time = microtime(true);
-        $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
 
         ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
         
-        $this->startMeasure('getroutes', 'Get Routes');     
-        $collection = $this->container->get('routes'); 
-        $this->stopMeasure('getroutes');
+        // enable routing context
         $this->startMeasure('initrouting', 'Init Routing');    
         $context = new RequestContext();    
         $context->fromRequest($this->container->get('request'));
-        $matcher = new UrlMatcher($collection, $context);   
         $response = null;
         $this->stopMeasure('initrouting');
+
+        // enable security system
         $this->startMeasure('security', 'Start security');
         $ss = $this->container->get('security');
         $this->stopMeasure('security');        
 
         if(DEVELOPMENT_ENVIRONMENT)
         {
-           $this->container->get('debug')['routes']->setRoutes($collection);        
+           $this->container->get('debug')['routes']->setRoutes($this->container->get('routes'));        
            $this->container->get('debug')["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));                      
         } 
         try 
         {    
-            $this->startMeasure('routing', 'Routing');            
-            $parameters = $matcher->match($url); 
+            $this->startMeasure('routing', 'Routing'); 
+
+            $closure = function () {
+                return $this->container->get('routes');
+            };
+
+            $arrpar = array();
+            if(!DEVELOPMENT_ENVIRONMENT)
+            {
+                $arrpar['cache_dir']  = ROUTECACHE;
+            }
+                         
+            $router = new Router(new ClosureLoader(),
+                $closure,
+                $arrpar,  
+                $context
+            );
+            $parameters = $router->match($url);
+ 
             $this->stopMeasure('routing');  
             $this->startMeasure('resolving', 'Resolving controller');
             $controller = $parameters['controller'];
