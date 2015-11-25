@@ -23,6 +23,7 @@ class Loader
         define('DICACHE',ROOT.DS.'cache'.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
         define('MIGRATIONPATH',ROOT . DS . "app" . DS . "Migrations"); // Migration script path
         define('ROUTECACHE',ROOT . DS . 'cache' . DS . 'route'); // Route cache system
+        define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // Debugbar asset folder
     }
 
     /**
