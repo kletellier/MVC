@@ -21,6 +21,10 @@ use GL\Command\SecurityCommand;
 use GL\Command\UserCommand;
 use GL\Command\DebugBarCommand;
 use GL\Command\ControllerCommand;
+use GL\Command\MigrationCommand;
+use GL\Command\MigrationCreateCommand;
+use GL\Command\MigrationRollbackCommand;
+use GL\Command\MigrationListCommand;
 use Symfony\Component\Console\Application;
 
 Loader::InitPath();
