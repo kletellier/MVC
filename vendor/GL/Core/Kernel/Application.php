@@ -34,10 +34,9 @@ class Application
         Loader::InitPath();
         Loader::InitConfig();
         Loader::InitDatabase();
-
+      
         // get DI container
         $this->container = ServiceProvider::GetDependencyContainer(); 
-
         // enable error reporting
         $this->setReporting();
     }
@@ -46,17 +45,9 @@ class Application
      * Enable/Disable error reporting to output buffer
      */
     private function setReporting() 
-    {
-        if (DEVELOPMENT_ENVIRONMENT == true) 
-        {
-        error_reporting(E_ALL & ~E_ERROR);
-        ini_set('display_errors','On');
-        } 
-        else 
-        {
-        error_reporting(E_ALL & ~E_ERROR);
-        ini_set('display_errors','Off');
-        }
+    {            
+        error_reporting(E_ALL);
+        ini_set('display_errors','Off');       
     }
 
    private function filterResponse(\Symfony\Component\HttpFoundation\Response $response)
@@ -196,7 +187,15 @@ class Application
     }
 
     public function handle($url)
-    {       
+    {   
+        $whoops = new \Whoops\Run;
+        $handler = new \GL\Core\Debug\ErrorHandler;
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $handler = new \Whoops\Handler\PrettyPageHandler;
+        } 
+        $whoops->pushHandler($handler);
+        $whoops->register();
 
         if(DEVELOPMENT_ENVIRONMENT)
         {        
@@ -207,8 +206,6 @@ class Application
             $debug_boot_time = microtime(true);
             $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
         }
-
-        ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  ); 
         
         // enable routing context
         $this->startMeasure('initrouting', 'Init Routing');    
@@ -269,19 +266,10 @@ class Application
         }
         catch(ResourceNotFoundException $ex)
         {
-            ob_clean();
             // return not found controller action
             $cr404 = new ControllerResolver("error", "error404", array());
             $response = $cr404->execute();            
-        }
-        catch(Exception $e)
-        {       
-            ob_clean();
-            // return error controller action
-            $params = array('message'=>$e->getMessage(),'file'=>'','line'=>'','errors'=>array()); 
-            $cr500 = new ControllerResolver("error", "error500", $params);
-            $response = $cr500->execute();           
-        }
+        }       
 
         $this->startMeasure('filtering', 'Filtering response'); 
          

@@ -37,26 +37,8 @@ class ControllerResolver
             $this->_errors = array();
             // return DI Container
             $this->_container = ServiceProvider::GetDependencyContainer();             
-      }
-        
-        /**
-         * 
-         * Return Error 500 Response
-         * 
-         * @param String $message Message to be displayed on error page
-         * @param String $file File where the error is located
-         * @param type $line Line error in file
-         */
-        private function get500Response($message,$file,$line)
-        {             
-            ob_clean();            
-            $params = array('message'=>$message,'file'=>$file,'line'=>$line,'errors'=>$this->_errors);  
-            $this->_controller = "error";
-            $this->_action = "error500";
-            $this->_args = $params;           
-            return  $this->execute();                
-        }
-        
+      }        
+               
          /**
          * 
          * Return Error 404 Response
@@ -95,80 +77,6 @@ class ControllerResolver
             return $this->execute(); 
         }
         
-     /**
-      * Fatal error handler
-      */
-       function ShutdownError()
-        {
-            $error = error_get_last();
-            if (!empty($error)) 
-            {
-                // on a une erreur fatale
-                $message = $error['message'];
-                $fichier = $error['file'];
-                $line = $error['line'];
-                                
-                if(!DEVELOPMENT_ENVIRONMENT)
-                {
-                    $message = $this->trans('error.oops',"Oops fatal error happens...");
-                    $fichier = "";
-                    $line = "";                    
-                }
-                
-                $response = $this->get500Response($message, $fichier, $line); 
-                $response->send();                  
-                exit(0);
-            }
-            else
-            {
-                if(!empty($this->_errors) && DEVELOPMENT_ENVIRONMENT)
-                {
-                    $message = $this->trans('error.snf',"Some non fatal error are detecting....");
-                    $response =$this->get500Response($message, "", "");  
-                    $response->send();  
-                    exit(0);
-                }
-            }
-        }
-        
-       /**
-        * 
-        * Non blocking error handler
-        *         
-        * 
-        * @param String $errno Error number
-        * @param String $errstr Error message
-        * @param String $errfile Error file location
-        * @param String $errline Error line number
-        * @return boolean
-        */
-        function ErrorHandler($errno, $errstr, $errfile, $errline)
-        {            
-            switch ($errno) 
-            {
-                case E_NOTICE:                   
-                case E_USER_NOTICE:
-                    $errors = "<b>" . $this->trans('error.notice','Notice') . "</b>";
-                    break;
-                case E_WARNING:
-                case E_USER_WARNING:
-                    $errors = "<b>" . $this->trans('error.warning','Warning') . "</b>";
-                    break;
-                case E_ERROR:
-                case E_USER_ERROR:
-                    $errors = "<b>" . $this->trans('error.fatal','Fatal error') . "</b>";
-                    break;
-                default:
-                    $errors = "<b>" . $this->trans('error.error','Error') . "</b>";
-                    break;
-            }
-            
-            $message = $errors." : ".$errstr;            
-            $arr = array('message'=>$message,'line'=>$errline,'file'=>$errfile);                
-            array_push($this->_errors,$arr);            
-            return true;
-        }  
-
 
         /**
          * Translate error message
@@ -298,13 +206,7 @@ class ControllerResolver
 
                 if ((int)method_exists($controllerName, $this->_action)) 
                 { 
-
-                    // non fatal error handling
-                    set_error_handler(array(&$this, 'ErrorHandler'));   
-                    // fatal error handling
-                    register_shutdown_function(array(&$this,'ShutdownError'));
-                    $params = $this->getArguments($dispatch);
- 
+                    $params = $this->getArguments($dispatch); 
                     $response = call_user_func_array(array($dispatch,$this->_action),$params);                   
                 }
                 else 
@@ -324,15 +226,7 @@ class ControllerResolver
             catch(\GL\Core\Exception\NotFoundHttpException $nf)
             {
                 $response = $this->get404Response();
-            }
-            catch(AssertionFailedException $eex)
-            {               
-               $response = $this->get500Response($eex->getMessage()  , "", "");  
-            }   
-            catch(Exception $ex)
-            {                   
-               $response = $this->get500Response($ex->getMessage()  , "", "");  
-            }
+            }          
             return $response;
      }        
   

@@ -32,7 +32,8 @@
         "danielstjules/stringy": "~1.10",
         "nesbot/carbon": "~1.20",
         "predis/predis": "1.1.*@dev",
-        "hoa/mime": "~2.0"
+        "hoa/mime": "~2.0",
+        "filp/whoops": "1.1.6"
     },
     "autoload": {
         "psr-0": {
