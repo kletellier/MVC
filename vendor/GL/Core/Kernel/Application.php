@@ -190,6 +190,7 @@ class Application
     {   
         $whoops = new \Whoops\Run;
         $handler = new \GL\Core\Debug\ErrorHandler;
+        $handler->setContainer($this->container);
         if(DEVELOPMENT_ENVIRONMENT)
         {
             $handler = new \Whoops\Handler\PrettyPageHandler;
@@ -205,6 +206,11 @@ class Application
             $this->container->get('debug')['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
             $debug_boot_time = microtime(true);
             $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
+        }
+
+        if(!DEVELOPMENT_ENVIRONMENT)
+        {
+            ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  );        
         }
         
         // enable routing context
