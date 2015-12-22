@@ -34,8 +34,22 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
     }
    
     public function up()
-    {
-         
+    {         
+        // Sample =>
+        /*
+        $tablename = "my_table_name";
+        $sch = $this->getSchema();
+        if($sch->hasTable($tablename))
+        {
+           $sch->table($tablename,function ($table)
+           {
+               // add new column names "test"
+               $table->string("test")->default("");
+               // add index on this columns
+               $table->index("test");
+           });
+        }
+        */
     }
 
     public function down()
