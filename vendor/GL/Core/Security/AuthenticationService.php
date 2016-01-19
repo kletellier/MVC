@@ -415,15 +415,13 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @return void
 	 */
 	public function autologin()
-	{
-		
+	{		
 		$id = $this->session->get('session.id');
 		try {
-
-			if(isset($id) && $id=="")
+			if(!isset($id) || $id=="")
 			{
 				$inst = $this->getUsersInstance();
-				$token = $this->request->cookies->get($this->cookiename); 
+				$token = $this->request->cookies->get($this->cookiename);
 				if($token!="")
 				{
 					$user = $inst->where('remember_token','=',$token)->first();
