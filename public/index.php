@@ -15,7 +15,17 @@ if(isset($_GET['url']))
 {
     $url = $_GET['url'];
 } 
-$url = '/'.$url;
+if(strlen($url)>0)
+{
+	if(substr($url,0,1)!="/")
+	{
+		$url = '/'.$url;
+	}
+}
+else
+{
+	$url = '/';
+}
 
 /**
  * Enable autoload
