@@ -13,9 +13,13 @@ use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config\Config;
 use Assert\Assertion;
 use Stringy\Stringy;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
+abstract class Controller implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+    
     protected $_controller;
     protected $_action;  
     protected $_cookies;
