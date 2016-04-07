@@ -7,21 +7,13 @@ set_time_limit(0);
  */
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__))); 
-define('TEMPLATEPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
-define('CONFIGDIR',ROOT.DS.'config'); // path to config directory
-define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
-define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // path to debugbar resource
-define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
-define('DICACHE',ROOT.DS.'cache'.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
-define('MIGRATIONPATH',ROOT . DS . "app" . DS . "Migrations"); // Migration script path
 
 /**
  * Enable autoload
  */
-require_once (ROOT . DS . 'library' . DS . 'autoload_composer.php');
-require_once (ROOT . DS . 'library' . DS . 'database.php');
-require_once (ROOT . DS . 'library' . DS . 'config.php');
+require_once ROOT . DS . 'plugins'. DS . 'autoload.php';
 
+use GL\Core\Kernel\Loader;
 use GL\Command\CacheCommand;
 use GL\Command\ModelCommand;
 use GL\Command\ModelsCommand;
@@ -34,6 +26,10 @@ use GL\Command\MigrationCreateCommand;
 use GL\Command\MigrationRollbackCommand;
 use GL\Command\MigrationListCommand;
 use Symfony\Component\Console\Application;
+
+Loader::InitPath();
+Loader::InitConfig();
+Loader::InitDatabase();
 
 $application = new Application();
 $application->add(new CacheCommand);

@@ -1,7 +1,8 @@
 security:
-     classes : "GL\Core\Security\SecurityService"
-     roles : [ ADMIN , USER , TRUSTED_USER ]
-     table : users
+     classes : GL\Core\Security\AuthenticationService
+     roles_table : roles
+     users_table : users
+     usersroles_table : usersroles
 cookie:
      token : typeyoursecuritytokenhere
      name : REMEMBERME

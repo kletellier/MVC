@@ -76,7 +76,7 @@ default:
     database: test
 ```
 
-Actually framework will only work with MySQL/MariaDb Database.
+Actually framework will only work with MySQL/MariaDb/Sqlite (add type options in database.yml) Database.
 You can connect many databases, just create a new section after default section in the config/database.yml
 
 6. Change email configuration file or type in your browser  ```http://yourwebsite/configuration/mail``` (available only in local and debug mode)
@@ -138,7 +138,7 @@ In our example DefaultController.php.
 
 After this the controller resolver component will try to instanciate this controller and try execute the action , in our case the xls function.
 
-The controller can return Html ou ```Symfony/Component/HttpFoundation/Response```.
+The controller must return  ```Symfony/Component/HttpFoundation/Response``` via render methods proposed by abstract controller class.
 
 By using 
 

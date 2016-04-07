@@ -46,7 +46,17 @@ class CacheCommand extends Command
                 $fs->remove($iteratordi); 
                 $fs->remove($pathdi);     
                 $fs->mkdir($pathdi);
-                $fs->chmod($pathdi,0777,0000,true);              
+                $fs->chmod($pathdi,0777,0000,true);   
+
+                 $output->writeln("    Clear route Cache");
+
+                $pathroute = ROUTECACHE;
+                $finderroute = new Finder();
+                $iteratorroute = $finderroute->files()->name('*.php')->in($pathroute);
+                $fs->remove($iteratorroute); 
+                $fs->remove($pathroute);     
+                $fs->mkdir($pathroute);
+                $fs->chmod($pathroute,0777,0000,true);              
         } 
         catch (IOExceptionInterface $e) 
         {

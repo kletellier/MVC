@@ -4,6 +4,7 @@ namespace GL\Core\Tools;
  
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
+use GL\Core\Config\Config;
 
 /**
  * SwiftMailer wrapper

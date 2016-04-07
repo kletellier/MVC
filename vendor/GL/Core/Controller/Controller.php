@@ -13,9 +13,13 @@ use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config\Config;
 use Assert\Assertion;
 use Stringy\Stringy;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-abstract class Controller extends \Symfony\Component\DependencyInjection\ContainerAware
+abstract class Controller implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+    
     protected $_controller;
     protected $_action;  
     protected $_cookies;
@@ -374,7 +378,7 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
     function AccessTest($roles = array())
     {
         $id = $this->get('session')->get('session.id');
-        if($id=="")
+        if(isset($id) && $id=="")
         {
             $this->isUnauthorized();
         }
@@ -385,13 +389,17 @@ abstract class Controller extends \Symfony\Component\DependencyInjection\Contain
                 $allowed = false;
                 $ss = $this->get('security');
                 $userroles = $ss->userRoles();
-                foreach ($roles as $role ) 
+
+                foreach ($roles as $role )   
                 {
-                    if(in_array($role, $userroles))
+                    foreach ($userroles as $roleu) 
                     {
-                        $allowed = true;
-                        break;
-                    }
+                        if($roleu==$role)
+                        {
+                            $allowed = true;
+                            break;
+                        }
+                    }                    
                 }             
                 if(!$allowed)
                 {

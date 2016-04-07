@@ -1,10 +1,10 @@
 global:
       type: global
-      class: "Application\Shared\GlobalFunction"
+      class: Application\Shared\GlobalFunction
 before:
       type: before
-      class: "Application\Shared\BeforeFunction"
+      class: Application\Shared\BeforeFunction
 filter:
       type: filter
-      class: "GL\Core\Debug\DebugInject"
+      class: GL\Core\Debug\DebugInject
       scope: "dev"

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Question\Question;
-use GL\Core\Security\SecurityService;
+use GL\Core\Security\AuthenticationService;
 use GL\Core\Config\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,24 +48,14 @@ class UserCommand extends Command
             if($password=="")
             {
                 throw new \Exception("you must specify a password");
-            }
-            $question = new Question('Please enter roles separated by comma : (USER) ', 'USER');
-            $roles = $helper->ask($input, $output, $question);
-            if($roles=="")
-            {
-                throw new \Exception("you must specify one role at least");
-            }
-            else
-            {
-                $arroles = explode(",", $roles);
-            }
+            }             
             // récupération de la config securité
             $cfgsecu = new Config('security');
             $values = $cfgsecu->load();
             $class =   $values['security']['classes'];
             $ss = new $class(new Session(),new Request());
             $output->writeln('Create user');
-            $ss->userCreate($login,$email,$password,$arroles);			
+            $ss->userCreate($login,$email,$password);			
 		 
         } 
         catch (\Exception $e) 

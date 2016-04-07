@@ -17,19 +17,13 @@ class TwigRouteNode extends \Twig_Node
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(\Twig_Compiler $compiler)
-    {
+    {   
         $compiler
-            ->addDebugInfo($this)             
-            ->write('$route = ')
+            ->raw("echo \GL\Core\Helpers\Utils::route(")
             ->subcompile($this->getNode('expr'))
-            ->raw(";\n")                     
-            ->raw('$args = array();')            
-            ->write('$args = ')
+            ->raw(",")
             ->subcompile($this->getNode('options'))
-            ->raw(";\n")  
-            ->raw(' $url = \GL\Core\Helpers\Utils::route($route,$args);')             
-            ->raw('echo $url;')    
-        ;        
-         
+            ->raw(");\n") ;
+        
     }
 }

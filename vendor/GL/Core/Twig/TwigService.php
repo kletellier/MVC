@@ -13,6 +13,7 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
 {
      protected $_controller;
      protected $_container;
+     protected $_profile;
      
      function __construct($controller = "")
      {
@@ -88,7 +89,10 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
         if(DEVELOPMENT_ENVIRONMENT)
         {
           $twigenv->addExtension(new \GL\Core\Debug\TwigDebugBar($this->_container));
-          $twigenv->addExtension(new \Twig_Extension_Debug());  
+          $twigenv->addExtension(new \Twig_Extension_Debug()); 
+          $this->_profile = new \Twig_Profiler_Profile();
+          $twigenv->addExtension(new \Twig_Extension_Profiler($this->_profile));
+         
         }
         $twigenv->addTokenParser(new \GL\Core\Twig\TwigRenderToken());
         $twigenv->addTokenParser(new \GL\Core\Twig\TwigRouteToken());
@@ -131,11 +135,13 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
                 $container->get('debug')["time"]->stopMeasure('inittwig');
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
-            {                
-                $envdebug = new \DebugBar\Bridge\Twig\TraceableTwigEnvironment($env);
-                $container->get('debug')->addCollector(new \DebugBar\Bridge\Twig\TwigCollector($envdebug)); 
+            {       
+                if(!$container->get('debug')->hasCollector('twig'))
+                {
+                    $container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
+                } 
                 $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
-                $ret =  $envdebug->render($template, $params);
+                $ret =  $env->render($template, $params);
                 $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
             }
             else

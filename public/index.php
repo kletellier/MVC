@@ -5,8 +5,7 @@
  */
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', dirname(dirname(__FILE__)));
-
-$start_boot_time = microtime(true);
+ 
 
 /**
  * Get rewriting URL
@@ -16,14 +15,23 @@ if(isset($_GET['url']))
 {
     $url = $_GET['url'];
 } 
-$url = '/'.$url;
+if(strlen($url)>0)
+{
+	if(substr($url,0,1)!="/")
+	{
+		$url = '/'.$url;
+	}
+}
+else
+{
+	$url = '/';
+}
 
 /**
  * Enable autoload
  */
-require_once (ROOT . DS . 'library' . DS . 'autoload_composer.php');
+require_once ROOT . DS . 'plugins'. DS . 'autoload.php';
 
-/**
- * Bootstrap loading
- */
-require_once (ROOT . DS . 'library' . DS . 'bootstrap.php');
+// start application
+$app = new \GL\Core\Kernel\Application();
+$app->handle($url);
