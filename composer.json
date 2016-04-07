@@ -17,7 +17,7 @@
         "symfony/dependency-injection": "3.0.*@dev",
         "symfony/stopwatch": "3.0.*@dev",
         "swiftmailer/swiftmailer": "5.4.*@dev",     
-        "symfony/class-loader": "3.08.*@dev",
+        "symfony/class-loader": "3.0.*@dev",
         "symfony/finder": "3.0.*@dev",
         "symfony/filesystem": "3.0.*@dev",          
         "symfony/config": "3.0.*@dev",
