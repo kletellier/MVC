@@ -206,7 +206,7 @@ Your function in your controller must use ```php $this->renderHtmlTemplate ```
 
 If you enable Twig cache, don't forget to delete all files in ```cache\twig``` for recreating cache version.
 
-You can use console with this command for clearing cache: ```php app/console cache:clear```.
+You can use console with this command for clearing cache: ```php console cache:clear```.
 
 You can add your own method in Twig with ```app/Application/Shared/SharedTwigHelper.php```.
 
