@@ -47,12 +47,12 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php app/console debugbar:install",
-            "php app/console cache:clear"
+            "php console debugbar:install",
+            "php console cache:clear"
         ],
         "post-update-cmd": [
-            "php app/console debugbar:install",
-            "php app/console cache:clear"
+            "php console debugbar:install",
+            "php console cache:clear"
         ]
     },
     "minimum-stability": "dev",
