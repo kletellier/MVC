@@ -1,7 +1,0 @@
-debug: true
-webpath: ''
-template:
-    engine: twig
-    cache: false
-    alwaysreload: true
-locale: en

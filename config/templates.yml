@@ -1,3 +1,0 @@
-# class must implement \GL\Core\Templating\TemplateServiceInterface
-twig:
-    class: \GL\Core\Twig\TwigService

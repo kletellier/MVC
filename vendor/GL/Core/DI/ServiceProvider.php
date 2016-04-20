@@ -67,8 +67,7 @@ class ServiceProvider
         $container = new ContainerBuilder();
 
         // retrieve security class 
-        $cfgsecu = new Config('security');
-        $values = $cfgsecu->load();
+        $values = \Parameters::get('security');
         $class =   $values['security']['classes'];
         // test if class exist and implement interface
         try 

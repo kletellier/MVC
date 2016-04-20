@@ -157,8 +157,7 @@ abstract class Controller implements ContainerAwareInterface
         // get actual route         
         $route = $this->getActualRouteName();
 
-        $cfg = new Config("functions");
-        $fnArray = $cfg->load();
+        $fnArray = \Functions::getAll();
         if(isset($fnArray))
         {
             foreach ($fnArray as $key => $value) 

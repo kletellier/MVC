@@ -128,9 +128,8 @@ class Mailer
      * Get all mail smtp parameters from config/mail.yml
      */
     private function getParams()
-    { 
-        $loader = new Config('mail');
-        $value = $loader->load();
+    {          
+        $value = \Parameters::get('mail');
         $arr = $value["mail"];
         if($arr!=null)
         {

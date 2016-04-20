@@ -24,20 +24,12 @@ class TemplateProvider
     {
         $ret = false;
         try 
-        {
-            $config = new Config('templates');
-            $path = $config->getPath(); 
-            $fs = new Filesystem();
-            $exist = $fs->exists(array($path));
-
-            if($exist)
-            {  
-                $value = $config->load(); 
-                foreach($value as $name => $th)
-                {
-                    $this->arr[$name] = $th['class'];                    
-                }
-            }           
+        {            
+            $value = \Parameters::get('templates'); 
+            foreach($value as $name => $th)
+            {
+                $this->arr[$name] = $th['class'];                    
+            }                        
         } 
         catch (IOException $e) {
             $ret = false;

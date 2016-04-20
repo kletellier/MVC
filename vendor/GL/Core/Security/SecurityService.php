@@ -44,8 +44,7 @@ class SecurityService implements SecurityServiceInterface
 	{
 		try 
 		{
-			$yaml = new Config('security');
-			$value = $yaml->load();
+			$value = \Parameters::get('security');
 			$this->config = $value;
 			$this->tablename = isset($this->config['security']['table']) ? $this->config['security']['table'] : 'users';
 			$this->tokensalt = $this->config['cookie']['token'];

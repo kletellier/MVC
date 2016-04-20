@@ -45,10 +45,8 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	public function loadConfig()
 	{
 		try 
-		{
-
-			$yaml = new Config('security');
-			$value = $yaml->load();
+		{			 
+			$value = \Parameters::get('security');
 			$this->config = $value;
 			$this->users_tablename = isset($this->config['security']['users_table']) ? $this->config['security']['users_table'] : 'users';
 			$this->roles_tablename = isset($this->config['security']['roles_table']) ? $this->config['security']['roles_table'] : 'roles';

@@ -35,9 +35,9 @@ class Loader
      */
     public static function InitConfig()
     {   
-        // loading configuration from config/config.yml
-        $loader = new Config('config');
-        $value = $loader->load();
+        // loading configuration from parameters.yml
+        
+        $value = \Parameters::get('config');
 
         define('DEVELOPMENT_ENVIRONMENT',$value['debug']);
         define('BASE_PATH',$value['webpath']);
@@ -50,10 +50,10 @@ class Loader
     public static function InitDatabase()
     {       
         /**
-         * Load database configuration from config/database.yml 
+         * Load database configuration from parameters.yml 
          */
-        $yaml = new Config("database");
-        $value = $yaml->load();
+         
+        $value = \Parameters::get('database');
                 
         $capsule = new Capsule;
          

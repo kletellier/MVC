@@ -54,8 +54,8 @@ class Application
     {
         $resp = $response;
         $ret = false;
-        $cfg = new Config("functions");
-        $fnArray = $cfg->load();
+         
+        $fnArray = \Functions::getAll();
         if(isset($fnArray))
         {
             foreach ($fnArray as $key => $value) 
@@ -113,8 +113,8 @@ class Application
     private  function executeBefores($route)
     {
         $ret = false;
-        $cfg = new Config("functions");
-        $fnArray = $cfg->load();
+        
+        $fnArray = \Functions::getAll();
         if(isset($fnArray))
         {
             $route = $this->container->get('request_helper')->getCurrentRoute()['_route'];           

@@ -13,17 +13,15 @@ class Redis
     
     
     protected $client;
-    protected $config;
-
+    
     public function __construct()
     {    
         $this->init();
     }
 
     private function init()
-    {
-        $this->config = new Config('redis');
-        $values = $this->config->load();
+    {         
+        $values = \Parameters::get('redis');
         $enable = isset($values['default']['enable']) ? $values['default']['enable'] : 0;
         $this->client = null;
         if($enable==1)

@@ -1,0 +1,38 @@
+config:
+      debug: true
+      webpath: ''
+      template:
+          engine: twig # section in template config below
+          cache: false
+          alwaysreload: true
+      locale: en
+database:
+    default:
+      server: 127.0.0.1
+      port: 3306
+      user: uid
+      password: pwd
+      database: dbname
+templates:
+    twig:
+      class: \GL\Core\Twig\TwigService # class must implement \GL\Core\Templating\TemplateServiceInterface
+mail:
+    server:  smtp.acme.com
+    port: 25
+    user: user
+    password: pwd
+redis:
+    default:
+    server: 127.0.0.1
+    port: 6379
+    enable: 0
+security:
+    security:
+         classes : GL\Core\Security\AuthenticationService
+         roles_table : roles
+         users_table : users
+         usersroles_table : usersroles
+    cookie:
+         token : typeyoursecuritytokenhere
+         name : REMEMBERME
+         duration : 3600

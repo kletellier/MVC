@@ -1,5 +1,0 @@
-mail:
-    server:  smtp.acme.com
-    port: 25
-    user: user
-    password: pwd

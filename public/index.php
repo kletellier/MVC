@@ -33,9 +33,12 @@ else
 require_once ROOT . DS . 'plugins'. DS . 'autoload.php';
 // require Facade aliases
 require_once ROOT . DS . 'library' . DS .'aliases.php';
-// start application
-$app = new \GL\Core\Kernel\Application();
+
 // load Facades
 \GL\Core\Facades\AliasLoader::getInstance($aliases)->register();
+ 
+ // start application
+$app = new \GL\Core\Kernel\Application();
+ 
 // Handle Url and render Response
 $app->handle($url);
