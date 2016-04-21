@@ -84,6 +84,15 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
             $cachepath = CACHEPATH . DS . 'blade'; 
             $views = $this->getPathArray();
             $blade = new Blade($views, $cachepath); 
+
+            // get blade compiler
+            $compiler = $blade->getCompiler();
+
+            // add use directive
+            $compiler->directive('use', function($expression){
+                preg_match('#\((.*?)\)#', $expression, $match);  
+                return "<?php use $match[1]; ?>";
+            });            
  
             if(DEVELOPMENT_ENVIRONMENT)
             {
