@@ -4,6 +4,14 @@ namespace GL\Core\Helpers;
 
 class Utils
 {
+     /**
+     * Return public path
+     * @return string
+     */
+    public static function getPublicPath()
+    {
+        return PUBLICPATH;
+    }
     
      /**
      * Convert relative url to absolute url
