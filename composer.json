@@ -34,7 +34,6 @@
         "predis/predis": "1.1.*@dev",
         "hoa/mime": "~2.0",
         "filp/whoops": "1.1.6",
-        "xiaoler/blade": "dev-master",
         "philo/laravel-blade": "3.*"
     },
     "autoload": {
