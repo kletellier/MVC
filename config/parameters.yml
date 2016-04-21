@@ -16,6 +16,8 @@ database:
 templates:
     twig:
       class: \GL\Core\Twig\TwigService # class must implement \GL\Core\Templating\TemplateServiceInterface
+    blade:
+      class: \GL\Core\Blade\Blade5service
 mail:
     server:  smtp.acme.com
     port: 25

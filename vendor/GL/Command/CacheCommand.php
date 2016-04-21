@@ -38,6 +38,16 @@ class CacheCommand extends Command
                 $fs->mkdir($path);
                 $fs->chmod($path,0777,0000,true);
 
+                $output->writeln("    Clear Blade Cache");
+
+                $path = CACHEPATH . DS . "blade";
+                $finder = new Finder();
+                $iterator = $finder->files()->name('*.php')->in($path);
+                $fs->remove($iterator); 
+                $fs->remove($path);     
+                $fs->mkdir($path);
+                $fs->chmod($path,0777,0000,true);
+
                 $output->writeln("    Clear DI Cache");
 
                 $pathdi = CACHEPATH . DS . "DI" . DS . "Container";

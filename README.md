@@ -22,6 +22,7 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF, Redis an
 	* PhpExcel
 * TCPDF
 * Twig
+* Blade
 * Swiftmailer
 * PSR Log
 * Predis
@@ -46,7 +47,7 @@ git clone https://github.com/kletellier/MVC.git /var/www
 
 4. Change website configuration file
 
-Open ```config/config.yml``` or type in your browser  ```http://yourwebsite/configuration/application``` (available only in local and debug mode)
+Open ```config/parameters.yml``` or type in your browser  ```http://yourwebsite/configuration/application``` (available only in local and debug mode)
 
 ```yaml
 debug: true
@@ -65,7 +66,7 @@ In twig section, enable cache in ```cache/twig``` folder, alwaysreload parameter
 
 5. Change database configuration file
 
-Open ```config/database.yml``` or type in your browser  ```http://yourwebsite/configuration/database``` (available only in local and debug mode)
+Open ```config/parameters.yml``` or type in your browser  ```http://yourwebsite/configuration/database``` (available only in local and debug mode)
 
 ```yaml
 default:
@@ -82,7 +83,7 @@ You can connect many databases, just create a new section after default section 
 6. Change email configuration file or type in your browser  ```http://yourwebsite/configuration/mail``` (available only in local and debug mode)
 
 
-Open ```config/mail.yml```
+Or in ```config/parameters.yml```
 
 ```yaml
 mail:
@@ -218,6 +219,26 @@ return $this->renderPHP('index.php',array(« params »=> « value »)) ;
 
 it works as an include file.
 
+You can also use the Blade template (issuing from Laravel) system by choose "blade" in  ```config/parameters.yml``` by replacing twig in 
+
+```yaml
+config:
+      debug: true
+      webpath: ''
+      template:
+          engine: blade 
+```
+
+Templates must be name {{templatename}}.blade.php
+
+Calling template from Controller works like Twig but just using his name, example for index template 
+
+```php
+return $this->render('index',array(« params »=> « value »)) ;
+```
+
+will call index.blade.php template file.
+
 ### Dependency injection
 
 Each controller instance own his DI container, you can retrieve each service on this container, by using get function :
@@ -300,6 +321,10 @@ For Eloquent ORM :
 For Twig :
 
 [Twig] (http://twig.sensiolabs.org/documentation)
+
+For Blade :
+
+[Blade] (http://duncan3dc.github.io/blade/)
 
 For SwiftMailer :
 
