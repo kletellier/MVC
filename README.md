@@ -324,7 +324,7 @@ For Twig :
 
 For Blade :
 
-[Blade] (http://duncan3dc.github.io/blade/)
+[Blade] (https://laravel.com/docs/5.1/blade)
 
 For SwiftMailer :
 
