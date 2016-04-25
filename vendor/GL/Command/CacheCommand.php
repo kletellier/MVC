@@ -66,7 +66,15 @@ class CacheCommand extends Command
                 $fs->remove($iteratorroute); 
                 $fs->remove($pathroute);     
                 $fs->mkdir($pathroute);
-                $fs->chmod($pathroute,0777,0000,true);              
+                $fs->chmod($pathroute,0777,0000,true);     
+
+                 if(class_exists("\Kletellier\Assets\AssetsUtils"))
+                {
+                     $output->writeln("    Install Kletellier assets");
+                    \Kletellier\Assets\AssetsUtils::install();
+                     $output->writeln("    Install Kletellier assets Twig helper");
+                    \Kletellier\Assets\AssetsUtils::verifyHelper();
+                }             
         } 
         catch (IOExceptionInterface $e) 
         {
