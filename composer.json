@@ -46,6 +46,9 @@
             },
         "files": ["library/functions.php"]
     },
+    "suggest": {
+        "kletellier/assets": "Add mainstream assets integration easiest."
+    },
     "scripts": {
         "post-install-cmd": [
             "php console debugbar:install",
