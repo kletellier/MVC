@@ -19,14 +19,19 @@ use GL\Core\DI\ServiceProvider;
 use GL\Core\Config\Config;
 use Assert\Assertion;
 use Symfony\Component\Routing\Loader\ClosureLoader;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class Application 
 {   
     protected $start_time;
     protected $container;
+    protected $watch;
 
     public function __construct()
     {   
+        $this->watch = new Stopwatch();
+        $this->watch->start('rendering');
+
         // initialize start time
         $this->start_time = microtime(true);
        
@@ -281,7 +286,22 @@ class Application
          
         if ($response instanceof Response) {
             // prepare response
-            $this->filterResponse($response)->send();
+            $filteredresponse =  $this->filterResponse($response);
+            // add rendering time comment if content type is html
+            $event = $this->watch->stop('rendering');
+            $headers = $filteredresponse->headers;
+            $ct = $headers->get('Content-Type');
+            
+            if(strtolower($ct)=="text/html")
+            {
+                $html = $filteredresponse->getContent();
+                $time = $event->getDuration();
+                $html.= "<!-- generation time : " . $time . " ms -->";
+                $filteredresponse->setContent($html);
+            }
+
+            $filteredresponse->send();
+             
         }     
         else
         {
