@@ -46,3 +46,15 @@ if ( ! function_exists('sdump'))
 }
 
 
+if( !function_exists('tpl'))
+{
+	/**
+	 * Return path for a template
+	 * @param  string $p relative path
+	 * @return string absolute path
+	 */
+	function tpl($p)
+	{
+		return TEMPLATEPATH . DS . $p;
+	}
+}
