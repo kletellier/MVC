@@ -129,8 +129,7 @@ class Mailer
      */
     private function getParams()
     {          
-        $value = \Parameters::get('mail');
-        $arr = $value["mail"];
+        $arr = \Parameters::get('mail');         
         if($arr!=null)
         {
             $this->_server = $arr["server"];
