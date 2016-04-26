@@ -259,7 +259,8 @@ abstract class Controller implements ContainerAwareInterface
         extract($this->GetGlobalVariables($inc_parameters));
         $ts = new \GL\Core\Templating\PhpTemplateService($this->container,$this->_controller);
         $ret = $ts->getPathTemplate($view);      
-        require($ret);          
+        require($ret);  
+        die();        
     }
          
     /**
