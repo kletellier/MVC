@@ -254,13 +254,22 @@ abstract class Controller implements ContainerAwareInterface
      */
     function renderPHP($view,$inc_parameters = array())
     {           
-        // inject all parameters in array
-        // use extract function instead of manually extracting
-        extract($this->GetGlobalVariables($inc_parameters));
+         extract($this->GetGlobalVariables($inc_parameters));
         $ts = new \GL\Core\Templating\PhpTemplateService($this->container,$this->_controller);
-        $ret = $ts->getPathTemplate($view);      
-        require($ret);  
-        die();        
+        $ret = $ts->getPathTemplate($view);  
+            
+        ob_start();
+        try 
+        {
+            include $ret;
+        } 
+        catch (Exception $e) 
+        {
+            
+        }  
+        $buffer = ltrim(ob_get_clean());
+        $response = $this->getResponse($buffer);
+        return $response;        
     }
          
     /**
