@@ -61,6 +61,6 @@ abstract class Facade
             throw new RuntimeException('A facade root has not been set.');
         }
 
-        return $instance->$method(...$args);
+        return call_user_func_array(array($instance, $method), $args);
     }
 }
