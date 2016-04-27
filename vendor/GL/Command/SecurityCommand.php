@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityCommand extends Command
-{	 
+{    
 
     protected function configure()
     {
@@ -29,17 +29,16 @@ class SecurityCommand extends Command
         try 
         {
             // récupération de la config securité
-            $cfgsecu = new Config('security');
-            $values = $cfgsecu->load();
+            $values = \Parameters::get('security');
             $class =   $values['security']['classes'];
             $ss = new $class(new Session(),new Request());
             $output->writeln('Create users table and model');
-            $ss->createTables();			 
+            $ss->createTables();             
         } 
         catch (\Exception $e) 
         {
                 $output->writeln('Error : ' . $e->getMessage());
-        }		 
+        }        
         $output->writeln('finished');
     }
 }
