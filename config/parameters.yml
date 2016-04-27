@@ -25,9 +25,9 @@ mail:
     password: pwd
 redis:
     default:
-    server: 127.0.0.1
-    port: 6379
-    enable: 0
+        server: 127.0.0.1
+        port: 6379
+        enable: 0
 security:
     security:
          classes : GL\Core\Security\AuthenticationService
