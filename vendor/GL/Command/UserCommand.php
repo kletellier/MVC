@@ -50,8 +50,7 @@ class UserCommand extends Command
                 throw new \Exception("you must specify a password");
             }             
             // récupération de la config securité
-            $cfgsecu = new Config('security');
-            $values = $cfgsecu->load();
+            $values = \Parameters::get('security');
             $class =   $values['security']['classes'];
             $ss = new $class(new Session(),new Request());
             $output->writeln('Create user');
