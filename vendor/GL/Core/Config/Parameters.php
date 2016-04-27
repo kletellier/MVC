@@ -36,11 +36,15 @@ class Parameters
      * @param string $key key value
      * @return tyarraype
      */
-    public function get($key)
+    public function get($key,$refresh=false)
     {
         $ret = null;
         try 
         {
+            if($refresh)
+            {
+                $this->load();
+            }
            if(isset($this->parameters[$key]))
            {
             $ret = $this->parameters[$key];
