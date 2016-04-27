@@ -14,23 +14,23 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
-		$config = new Config('database'); 
+		$config = new Config('parameters'); 
 		if($request->getMethod()=="POST")
 		{
-			 $server = $request->get('server');
-			 $port = (int)$request->get('port');
-			 $database = $request->get('database');
-			 $user = $request->get('user');
-			 $password = $request->get('password');
-			 
-			 $array  = array('server'=>$server,'port'=>$port,'database'=>$database,'user'=>$user,'password'=>$password);
-			 $arr = array();
-			 $arr["default"] = $array;			 
-			 
-			 $config->save($arr);			 
+			$server = $request->get('server');
+			$port = (int)$request->get('port');
+			$database = $request->get('database');
+			$user = $request->get('user');
+			$password = $request->get('password');
+			
+			$tab = $config->load();
+			$array  = array('server'=>$server,'port'=>$port,'database'=>$database,'user'=>$user,'password'=>$password);
+			$tab["database"]["default"] = $array;			 
+			
+			$config->save($tab);			 
 		}		
 		 
-		$value = $config->load();	  
+		$value = \Parameters::get('database',true); //$config->load();	  
 		return $this->renderTwig('database.html.twig',array('database'=>$value));
 	}
 
@@ -42,7 +42,7 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
-		$config = new Config('config'); 
+		$config = new Config('parameters'); 
 		if($request->getMethod()=="POST")
 		{
 			 $debug = ($request->get('debug')=='1');
@@ -52,13 +52,16 @@ class ConfigController extends Controller
 			 $engine = $request->get('engine') != "" ? $request->get('engine') : "twig";
 			 $alwaysreload = ($request->get('alwaysreload')=='1');
 			 
+			 $tab = $config->load();
+			 
 			 $twigarr = array('engine'=>$engine,'cache'=>$cache,'alwaysreload'=>$alwaysreload);			 
 			 $array  = array('debug'=>$debug,'webpath'=>$webpath,'template'=>$twigarr,'locale'=>$locale);
-			 
-			 $config->save($array);	
+			 $tab["config"]  = $array;
+
+			 $config->save($tab);	
 		}
 		
-		$value = $config->load();			 
+		$value = \Parameters::get('config',true);  		 
 		return $this->renderTwig('application.html.twig',array('application'=>$value));	
 	}
 	
@@ -70,22 +73,24 @@ class ConfigController extends Controller
 		{
 			throw new \GL\Core\Exception\AccessDeniedHttpException;
 		}
-		 $config = new Config('mail'); 
+		 $config = new Config('parameters'); 
 		if($request->getMethod()=="POST")
 		{
 			 $server = $request->get('server');
 			 $port = (int)$request->get('port');			 
 			 $user = $request->get('user');
 			 $password = $request->get('password');
+
+			 $tab = $config->load();
 			 
 			 $array  = array('server'=>$server,'port'=>$port,'user'=>$user,'password'=>$password);
 			 $arr = array();
-			 $arr["mail"] = $array;
+			 $tab["mail"] = $array;
 			 
-			 $config->save($arr);
+			 $config->save($tab);
 		}
 		
-		$value = $config->load();		 
+		$value = \Parameters::get('mail',true); 
 		return $this->renderTwig('mail.html.twig',array('mail'=>$value));	
 	}
       
