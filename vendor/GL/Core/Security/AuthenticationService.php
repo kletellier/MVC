@@ -513,6 +513,20 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 		return $roles;
 	}
 
+	/**
+	 * Return array of users for specific role
+	 * @param int $role_id  role id
+	 * @return array of users instance
+	 */
+	public function roleUsers($role_id)
+	{
+		$inst = $this->getUsersRolesInstance();
+		$ids = $inst->where('roles_id','=',$role_id)->get(array('users_id'))->toArray(); 
+		$users = $this->getUsersInstance()->whereIn('id',$ids)->get();
+		return $users;
+	}
+
+
 	
 	/**
 	 * Give remenbertoken

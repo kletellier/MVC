@@ -134,6 +134,13 @@ interface AuthenticationServiceInterface
 	 * @return array
 	 */
 	public function userRoles($user_id="");
+
+	/**
+	 * Return array of users for specific role
+	 * @param int $role_id  role id
+	 * @return array of users instance
+	 */
+	public function roleUsers($role_id);
 	
 	/**
 	 * Give remenbertoken
