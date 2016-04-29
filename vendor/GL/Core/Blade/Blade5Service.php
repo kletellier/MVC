@@ -120,7 +120,9 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
         } 
         catch (\Exception $e) 
         {
-             
+            $ret = "<!DOCTYPE html><html><head></head><body>";
+            $ret .=  "Error Blade rendering : " . $e->getMessage();          
+            $ret .= "</body></html>";             
         }
          
         return $ret;
