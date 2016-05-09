@@ -97,7 +97,7 @@ class ServiceProvider
         // Inject PHPExcel Wrapper
         $container->register('excel', 'GL\Core\Tools\Excel');
         // Inject Session
-        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name)->addMethodCall('start');
+        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name))->addMethodCall('start');
         // Inject Crsf verifier
         $container->register('crsf','GL\Core\Security\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
         // Inject translator service
