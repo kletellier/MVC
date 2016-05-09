@@ -69,6 +69,7 @@ class ServiceProvider
         // retrieve security class 
         $values = \Parameters::get('security');
         $class =   $values['security']['classes'];
+        $session_name = $values['session']['name'];
         // test if class exist and implement interface
         try 
         {
@@ -96,7 +97,7 @@ class ServiceProvider
         // Inject PHPExcel Wrapper
         $container->register('excel', 'GL\Core\Tools\Excel');
         // Inject Session
-        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('start');
+        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name)->addMethodCall('start');
         // Inject Crsf verifier
         $container->register('crsf','GL\Core\Security\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
         // Inject translator service

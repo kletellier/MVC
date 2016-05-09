@@ -38,3 +38,5 @@ security:
          token : typeyoursecuritytokenhere
          name : REMEMBERME
          duration : 3600
+    session:
+         name: "kletellier"
