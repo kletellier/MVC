@@ -136,6 +136,13 @@ interface AuthenticationServiceInterface
 	public function userRoles($user_id="");
 
 	/**
+	 * Return if user is member in one of 
+	 * @param Array $roles array of role name
+	 * @return type
+	 */
+	public function userIsRoleMember(Array $roles);
+
+	/**
 	 * Return array of users for specific role
 	 * @param int $role_id  role id
 	 * @return array of users instance

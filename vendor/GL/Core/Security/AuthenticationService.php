@@ -303,7 +303,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 			{
 				$role->delete();
 			}
-				$links = $this->getUsersRolesInstance()->where('role_id','=',$role_id)->get();
+				$links = $this->getUsersRolesInstance()->where('roles_id','=',$role_id)->get();
 			foreach ($linsk as $link) 
 			{
 				$link->delete();
@@ -461,6 +461,38 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 			}
 			
 		} catch (Exception $e) {
+			
+		}
+		return $ret;
+	}
+
+	/**
+	 * Return if user is member in one of 
+	 * @param Array $roles array of role name
+	 * @return type
+	 */
+	public function userIsRoleMember(Array $roles)
+	{
+		$ret = false;
+		try 
+		{
+			$user = $this->userLogged();
+			if($user!=null)
+			{
+				$user_roles = $this->userRoles();
+				foreach ($user_roles as $role) 
+				{
+					if(in_array($role->role,$roles))
+					{
+						$ret = true;
+						break;
+					}
+				}
+
+			}
+		} 
+		catch (Exception $e) 
+		{
 			
 		}
 		return $ret;
