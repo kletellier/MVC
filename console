@@ -17,6 +17,10 @@ require_once ROOT . DS . 'plugins'. DS . 'autoload.php';
 // require Facade aliases
 require_once ROOT . DS . 'library' . DS .'aliases.php';
 
+
+// require User commands aliases
+require_once ROOT . DS . 'library' . DS .'commands.php';
+
 // load Facades
 \GL\Core\Facades\AliasLoader::getInstance($aliases)->register();
 
@@ -51,4 +55,10 @@ $application->add(new MigrationCommand);
 $application->add(new MigrationCreateCommand);
 $application->add(new MigrationRollbackCommand);
 $application->add(new MigrationListCommand);
+// load commands defined in library/commands.php
+foreach ($commands as $command) 
+{
+	$application->add(new $command);
+}
+
 $application->run();
