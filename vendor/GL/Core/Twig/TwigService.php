@@ -25,10 +25,22 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
       * set Controller name
       * @return void
       */
-     private function setController($controller = "")
+     public function setController($controller = "")
      {        
         $this->_controller = $controller;
      }
+
+
+    /**
+     * Embed DI container in TwigHelper
+     * 
+     * @param \GL\Core\ContainerInterface $container DI contrainer to embed in TwigHelper
+     */
+     public function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
+     {
+         $this->_container = $container;
+     }
+    
     
      /**
      * Function for Twig path searching
@@ -99,50 +111,44 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
 
         return $twigenv;
     }
-    
-    /**
-     * Embed DI container in TwigHelper
-     * 
-     * @param \GL\Core\ContainerInterface $container DI contrainer to embed in TwigHelper
-     */
-     private function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
-     {
-         $this->_container = $container;
-     }
-    
+   
     /**
      * Render Twig template
      * 
      * @param string $template template path
      * @param array $params parameters array for template
      */ 
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="",$disabledebug=false)
+    public function render($template,array $params,$disabledebug=false)
     {   
         $ret = "";
         try 
         {
+            if($this->_container==null)
+            {
+                throw new Exception("Missing Dependency Container, add it with setContainer Method");                
+            }
+
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
-            $this->setContainer($container);  
-            $this->setController($controller);
+            
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                $container->get('debug')["time"]->startMeasure('inittwig','Init Twig Environnment');
+                $this->_container->get('debug')["time"]->startMeasure('inittwig','Init Twig Environnment');
             }
             $env = $this->getTwigEnvironment();
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                $container->get('debug')["time"]->stopMeasure('inittwig');
+                $this->_container->get('debug')["time"]->stopMeasure('inittwig');
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             {       
-                if(!$container->get('debug')->hasCollector('twig'))
+                if(!$this->_container->get('debug')->hasCollector('twig'))
                 {
-                    $container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
+                    $this->_container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
                 } 
-                $container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
+                $this->_container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
                 $ret =  $env->render($template, $params);
-                $container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
+                $this->_container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
             }
             else
             {
@@ -157,10 +163,10 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
         } 
         catch (\Twig_Error $e) 
         {
-            if($container!=null && DEVELOPMENT_ENVIRONMENT)
+            if($this->_container!=null && DEVELOPMENT_ENVIRONMENT)
             {
 
-                $container->get('debug')["exceptions"]->addException($e);
+                $this->_container->get('debug')["exceptions"]->addException($e);
             }
            throw new \Exception($e->getMessage());
         }

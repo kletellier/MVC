@@ -14,8 +14,7 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
 {
      protected $_controller;
      protected $_container;
-     protected $_profile;
-     
+           
      function __construct($controller = "")
      {
          $this->_controller = $controller;   
@@ -26,9 +25,19 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
       * set Controller name
       * @return void
       */
-     private function setController($controller = "")
+     public function setController($controller = "")
      {        
         $this->_controller = $controller;
+     }
+
+      /**
+     * Embed DI container 
+     * 
+     * @param \GL\Core\ContainerInterface $container DI contrainer to embed 
+     */
+     public function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
+     {
+         $this->_container = $container;
      }
 
       /**
@@ -54,15 +63,7 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
     }
     
     
-    /**
-     * Embed DI container 
-     * 
-     * @param \GL\Core\ContainerInterface $container DI contrainer to embed 
-     */
-     private function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
-     {
-         $this->_container = $container;
-     }
+   
     
     /**
      * Render Blade template
@@ -70,23 +71,21 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
      * @param string $template template path
      * @param array $params parameters array for template
      */ 
-    public function render($template,array $params,\Symfony\Component\DependencyInjection\Container $container = null,$controller="",$disabledebug=false)
+    public function render($template,array $params,$disabledebug=false)
     {   
         $ret = "";
         try 
         {
-
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
-            $this->setContainer($container);  
-            $this->setController($controller);                    
+                              
  
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                $container->get('debug')["time"]->startMeasure('initblade','Init Blade Environnment');
+                 $this->_container->get('debug')["time"]->startMeasure('initblade','Init Blade Environnment');
             }
 
-             $cachepath = CACHEPATH . DS . 'blade'; 
+            $cachepath = CACHEPATH . DS . 'blade'; 
             $views = $this->getPathArray();
             $blade = new Blade($views, $cachepath); 
 
@@ -101,15 +100,15 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
              
              if(DEVELOPMENT_ENVIRONMENT)
             {
-                $container->get('debug')["time"]->stopMeasure('initblade');
+                $this->_container->get('debug')["time"]->stopMeasure('initblade');
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             {       
                 
-                $container->get('debug')["time"]->startMeasure('renderblade','Blade rendering');   
+                 $this->_container->get('debug')["time"]->startMeasure('renderblade','Blade rendering');   
                 // render the template file and echo it         
                 $ret = $blade->view()->make($template, $params)->render();  
-                $container->get('debug')["time"]->stopMeasure('renderblade','Blade rendering');
+                 $this->_container->get('debug')["time"]->stopMeasure('renderblade','Blade rendering');
             }
             else
             {

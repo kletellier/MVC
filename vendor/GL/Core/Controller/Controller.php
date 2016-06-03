@@ -459,7 +459,10 @@ abstract class Controller implements ContainerAwareInterface
         {
             $this->get('debug')["time"]->stopMeasure('global');
         }
-       return  $this->get('template')->getTemplateService()->render($template,$fnparams,$this->container,$this->_controller,$htmlmode);
+        $tpl_service = $this->get('template')->getTemplateService();
+        $tpl_service->setContainer($this->container);
+        $tpl_service->setController($this->_controller);
+        return $tpl_service->render($template,$fnparams,$htmlmode);
     }
     
     /**
