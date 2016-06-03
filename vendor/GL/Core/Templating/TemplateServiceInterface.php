@@ -4,5 +4,9 @@ namespace GL\Core\Templating;
 
 interface TemplateServiceInterface
 {
-    public function render($template,array $params ,\Symfony\Component\DependencyInjection\Container $container = null,$controller = "",$disabledebug=false);
+	public function setController($controller = "");
+
+    public function setContainer(\Symfony\Component\DependencyInjection\Container $container = null);
+
+    public function render($template,array $params , $disabledebug=false);
 }
