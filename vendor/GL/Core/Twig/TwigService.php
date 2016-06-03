@@ -125,7 +125,7 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
         {
             if($this->_container==null)
             {
-                throw new Exception("Missing Dependency Container, add it with setContainer Method");                
+                throw new \Exception("Missing Dependency Container, add it with setContainer Method");                
             }
 
             $stopwatch = new Stopwatch();

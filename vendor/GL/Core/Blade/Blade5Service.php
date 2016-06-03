@@ -76,6 +76,11 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
         $ret = "";
         try 
         {
+            if($this->_container==null)
+            {
+                throw new \Exception("Missing Dependency Container, add it with setContainer Method");                
+            }
+
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
                               
