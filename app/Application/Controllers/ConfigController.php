@@ -98,7 +98,9 @@ class ConfigController extends Controller
     {
 
         $tw = new \GL\Core\Twig\TwigService();
-        $html = $tw->render($tpl,$params,\GL\Core\DI\ServiceProvider::GetDependencyContainer(),$this->_controller);
+        $tw->setContainer($this->container);
+        $tw->setController('Config');
+        $html = $tw->render($tpl,$params);
         $response = new \Symfony\Component\HttpFoundation\Response($html, $code, array('Content-Type' => 'text/html'));         
         return $response;
     }  
