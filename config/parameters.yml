@@ -20,9 +20,11 @@ templates:
       class: \GL\Core\Blade\Blade5Service
 mail:
     server:  smtp.acme.com
-    port: 25
+    port: 587
     user: user
     password: pwd
+    secure: 1
+    encryption: "tls"
 redis:
     default:
         server: 127.0.0.1
