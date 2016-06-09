@@ -7,7 +7,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use GL\Core\Config\Config;
 
 /**
- * SwiftMailer wrapper
+ * PHPMailer wrapper
  */
 class Mailer
 {
@@ -34,7 +34,8 @@ class Mailer
             $this->_port = 25;
             $this->_user = "";
             $this->_password = "";
-            $this->_from = array();
+            $this->_from = "";
+            $this->_fromname = "";
             $this->_to = array();
             $this->_cc = array();
             $this->_bcc = array();
@@ -43,6 +44,8 @@ class Mailer
             $this->_isHtml = false;
             $this->_attach = array();
             $this->_disable = 0;
+            $this->_encryption = "";
+            $this->_secure = 0;
             $this->getParams();
     }
     
@@ -51,13 +54,33 @@ class Mailer
      * 
      * @param Swift_Message $message Swift message instance
      */
-    private function getAttachment(\Swift_Message $message)
+    private function getAttachment(\PHPMailer $message)
     {
         foreach($this->_attach as $tmp)
         {
-            $attachment = \Swift_Attachment::fromPath($tmp); 
-            $message->attach($attachment);
+            $message->addAttachment($tmp);
         }
+    }
+
+
+    /**
+     * Clear attachment list
+     * @return void
+     */
+    public function clearAttach()
+    {
+      $this->_attach = array();
+    }
+
+    /**
+     * Clear recipients lists
+     * @return void
+     */
+    public function clearRecipients()
+    {
+      $this->_to = array();
+      $this->_bcc = array();
+      $this->_cc = array();
     }
     
     /**
@@ -66,7 +89,7 @@ class Mailer
      * 
      * @param Swift_Message $message Swift message instance
      */
-    private function getTo(\Swift_Message $message)
+    private function getTo(\PHPMailer $message)
     {            
         // ajout destinataire    
         foreach($this->_to as $mail)
@@ -78,11 +101,11 @@ class Mailer
                 if(isset($tmp[1]))
                 {
                     $nomtmp= $tmp[1];                    
-                    $message->addTo($mailtmp,$nomtmp);
+                    $message->addAddress($mailtmp,$nomtmp);
                 }
                 else
                 {
-                    $message->addTo($mailtmp);
+                    $message->addAddress($mailtmp);
                 }                 
             }
         }  
@@ -96,11 +119,11 @@ class Mailer
                 if(isset($tmp[1]))
                 {
                     $nomtmp= $tmp[1];                    
-                    $message->addCc($mailtmp,$nomtmp);
+                    $message->addCC($mailtmp,$nomtmp);
                 }
                 else
                 {
-                    $message->addCc($mailtmp);
+                    $message->addCC($mailtmp);
                 }                 
             }
         } 
@@ -114,11 +137,11 @@ class Mailer
                 if(isset($tmp[1]))
                 {
                     $nomtmp= $tmp[1];                    
-                    $message->addBcc($mailtmp,$nomtmp);
+                    $message->addBCC($mailtmp,$nomtmp);
                 }
                 else
                 {
-                    $message->addBcc($mailtmp);
+                    $message->addBCC($mailtmp);
                 }                 
             }
         }       
@@ -140,6 +163,14 @@ class Mailer
             {
                 $this->_disable = $arr['disable'];
             }
+            if(isset($arr["secure"]))
+               {
+                $this->_secure = $arr['secure'];
+            }
+            if(isset($arr["encryption"]))
+               {
+                $this->_encryption = $arr['encryption'];
+            }
         }
     }
     
@@ -151,8 +182,9 @@ class Mailer
      */
     public function setFrom($mail,$from = "")
     {
-        $fromtmp = $from ?: $mail;
-        $this->_from = array($mail => $fromtmp);
+        $this->_fromname = $from ?: $mail;
+        $this->_from = $mail;
+         
     }
     
     /**
@@ -262,33 +294,52 @@ class Mailer
      */
     public function send()
     {       
-        $transport = \Swift_SmtpTransport::newInstance($this->_server, $this->_port);
-        if($this->_user!="")
+        $mail = new \PHPMailer;
+        $mail->isSMTP();
+        $mail->Host = $this->_server;
+        $mail->Port = $this->_port;
+         if($this->_user!="")
         {
-            $transport->setUsername($this->_user)
-                    ->setPassword($this->_password);                             
+            $mail->SMTPAuth = true;                             
+            $mail->Username = $this->_user;                 
+            $mail->Password = $this->_password;  
+        }
+        if($this->_secure==1)
+        {
+          $mail->SMTPSecure  = $this->_encryption;
+          if (version_compare(PHP_VERSION, '5.6.0') >= 0) 
+          {
+            // ssl check pb with php 5.6
+                $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+          }
+          
         }
 
-        $mailer = \Swift_Mailer::newInstance($transport);
-
-        $message = \Swift_Message::newInstance() 
-          ->setSubject($this->_subject)          
-          ->setFrom($this->_from)         
-          ->setBody($this->_body)  ;
+        $mail->setFrom($this->_from,$this->_fromname);
+        $mail->Subject = $this->_subject;
+        $mail->Body = $this->_body;
         if($this->_isHtml)
         {
-            $message->setContentType("text/html");
-        }
-        // ajout des destinataires
-        $this->getTo($message);
-        // ajout des pièces jointes
-        $this->getAttachment($message);   
+            $mail->isHTML(true);
+        }         
+        $this->getTo($mail);         
+        $this->getAttachment($mail);   
         $result = 0;
         if($this->_disable==0)
         {
-            $result = $mailer->send($message);   
+            $result = $mail->send();   
         }             
-        return ($result>=1);
+        if(!$result)
+        {         
+            throw new \Exception($mail->ErrorInfo);            
+        }
+        return $result;
     }
         
     function __destruct()

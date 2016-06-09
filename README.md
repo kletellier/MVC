@@ -23,7 +23,7 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF, Redis an
 * TCPDF
 * Twig
 * Blade
-* Swiftmailer
+* PHPMailer
 * PSR Log
 * Predis
 
@@ -247,7 +247,7 @@ Each controller instance own his DI container, you can retrieve each service on 
 
 You have many services on each container :
 
-* mailer : ```\GL\Core\Tools\Mailer``` instance, a wrapper of SwiftMailer.
+* mailer : ```\GL\Core\Tools\Mailer``` instance, a wrapper of PHPMailer.
 * request : ```Symfony\Component\HttpFoundation\Request``` instance.
 * request_helper : ```GL\Core\Helpers\RequestHelper``` instance.
 * template : ```GL\Core\Templating\TemplateProvider``` instance.
@@ -326,9 +326,9 @@ For Blade :
 
 [Blade] (https://laravel.com/docs/5.1/blade)
 
-For SwiftMailer :
+For PHPMailer :
 
-[Swiftmailer] (http://swiftmailer.org/docs/introduction.html)
+[PHPMailer] (https://github.com/PHPMailer/PHPMailer)
 
 For TCPDF :
 
