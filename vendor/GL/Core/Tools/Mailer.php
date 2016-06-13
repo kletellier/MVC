@@ -16,6 +16,7 @@ class Mailer
     private $_password;
     private $_port;
     private $_from;
+    private $_fromname;
     private $_to;
     private $_cc;
     private $_bcc;
@@ -34,18 +35,23 @@ class Mailer
             $this->_port = 25;
             $this->_user = "";
             $this->_password = "";
-            $this->_from = "";
+
             $this->_fromname = "";
+            $this->_from = "";
+            
             $this->_to = array();
             $this->_cc = array();
             $this->_bcc = array();
+
             $this->_subject = "";
             $this->_body = "";
             $this->_isHtml = false;
             $this->_attach = array();
             $this->_disable = 0;
+
             $this->_encryption = "";
             $this->_secure = 0;
+            
             $this->getParams();
     }
     
