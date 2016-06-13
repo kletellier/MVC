@@ -109,7 +109,7 @@ class Mailer
                 }                 
             }
         }  
-        // ajout copie
+        // add carbon copy
         foreach($this->_cc as $mail)
         {
             $tmp = explode("::",$mail);
@@ -127,7 +127,7 @@ class Mailer
                 }                 
             }
         } 
-        // ajout copie cachée
+        // add blind carbon copy
         foreach($this->_bcc as $mail)
         {
             $tmp = explode("::",$mail);
