@@ -20,12 +20,14 @@ use GL\Core\Config\Config;
 use Assert\Assertion;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Stopwatch\Stopwatch;
+use GL\Core\Controller\Filters;
 
 class Application 
 {   
     protected $start_time;
     protected $container;
     protected $watch;
+    protected $filters;
 
     public function __construct()
     {   
@@ -42,6 +44,10 @@ class Application
       
         // get DI container
         $this->container = ServiceProvider::GetDependencyContainer(); 
+
+        // instantiate filters object
+        $this->filters = new Filters();
+
         // enable error reporting
         $this->setReporting();
     }
@@ -54,126 +60,6 @@ class Application
         error_reporting(E_ALL);
         ini_set('display_errors','Off');       
     }
-
-   private function filterResponse(\Symfony\Component\HttpFoundation\Response $response)
-    {
-        $resp = $response;
-        $ret = false;
-         
-        $fnArray = \Functions::getAll();
-        if(isset($fnArray))
-        {
-            foreach ($fnArray as $key => $value) 
-            {
-                $route = $this->container->get('request_helper')->getCurrentRoute()['_route'];
-                if($value["type"]=="filter")
-                {
-                    $bExecute = false;
-                    // for each global function defined
-                    $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
-                    $scope = (isset($value["scope"])) ? $value["scope"] : "all";
-                    $class = $value["class"];
-                    // test if class exist
-                    Assertion::ClassExists($class);
-                    Assertion::implementsInterface($class,'\GL\Core\Controller\FilterResponseInterface');                   
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
-     
-                    if($bExecute)
-                    {
-                        $exc = new $class($resp,$this->container);                    
-                        $resp = $exc->execute();
-                    }
-                }  
-            } 
-        }
-        return $resp;
-    }
-
-    private  function executeBefores($route)
-    {
-        $ret = false;
-        
-        $fnArray = \Functions::getAll();
-        if(isset($fnArray))
-        {
-            $route = $this->container->get('request_helper')->getCurrentRoute()['_route'];           
-            foreach ($fnArray as $key => $value) 
-            {
-                if($value["type"]=="before")
-                {
-                    $bExecute = false;
-                    // for each global function defined
-                    $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
-                    $scope = (isset($value["scope"])) ? $value["scope"] : "all";
-                    $class = $value["class"];
-                    // test if class exist and implements interface
-                    Assertion::ClassExists($class);
-                    Assertion::implementsInterface($class,'\GL\Core\Controller\BeforeFunctionInterface');    
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
-                    if($bExecute)
-                    {
-                        $exc = new $class($this->container);
-                        $ret = $exc->execute();
-                    }
-                }  
-            } 
-        }
-          
-        return $ret;
-    }
-
-     
 
     private  function startMeasure($id,$text)
     {
@@ -193,6 +79,7 @@ class Application
 
     public function handle($url)
     {   
+        $route = "";
         $whoops = new \Whoops\Run;
         $handler = new \GL\Core\Debug\ErrorHandler;
         $handler->setContainer($this->container);
@@ -259,16 +146,17 @@ class Application
             $this->stopMeasure('routing');  
             $this->startMeasure('resolving', 'Resolving controller');
             $controller = $parameters['controller'];
-            $action = $parameters['action'];                    
+            $action = $parameters['action'];    
+            $route = $parameters["_route"];
             if(DEVELOPMENT_ENVIRONMENT)
             {
-               $this->container->get('debug')["messages"]->addMessage("Route : " . $parameters["_route"]);                      
+               $this->container->get('debug')["messages"]->addMessage("Route : " . $route);                      
             } 
 
             $cr = new ControllerResolver($controller,$action,$parameters);  
             $this->stopMeasure('resolving'); 
             $this->startMeasure('before', 'Execute before');                                   
-            $this->executeBefores($parameters["_route"]); 
+            $this->filters->executeBefores($route); 
             $this->stopMeasure('before'); 
             $this->startMeasure('execute', 'Execute action');                        
             $response = $cr->execute(); 
@@ -286,7 +174,7 @@ class Application
          
         if ($response instanceof Response) {
             // prepare response
-            $filteredresponse =  $this->filterResponse($response);
+            $filteredresponse =  $this->filters->filterResponse($response,$route);
             // add rendering time comment if content type is html
             $event = $this->watch->stop('rendering');
             $headers = $filteredresponse->headers;

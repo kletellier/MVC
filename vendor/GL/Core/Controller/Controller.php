@@ -15,6 +15,7 @@ use Assert\Assertion;
 use Stringy\Stringy;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use GL\Core\Controller\Filters;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -153,61 +154,8 @@ abstract class Controller implements ContainerAwareInterface
       */
     private function GetGlobalVariables($arr)
     {
-        $ret = $arr;
-        // get actual route         
-        $route = $this->getActualRouteName();
-
-        $fnArray = \Functions::getAll();
-        if(isset($fnArray))
-        {
-            foreach ($fnArray as $key => $value) 
-            {
-                if($value["type"]=="global")
-                {
-                    $bExecute = false;
-                    // for each global function defined
-                    $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
-                    $scope = (isset($value["scope"])) ? $value["scope"] : "all";
-                    $class = $value["class"];
-                    // test if class exist and implements interface
-                    Assertion::ClassExists($class);
-                    Assertion::implementsInterface($class,'\GL\Core\Controller\GlobalFunctionInterface');                       
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
-                    if($bExecute)
-                    {                    
-                        $exc = new $class($ret,$this->container);
-                        $ret = $exc->execute();
-                    }
-                }     
-            }    
-        }
-             
-        return $ret;               
+        $filters = new Filters();
+        return $filters->GlobalFunction($arr);    
     }
 
     /**
