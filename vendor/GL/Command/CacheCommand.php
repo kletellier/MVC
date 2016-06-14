@@ -33,8 +33,11 @@ class CacheCommand extends Command
                 $path = CACHEPATH . DS . "twig";
                 $finder = new Finder();
                 $iterator = $finder->files()->name('*.php')->in($path);
-                $fs->remove($iterator);	
-                $fs->remove($path);		
+                if($fs->exists($path))
+                {
+                    $fs->remove($iterator); 
+                    $fs->remove($path);     
+                }       
                 $fs->mkdir($path);
                 $fs->chmod($path,0777,0000,true);
 
@@ -43,8 +46,11 @@ class CacheCommand extends Command
                 $path = CACHEPATH . DS . "blade";
                 $finder = new Finder();
                 $iterator = $finder->files()->name('*.php')->in($path);
-                $fs->remove($iterator); 
-                $fs->remove($path);     
+                if($fs->exists($path))
+                {
+                    $fs->remove($iterator); 
+                    $fs->remove($path);     
+                }              
                 $fs->mkdir($path);
                 $fs->chmod($path,0777,0000,true);
 
@@ -74,12 +80,19 @@ class CacheCommand extends Command
                     \Kletellier\Assets\AssetsUtils::install();
                      $output->writeln("    Install Kletellier assets Twig helper");
                     \Kletellier\Assets\AssetsUtils::verifyHelper();
-                }             
+                }     
+                $output->writeln("    Create parameters cache file directory");
+                $path = CACHEPATH . DS . "parameters";
+                if(!$fs->exists($path))
+                {
+                    $fs->mkdir($path);
+                }
+
         } 
         catch (IOExceptionInterface $e) 
         {
                 $output->writeln('Error : ' . $e->getMessage());
-        }		 
+        }        
         $output->writeln('finished');
     }
 }

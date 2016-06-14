@@ -34,7 +34,8 @@
         "predis/predis": "1.1.*@dev",
         "hoa/mime": "~2.0",
         "filp/whoops": "1.1.6",
-        "philo/laravel-blade": "3.*"
+        "philo/laravel-blade": "3.*",
+        "nikic/php-parser":"*"
     },
     "autoload": {
         "psr-4": {
@@ -42,7 +43,8 @@
             "Migrations\\" : "app/Migrations",           
             "Facades\\": "app/Facades", 
             "GL\\" : "vendor/GL",       
-            "DI\\" : "cache/DI"
+            "DI\\" : "cache/DI",
+            "Parameters\\": "cache/parameters"
             },
         "files": ["library/functions.php"]
     },
@@ -51,12 +53,13 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php console debugbar:install",
-            "php console cache:clear"
+            "php console cache:clear",
+            "php console debugbar:install"
+            
         ],
         "post-update-cmd": [
-            "php console debugbar:install",
-            "php console cache:clear"
+            "php console cache:clear",
+            "php console debugbar:install"
         ]
     },
     "minimum-stability": "dev",

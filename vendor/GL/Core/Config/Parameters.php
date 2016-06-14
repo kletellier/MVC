@@ -4,6 +4,11 @@ namespace GL\Core\Config;
  
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
+use PhpParser\BuilderFactory;
+use PhpParser\PrettyPrinter;
+use PhpParser\Node;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class Parameters
 {
@@ -29,6 +34,16 @@ class Parameters
     private function getPath()
     {
         return CONFIGDIR . DS . "parameters.yml";
+    }
+
+    private function getPathPHP()
+    {
+        return CACHEPATH . DS . "parameters";
+    }
+
+    private function getPathClass()
+    {
+        return $this->getPathPHP() . DS . "Parameters.php";
     }
 
     /**
@@ -67,6 +82,39 @@ class Parameters
     }
 
     /**
+     * Function to put parameters in PHP Classes
+     * @return type
+     */
+    private function createClass()
+    {
+        $fs = new Filesystem();
+        $directory = $this->getPathPHP();
+        $path  = $this->getPathClass();
+
+        if(!$fs->exists($directory))
+        {
+            $fs->mkdir($directory);
+        }
+
+        $parameters = $this->parameters;
+        $factory = new BuilderFactory;
+        $node = $factory->namespace('Parameters')
+                        ->addStmt($factory->class('Parameters')
+                        ->addStmt($factory->property('_parameters')->makePrivate()->setDefault($parameters))
+                        ->addStmt($factory->method('getParameters')
+                                ->makePublic()                
+                                ->addStmt(new Node\Stmt\Return_(new Node\Expr\Variable('this->_parameters')))
+                                )
+                    )->getNode();
+
+        $stmts = array($node);
+        $prettyPrinter = new PrettyPrinter\Standard();
+        $php = $prettyPrinter->prettyPrintFile($stmts); 
+         
+        file_put_contents($path, $php);             
+    }
+
+    /**
      * Load  parameters data from yaml file
      */
     private function load()
@@ -75,9 +123,33 @@ class Parameters
         $this->parameters = null;
         try 
         {
-            $yaml = new Parser();
-            $this->parameters = $yaml->parse(file_get_contents($this->getPath()));
+            $pathPHP = $this->getPathClass();
+            $pathXml = $this->getPath();
 
+            $create = false;
+            if(is_file($pathPHP))
+            {
+                if(filemtime($pathPHP)<filemtime($pathXml))
+                {
+                    $create = true;
+                }
+            }
+            else
+            {
+                $create = true;
+            }
+            if($create)
+            {
+                // parameters.yml changed or new install, create Php class
+                $yaml = new Parser();
+                $this->parameters = $yaml->parse(file_get_contents($this->getPath()));
+                $this->createClass();
+            }
+            if(!class_exists('\Parameters\Parameters'))
+                throw new \Exception("Class Parameters not created");
+            $param = new \Parameters\Parameters();
+            $this->parameters = $param->getParameters();            
+            
         } 
         catch (Exception $e) 
         {
