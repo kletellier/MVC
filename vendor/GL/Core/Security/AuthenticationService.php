@@ -79,7 +79,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param \Symfony\Component\HttpFoundation\Request $request 
 	 * @return void
 	 */
-	private function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+	protected function setRequest(\Symfony\Component\HttpFoundation\Request $request)
 	{
 		$this->request = $request;
 	}
@@ -89,7 +89,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param  \Symfony\Component\HttpFoundation\Session\Session $session 
 	 * @return void
 	 */
-	private function setSession(\Symfony\Component\HttpFoundation\Session\Session $session)
+	protected function setSession(\Symfony\Component\HttpFoundation\Session\Session $session)
 	{
 		$this->session = $session;
 	}
@@ -98,7 +98,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * Return model instance 
 	 * @return Model instance
 	 */
-	private function getInstance($tablename)
+	protected function getInstance($tablename)
 	{
 		$name = "Application\\Models\\".ucfirst($tablename);
 		if(class_exists($name))
@@ -112,17 +112,17 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 		
 	}
 
-	private function getUsersInstance()
+	protected function getUsersInstance()
 	{
 		return $this->getInstance($this->users_tablename);
 	}
 
-	private function getRolesInstance()
+	protected function getRolesInstance()
 	{
 		return $this->getInstance($this->roles_tablename);
 	}
 
-	private function getUsersRolesInstance()
+	protected function getUsersRolesInstance()
 	{
 		return $this->getInstance($this->usersroles_tablename);
 	}
@@ -658,7 +658,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param string $tablename tablename in database
 	 * @return void
 	 */
-	private function createUsersTable()
+	protected function createUsersTable()
 	{
 		$sch = DB::getSchema();
 		$tablename = $this->users_tablename;
@@ -688,7 +688,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param string $tablename tablename in database
 	 * @return void
 	 */
-	private function createRolesTable()
+	protected function createRolesTable()
 	{
 		$sch = DB::getSchema();
 		$tablename = $this->roles_tablename;
@@ -717,7 +717,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param string $tablename tablename in database
 	 * @return void
 	 */
-	private function createUsersRolesTable()
+	protected function createUsersRolesTable()
 	{
 		$sch = DB::getSchema();
 		$tablename = $this->usersroles_tablename;
@@ -749,7 +749,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 * @param string $mode model name
 	 * @return void
 	 */
-	private function createModel($tablename ,$mode)
+	protected function createModel($tablename ,$mode)
 	{
 		try {
 			$nmodel = $this->model;
