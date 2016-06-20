@@ -177,16 +177,16 @@ class Application
             $filteredresponse =  $this->filters->filterResponse($response,$route);
             // add rendering time comment if content type is html
             $event = $this->watch->stop('rendering');
-            $headers = $filteredresponse->headers;
-            $ct = $headers->get('Content-Type');
+            // $headers = $filteredresponse->headers;
+            // $ct = $headers->get('Content-Type');
             
-            if(strtolower($ct)=="text/html")
-            {
-                $html = $filteredresponse->getContent();
-                $time = $event->getDuration();
-                $html.= "<!-- generation time : " . $time . " ms -->";
-                $filteredresponse->setContent($html);
-            }
+            // if(strtolower($ct)=="text/html")
+            // {
+            //     $html = $filteredresponse->getContent();
+            //     $time = $event->getDuration();
+            //     $html.= "<!-- generation time : " . $time . " ms -->";
+            //     $filteredresponse->setContent($html);
+            // }
 
             $filteredresponse->send();
              
