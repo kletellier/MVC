@@ -91,11 +91,17 @@ class ServiceProvider
         // Inject Twig Service
         $container->register('template','GL\Core\Templating\TemplateProvider');
         // Inject RouteCollection
-        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')->setFactory("GL\Core\Routing\RouteProvider::GetRouteCollection");          
-        // Inject FPDF Wrapper
-        $container->register('pdf', 'GL\Core\Tools\PDF');
-        // Inject PHPExcel Wrapper
-        $container->register('excel', 'GL\Core\Tools\Excel');
+        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')->setFactory("GL\Core\Routing\RouteProvider::GetRouteCollection");  
+        if(class_exists("\PHPExcel"))
+        {
+            // Inject PHPExcel Wrapper
+            $container->register('excel', 'GL\Core\Tools\Excel');
+        }   
+        if(class_exists("\TCPDF"))
+        {
+            // Inject FPDF Wrapper
+            $container->register('pdf', 'GL\Core\Tools\PDF');
+        }   
         // Inject Session
         $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name))->addMethodCall('start');
         // Inject Crsf verifier

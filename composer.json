@@ -25,9 +25,7 @@
         "psr/log": "1.0.*@dev",
         "maximebf/debugbar": "1.*",
         "mobiledetect/mobiledetectlib": "dev-master",
-        "symfony/var-dumper": "2.7.*@dev",
-        "tecnickcom/tcpdf": "dev-master",
-        "phpoffice/phpexcel": "dev-master",
+        "symfony/var-dumper": "2.7.*@dev",       
         "beberlei/assert": "2.3.*@dev",                
         "danielstjules/stringy": "~1.10",
         "nesbot/carbon": "~1.20",
@@ -49,7 +47,9 @@
         "files": ["library/functions.php"]
     },
     "suggest": {
-        "kletellier/assets": "Add mainstream assets integration easiest."
+        "kletellier/assets": "Add mainstream assets integration easiest.",
+        "tecnickcom/tcpdf": "For PDF handling",
+        "phpoffice/phpexcel": "For Excel file handling"
     },
     "scripts": {
         "post-install-cmd": [
