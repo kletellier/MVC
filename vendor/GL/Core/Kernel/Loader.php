@@ -59,14 +59,11 @@ class Loader
          
         foreach($value as $name => $conn)
         {
+            $port = 3306;
             $connstr = $conn["server"];
             if(isset($conn["port"]))
             {
-                    $port = trim($conn["port"]);
-                    if($port!="")
-                    {
-                    $connstr.=":".$port;
-                    }
+                 $port = trim($conn["port"]);
             }
 
             $type = isset($conn["type"]) ? $conn["type"] : "mysql";
@@ -79,6 +76,7 @@ class Loader
             $capsule->addConnection( array(
             'driver'    => $type,
             'host'      => $connstr,
+            'port'      => $port,
             'database'  => $conn["database"],
             'username'  => $conn["user"],
             'password'  => $conn["password"],
