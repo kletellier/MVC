@@ -64,7 +64,7 @@ class CacheCommand extends Command
                 $fs->mkdir($pathdi);
                 $fs->chmod($pathdi,0777,0000,true);   
 
-                 $output->writeln("    Clear route Cache");
+                $output->writeln("    Clear route Cache");
 
                 $pathroute = ROUTECACHE;
                 $finderroute = new Finder();
@@ -88,6 +88,7 @@ class CacheCommand extends Command
                     $fs->mkdir($path);
                 }
                 $fs->chmod($path,0777,0000,true);
+                
 
         } 
         catch (IOExceptionInterface $e) 
