@@ -20,17 +20,22 @@ class Loader
         /**
          * Loading path constant
          */
-        define('TEMPLATEPATH',ROOT . DS . 'app'.DS.'Application'.DS.'Views'); // Path to twig views
-        define('CONFIGDIR',ROOT.DS.'config'); // path to config directory
-        define('UPLOADPATH',ROOT . DS . 'uploads'); // Path to upload directory
-        define('PUBLICPATH',ROOT. DS . 'public'); // Path to public directory (directory open to the web)
-        define('TMPPATH',ROOT . DS . 'tmp'); // Temporary path (using for xls export)
-        define('CACHEPATH',ROOT . DS . 'cache'); // Cache path
-        define('SERVICEPATH',ROOT . DS . 'config'); // DI service definition directory  path
-        define('DICACHE',ROOT.DS.'cache'.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
-        define('MIGRATIONPATH',ROOT . DS . "app" . DS . "Migrations"); // Migration script path
-        define('ROUTECACHE',ROOT . DS . 'cache' . DS . 'route'); // Route cache system
-        define('DEBUGBAR',ROOT . DS ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // Debugbar asset folder
+        $root = ROOT . DS;
+        $cache = $root . 'cache';
+        $app = $root . 'app';
+        $config = $root . 'config';
+
+        define('TEMPLATEPATH',$app.DS.'Application'.DS.'Views'); // Path to twig views
+        define('CONFIGDIR',$config); // path to config directory
+        define('UPLOADPATH',$root . 'uploads'); // Path to upload directory
+        define('PUBLICPATH',$root . 'public'); // Path to public directory (directory open to the web)
+        define('TMPPATH',$root . 'tmp'); // Temporary path (using for xls export)
+        define('CACHEPATH',$cache); // Cache path
+        define('SERVICEPATH',$config); // DI service definition directory  path
+        define('DICACHE',$cache.DS.'DI'.DS.'Container'.DS.'ServiceContainer.php'); // DI container compiled file
+        define('MIGRATIONPATH',$app . DS . "Migrations"); // Migration script path
+        define('ROUTECACHE',$cache . DS . 'route'); // Route cache system
+        define('DEBUGBAR',$root ."plugins".DS."maximebf".DS."debugbar".DS."src".DS."DebugBar".DS."Resources"); // Debugbar asset folder
     }
 
     /**
