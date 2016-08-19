@@ -39,10 +39,8 @@ class Application
         $this->start_time = microtime(true);
        
         // Initialize all parameters before parsing url
-        Loader::InitPath();
-        Loader::InitConfig();
-        Loader::InitDatabase();
-      
+        Loader::Init();
+           
         // get DI container
         $this->container = ServiceProvider::GetDependencyContainer(); 
         if(DEVELOPMENT_ENVIRONMENT)

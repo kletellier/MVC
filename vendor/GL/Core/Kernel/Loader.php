@@ -8,6 +8,13 @@ use Symfony\Component\Yaml\Parser;
 
 class Loader 
 {
+    public static function Init()
+    {
+        self::InitPath();
+        self::InitConfig();
+        self::InitDatabase();
+    }
+    
     public static function InitPath()
     {
         /**
