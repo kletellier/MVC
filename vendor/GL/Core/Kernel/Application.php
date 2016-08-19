@@ -28,6 +28,7 @@ class Application
     protected $container;
     protected $watch;
     protected $filters;
+    protected $debug;
 
     public function __construct()
     {   
@@ -44,6 +45,10 @@ class Application
       
         // get DI container
         $this->container = ServiceProvider::GetDependencyContainer(); 
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $this->debug = $this->container->get('debug');
+        }
 
         // instantiate filters object
         $this->filters = new Filters();
@@ -65,7 +70,7 @@ class Application
     {
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->container->get('debug')['time']->startMeasure($id, $text);
+            $this->debug['time']->startMeasure($id, $text);
         }
     }
 
@@ -73,7 +78,7 @@ class Application
     {
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->container->get('debug')['time']->stopMeasure($id);
+            $this->debug['time']->stopMeasure($id);
         }
     }
 
@@ -94,10 +99,10 @@ class Application
         {        
             $end_boot_time = microtime(true);
             $boot_time = $end_boot_time - $this->start_time;
-            $this->container->get('debug')['messages']->addMessage("Booting time : $boot_time sec");
-            $this->container->get('debug')['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
+            $this->debug['messages']->addMessage("Booting time : $boot_time sec");
+            $this->debug['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
             $debug_boot_time = microtime(true);
-            $this->container->get('debug')['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
+            $this->debug['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
         }
 
         if(!DEVELOPMENT_ENVIRONMENT)
@@ -119,8 +124,8 @@ class Application
 
         if(DEVELOPMENT_ENVIRONMENT)
         {
-           $this->container->get('debug')['routes']->setRoutes($this->container->get('routes'));        
-           $this->container->get('debug')["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));                      
+           $this->debug['routes']->setRoutes($this->container->get('routes'));        
+           $this->debug["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));                      
         } 
         try 
         {    
@@ -170,7 +175,7 @@ class Application
             $response = $cr404->execute();            
         }       
 
-        $this->startMeasure('filtering', 'Filtering response'); 
+        $this->startMeasure('filtering', 'Filtering response');               
          
         if ($response instanceof Response) {
             // prepare response

@@ -285,20 +285,21 @@ abstract class Controller implements ContainerAwareInterface
      */
     function render($template,$params = array(), $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
     {  
+        $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->get('debug') : null;
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->get('debug')["time"]->startMeasure('gethtml','Get Html');
+            $debug["time"]->startMeasure('gethtml','Get Html');
         }
         $buf = $this->getHtmlBuffer($template,$params);
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->get('debug')["time"]->stopMeasure('gethtml');
-            $this->get('debug')["time"]->startMeasure('response','Prepare response');
+            $debug["time"]->stopMeasure('gethtml');
+            $debug["time"]->startMeasure('response','Prepare response');
         }
         $response = $this->getResponse($buf,$status,$headers);
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->get('debug')["time"]->stopMeasure('response');
+            $debug["time"]->stopMeasure('response');
         }
         return $response;
     }

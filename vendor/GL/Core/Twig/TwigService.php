@@ -127,28 +127,29 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             {
                 throw new \Exception("Missing Dependency Container, add it with setContainer Method");                
             }
+            $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->_container->get('debug') : null;
 
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
             
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                $this->_container->get('debug')["time"]->startMeasure('inittwig','Init Twig Environnment');
+                $debug["time"]->startMeasure('inittwig','Init Twig Environnment');
             }
             $env = $this->getTwigEnvironment();
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                $this->_container->get('debug')["time"]->stopMeasure('inittwig');
+                $debug["time"]->stopMeasure('inittwig');
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             {       
-                if(!$this->_container->get('debug')->hasCollector('twig'))
+                if(!$debug->hasCollector('twig'))
                 {
-                    $this->_container->get('debug')->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
+                    $debug->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
                 } 
-                $this->_container->get('debug')["time"]->startMeasure('rendertwig','Twig rendering');             
+                $debug["time"]->startMeasure('rendertwig','Twig rendering');             
                 $ret =  $env->render($template, $params);
-                $this->_container->get('debug')["time"]->stopMeasure('rendertwig','Twig rendering');
+                $debug["time"]->stopMeasure('rendertwig','Twig rendering');
             }
             else
             {
@@ -166,7 +167,7 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             if($this->_container!=null && DEVELOPMENT_ENVIRONMENT)
             {
 
-                $this->_container->get('debug')["exceptions"]->addException($e);
+                $debug["exceptions"]->addException($e);
             }
            throw new \Exception($e->getMessage());
         }
