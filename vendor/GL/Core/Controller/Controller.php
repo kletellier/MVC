@@ -425,6 +425,23 @@ abstract class Controller implements ContainerAwareInterface
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    private function redirecting($url)
+    {
+        $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
+         foreach ($this->_cookies as $cookie) {
+            $response->headers->setCookie($cookie);
+        } 
+        foreach ($this->_cookiestodelete as $cookie) {
+            $response->headers->clearCookie($cookie);
+        } 
+        $response->send();
+    }
+
+    function redirectUrl($url)
+    {
+        $this->redirecting($url);
+    }
     
     /**
      * Redirect with 302 response
@@ -443,18 +460,10 @@ abstract class Controller implements ContainerAwareInterface
         catch (Exception $e )
         {
             
-        }
-        
+        }        
         if($url!="")
         {
-            $response = new \Symfony\Component\HttpFoundation\RedirectResponse($url);
-             foreach ($this->_cookies as $cookie) {
-                $response->headers->setCookie($cookie);
-            } 
-            foreach ($this->_cookiestodelete as $cookie) {
-                $response->headers->clearCookie($cookie);
-            } 
-            $response->send();
+            $this->redirecting($url);
         }
     }
     
