@@ -35,13 +35,29 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
    
     public function up()
     {         
-        // Sample =>
+        // Sample (add columns) =>
         /*
         $tablename = "my_table_name";
         $sch = $this->getSchema();
         if($sch->hasTable($tablename))
         {
            $sch->table($tablename,function ($table)
+           {
+               // add new column names "test"
+               $table->string("test")->default("");
+               // add index on this columns
+               $table->index("test");
+           });
+        }
+        */
+
+        // Sample (create table) =>
+        /*
+        $tablename = "my_table_name";
+        $sch = $this->getSchema();
+        if(!$sch->hasTable($tablename))
+        {
+           $sch->create($tablename,function ($table)
            {
                // add new column names "test"
                $table->string("test")->default("");
