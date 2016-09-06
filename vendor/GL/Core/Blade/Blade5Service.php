@@ -98,9 +98,8 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
             $compiler = $blade->getCompiler();
 
             // add use directive
-            $compiler->directive('use', function($expression){
-                preg_match('#\((.*?)\)#', $expression, $match);  
-                return "<?php use $match[1]; ?>";
+            $compiler->directive('use', function($expression){               
+                return "<?php use $expression; ?>";
             });   
              
              if(DEVELOPMENT_ENVIRONMENT)
@@ -108,12 +107,11 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
                 $this->_container->get('debug')["time"]->stopMeasure('initblade');
             }
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
-            {       
-                
-                 $this->_container->get('debug')["time"]->startMeasure('renderblade','Blade rendering');   
+            { 
+                $this->_container->get('debug')["time"]->startMeasure('renderblade','Blade rendering');   
                 // render the template file and echo it         
-                $ret = $blade->view()->make($template, $params)->render();  
-                 $this->_container->get('debug')["time"]->stopMeasure('renderblade','Blade rendering');
+                $ret = $blade->view()->make($template, $params)->render(); 
+                $this->_container->get('debug')["time"]->stopMeasure('renderblade','Blade rendering');
             }
             else
             {
