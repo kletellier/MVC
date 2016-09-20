@@ -81,12 +81,7 @@ class CacheCommand extends Command
                      $output->writeln("    Install Kletellier assets Twig helper");
                     \Kletellier\Assets\AssetsUtils::verifyHelper();
                 }     
-                if(class_exists("\Kletellier\Html\HtmlUtils"))
-                {
-                   $output->writeln("    Install Kletellier html assets");
-                    \Kletellier\Html\HtmlUtils::install();
-                }    
- 
+                
                 $output->writeln("    Create parameters cache file directory");
                 $path = CACHEPATH . DS . "parameters";
                 if(!$fs->exists($path))
