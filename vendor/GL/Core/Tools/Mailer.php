@@ -20,6 +20,7 @@ class Mailer
     private $_to;
     private $_cc;
     private $_bcc;
+    private $_replyto;
     private $_subject;
     private $_body;
     private $_isHtml;
@@ -39,6 +40,7 @@ class Mailer
             $this->_fromname = "";
             $this->_from = "";
             
+            $this->_replyto = array();
             $this->_to = array();
             $this->_cc = array();
             $this->_bcc = array();
@@ -150,7 +152,24 @@ class Mailer
                     $message->addBCC($mailtmp);
                 }                 
             }
-        }       
+        }   
+        // add reply to 
+        foreach ($this->_replyto as $mail) {
+              $tmp = explode("::",$mail);
+            {
+                $mailtmp = $tmp[0];
+                $nomtmp = "";
+                if(isset($tmp[1]))
+                {
+                    $nomtmp= $tmp[1];                    
+                    $message->addReplyTo($mailtmp,$nomtmp);
+                }
+                else
+                {
+                    $message->addReplyTo($mailtmp);
+                }                 
+            }
+            }    
     }
     
     /**
@@ -266,6 +285,21 @@ class Mailer
             $val.="::".$bccname;
         }
         array_push($this->_bcc,$val);
+    }
+
+     /**
+     * Add reply to
+     * @param string $to recipient mail
+     * @param string $toname recipient name 
+     */
+    public function addReplyTo($rto,$rtoname="")
+    {
+        $val = $rto;
+        if($rtoname!="")
+        {
+            $val.="::".$rtoname;
+        }
+        array_push($this->_replyto,$val);
     }
    
     /**
