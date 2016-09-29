@@ -90,6 +90,10 @@ class CacheCommand extends Command
                 }
                 $fs->chmod($path,0777,0000,true);
                 
+                $output->writeln("    Create parameters cache file");
+                // create parameters files
+                $para = new \GL\Core\Config\Parameters();
+                
 
         } 
         catch (IOExceptionInterface $e) 

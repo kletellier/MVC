@@ -1,7 +1,6 @@
 section:
-    test: "hello"
-    test2: "it's me"
-    test3: "Actual date"
+    test: "Welcome !!"
+    test2: "Actual date"
 global:
     disable : "Disable"
     enable : "Enable"

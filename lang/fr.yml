@@ -1,7 +1,6 @@
 section:
-    test: "coucou"
-    test2: "c'est moi"
-    test3: "Date actuelle"
+    test: "Bienvenue !!"
+    test2: "Date actuelle"
 global:
     disable : "Désactiver"
     enable : "Activer"
