@@ -1,27 +1,3 @@
-config_database:
-    pattern: /config/database
-    controller: config
-    action: database
-config_application:
-    pattern: /config/application
-    controller: config
-    action: application
-config_mail:
-    pattern: /config/mail
-    controller: config
-    action: mail
-pdf:
-    pattern:  /pdf
-    controller: default
-    action: pdf  
-xls:
-    pattern:  /xls
-    controller: default
-    action: xls    
-testdb:
-    pattern:  /testdb
-    controller: default
-    action: testdb
 root:
     pattern: /{name}
     controller: default

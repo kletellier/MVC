@@ -2,7 +2,7 @@ config:
       debug: true
       webpath: ''
       template:
-          engine: twig # section in template config below
+          engine: blade # section in template config below
           cache: false
           alwaysreload: true
       locale: en
