@@ -10,6 +10,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+  .ombre
+  {         
+      border: 1px solid #222222;
+      box-shadow: 1px 1px 12px #555;
+      background-color: #FFFFFF;
+  }
+  </style>
 </head>
 <body>        
 <div class="container">
