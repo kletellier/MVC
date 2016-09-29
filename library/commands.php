@@ -1,3 +1,5 @@
 <?php 
 
-$commands = [];
+$commands = [
+"Application\Commands\TestCommand"
+];
