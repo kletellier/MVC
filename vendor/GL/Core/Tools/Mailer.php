@@ -89,6 +89,23 @@ class Mailer
       $this->_to = array();
       $this->_bcc = array();
       $this->_cc = array();
+      $this->_replyto = array();
+    }
+
+    /**
+     * Reset all parameters (call after every send for batch sending)
+     * @return void
+     */
+    public function reset($keep_subject_and_body=false)
+    {
+      $this->clearAttach();
+      $this->clearRecipients();
+      if(!$keep_subject_and_body)
+      {
+        $this->_body = "";
+        $this->_subject = "";
+      }
+      
     }
     
     /**
@@ -332,7 +349,7 @@ class Mailer
      * 
      * @return bool mail sended
      */
-    public function send()
+    public function send($call_reset_after=false)
     {       
         $mail = new \PHPMailer;
         $mail->isSMTP();
@@ -378,6 +395,10 @@ class Mailer
         if(!$result)
         {         
             throw new \Exception($mail->ErrorInfo);            
+        }
+        if($call_reset_after)
+        {
+          $this->reset();
         }
         return $result;
     }
