@@ -1,5 +1,5 @@
 <?php 
 
 $commands = [
-"Application\Commands\TestCommand"
+"Application\Commands\TestTestCommand"
 ];
