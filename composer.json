@@ -27,7 +27,7 @@
         "mobiledetect/mobiledetectlib": "dev-master",
         "symfony/var-dumper": "3.1.*@dev",       
         "beberlei/assert": "2.6.*@dev",                
-        "danielstjules/stringy": "~1.10",
+        "danielstjules/stringy": "2.3.2",
         "nesbot/carbon": "~1.20",
         "predis/predis": "1.1.*@dev",
         "hoa/mime": "~2.0",
