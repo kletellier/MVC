@@ -37,6 +37,7 @@ use GL\Command\MigrationCommand;
 use GL\Command\MigrationCreateCommand;
 use GL\Command\MigrationRollbackCommand;
 use GL\Command\MigrationListCommand;
+use GL\Command\CreateConsoleCommand;
 use Symfony\Component\Console\Application;
 
 Loader::InitPath();
@@ -55,6 +56,7 @@ $application->add(new MigrationCommand);
 $application->add(new MigrationCreateCommand);
 $application->add(new MigrationRollbackCommand);
 $application->add(new MigrationListCommand);
+$application->add(new CreateConsoleCommand);
 // load commands defined in library/commands.php
 foreach ($commands as $command) 
 {
