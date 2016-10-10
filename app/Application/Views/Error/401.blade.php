@@ -1,12 +1,13 @@
+@use(GL\Core\Blade\Utils)
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>{{ "error.401title"|trans}}</title>
-<link rel="stylesheet" href="{{ url('error/css/bootstrap.min.css') }}">
-<script src="{{ url('error/js/jquery-1.9.1.js')}}"></script>
-<script src="{{ url('error/js/bootstrap.min.js')}}"></script>
+<title>{{ Utils::trans("error.401title")}}</title>
+<link rel="stylesheet" href="{{ Utils::url('error/css/bootstrap.min.css') }}">
+<script src="{{ Utils::url('error/js/jquery-1.9.1.js') }}"></script>
+<script src="{{ Utils::url('error/js/bootstrap.min.js') }}"></script>
 </head>
 <body>      
 <div class="container-fluid">  
@@ -15,10 +16,10 @@
 <div class="row col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
     <div class="panel panel-danger">
       <div class="panel-heading" >
-        <h3 class="panel-title " id="titre"> {{ "error.401title"|trans}}</h3>
+        <h3 class="panel-title " id="titre"> {{ Utils::trans("error.401title")}}</h3>
       </div>
       <div id="panel-body" class="panel-body" >
-          <h4 id="contenu">{{ "error.401message"|trans}}</h4>             
+          <h4 id="contenu">{{ Utils::trans("error.401message")}}</h4>             
       </div>
     </div>
 </div>

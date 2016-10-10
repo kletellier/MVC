@@ -4,7 +4,8 @@ namespace GL\Core\Twig;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Stopwatch\Stopwatch;
-
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 /**
  * Load Twig Environment
  *
@@ -19,6 +20,21 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
      {
          $this->_controller = $controller;   
          $this->_container = null;
+         $this->testTwig();
+     }
+
+     private function testTwig()
+     {
+        try 
+        {
+            $class = "Twig_Environment";
+            Assertion::ClassExists($class);              
+        } 
+        catch (AssertionFailedException $e) 
+        {
+            echo "Twig is not installed, add it with 'twig/twig':'1.24' in your composer.json";
+            die();
+        }          
      }
      
      /**

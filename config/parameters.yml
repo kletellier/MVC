@@ -13,9 +13,9 @@ database:
       user: uid
       password: pwd
       database: dbname
-templates:
-    twig:
-      class: \GL\Core\Twig\TwigService # class must implement \GL\Core\Templating\TemplateServiceInterface
+templates: # classes must implement \GL\Core\Templating\TemplateServiceInterface
+    twig:  
+      class: \GL\Core\Twig\TwigService # need to install twig components
     blade:
       class: \GL\Core\Blade\Blade5Service
 mail:
