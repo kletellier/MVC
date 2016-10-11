@@ -7,21 +7,17 @@ A small PHP MVC Framework using Symfony components, Eloquent ORM, FPDF, Redis an
 ## Components
 
 * Symfony
-	* Http Foundation
-	* Routing
-	* Yaml
-	* Dependency Injection
-	* Filesystem
-	* Finder
-	* Stopwatch
-	* Config
-	* Console
+    * Http Foundation
+    * Routing
+    * Yaml
+    * Dependency Injection
+    * Filesystem
+    * Finder
+    * Stopwatch
+    * Config
+    * Console
 * Illuminate
-	* Eloquent
-* PhpOfffice
-	* PhpExcel
-* TCPDF
-* Twig
+    * Eloquent
 * Blade
 * PHPMailer
 * PSR Log
@@ -47,14 +43,53 @@ git clone https://github.com/kletellier/MVC.git /var/www
 
 4. Change website configuration file
 
-Open ```config/parameters.yml``` or type in your browser  ```http://yourwebsite/configuration/application``` (available only in local and debug mode)
+Open ```config/parameters.yml``` 
 
 ```yaml
-debug: true
-webpath: http://localhost
-twig:
-    cache: false
-    alwaysreload: true
+config:
+      debug: true
+      webpath: ''
+      template:
+          engine: blade # section in template config below
+          cache: false
+          alwaysreload: true
+      locale: en
+database:
+    default:
+      server: 127.0.0.1
+      port: 3306
+      user: uid
+      password: pwd
+      database: dbname
+templates: # classes must implement \GL\Core\Templating\TemplateServiceInterface
+    twig:  
+      class: \GL\Core\Twig\TwigService # need to install twig components
+    blade:
+      class: \GL\Core\Blade\Blade5Service
+mail:
+    server:  smtp.acme.com
+    port: 587
+    user: user
+    password: pwd
+    secure: 1
+    encryption: "tls"
+redis:
+    default:
+        server: 127.0.0.1
+        port: 6379
+        enable: 0
+security:
+    security:
+         classes : GL\Core\Security\AuthenticationService
+         roles_table : roles
+         users_table : users
+         usersroles_table : usersroles
+    cookie:
+         token : typeyoursecuritytokenhere
+         name : REMEMBERME
+         duration : 3600
+    session:
+         name: "kletellier"
 
 ```
 
@@ -62,40 +97,25 @@ The debug paramater display error description. Never use true in production webs
 
 The webpath parameter is the root url of your website.
 
-In twig section, enable cache in ```cache/twig``` folder, alwaysreload parameter  recreate cache for every request.
+The template section set the engine used for rendering templates (default is blade).
 
-5. Change database configuration file
+The locale parameters is using for translator object (translation files are stored in lang folder).
 
-Open ```config/parameters.yml``` or type in your browser  ```http://yourwebsite/configuration/database``` (available only in local and debug mode)
+in templates section, you can add your own tendering engine implementation, the class must implement \GL\Core\Templating\TemplateServiceInterface interface.
 
-```yaml
-default:
-    server: 127.0.0.1
-    port: 3306
-    user: usr
-    password: pwd
-    database: test
-```
+If you want using twig, just add twig in your composer.json and change type from blade to twig in config/template/engine section.
 
-Actually framework will only work with MySQL/MariaDb/Sqlite (add type options in database.yml) Database.
-You can connect many databases, just create a new section after default section in the config/database.yml
+The mail section provide all parameters for mail sending. You can send mail by using mailer object in container. (See GL\Core\Tools\Mailer class). 
 
-6. Change email configuration file or type in your browser  ```http://yourwebsite/configuration/mail``` (available only in local and debug mode)
+The redis section provide all parameters for using redis cache system.
 
+The security section : 
+    
+    - specify a security class who implement GL\Core\Security\AuthenticationServiceInterface , by default GL\Core\Security\AuthenticationService. 
+    - You must create table by using console security:create
+    - Select a cookie session name, duration 
 
-Or in ```config/parameters.yml```
-
-```yaml
-mail:
-    server:  smtp.acme.com
-    port: 25
-    user: user
-    password: pwd
-```
-
-Setup your mail server configuration.
-
-7. The route file configuration
+5. The route file configuration
 
 Open ```config/routes.yml```
 
@@ -161,13 +181,13 @@ $this->redirect(«routename»,array(« param »=> value)) ; // routename is a route 
 
 ### template
 
-And also you have render function for using Twig Template engine.
+And also you have render function for using Blade Template engine.
 
 ```php
-return $this->render('index.html.twig',array(« params »=> « value »)) ;
+return $this->render('index',array(« params »=> « value »)) ;
 ```
 
-The render function submit all params provided in array to the template file index.html.twig.
+The render function submit all params provided in array to the template file index.blade.php.
 
 All templates are stored in ```app/Application/Views```
 
@@ -180,64 +200,32 @@ Render function return an ```Symfony/Component/HttpFoundation/Response```, you c
 If you only want the Html, you can use :
 
 ```php
-return $this->renderHtmlTemplate('index.html.twig',array(« params »=> « value »)) ;
+return $this->renderHtmlTemplate('index',array(« params »=> « value »)) ;
 ```
 
 That return only raw Html.
 
-All documentation about Twig are here [Twig] (http://twig.sensiolabs.org/documentation).
+All documentation about Blade are here [Blade] (https://laravel.com/docs/5.1/blade).
 
-I've add an url function, for retrieve absolute url form relative url, based on webpath parameters in ```config/config.yml```
+I've add an url function, for retrieve absolute url form relative url, based on webpath parameters in ```config/parameters.yml```
 
-```twig
-{{ url('/xls') }}
+```
+{{ Utils::url('/xls') }}
 ```
 
 give http://localhost/xls
 
-You can also render controller action :
-
-```twig
-{ % render « controller::action »,{« params » : « value »} %}
-```
-
-Which include the Html provided by executing this action in this controller.
-
-Your function in your controller must use ```php $this->renderHtmlTemplate ```
-
-If you enable Twig cache, don't forget to delete all files in ```cache\twig``` for recreating cache version.
-
 You can use console with this command for clearing cache: ```php console cache:clear```.
 
-You can add your own method in Twig with ```app/Application/Shared/SharedTwigHelper.php```.
+You can add your own method in Blade by adding @use(\Application\Classes\MyClass) in the template and calling  ```{{ MyClass:MyMethod($data) }}```.
 
-If you doesn't want use Twig you can put PHP file in views folder and use 
+If you doesn't want use Blade you can put PHP file in views folder and use 
 
 ```php
 return $this->renderPHP('index.php',array(« params »=> « value »)) ;
 ```
 
-it works as an include file.
-
-You can also use the Blade template (issuing from Laravel) system by choose "blade" in  ```config/parameters.yml``` by replacing twig in 
-
-```yaml
-config:
-      debug: true
-      webpath: ''
-      template:
-          engine: blade 
-```
-
-Templates must be name {{templatename}}.blade.php
-
-Calling template from Controller works like Twig but just using his name, example for index template 
-
-```php
-return $this->render('index',array(« params »=> « value »)) ;
-```
-
-will call index.blade.php template file.
+it works like an include file.
 
 ### Dependency injection
 
@@ -287,7 +275,7 @@ namespace Application\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Test extends Model {
-	protected $table = 'test';
+    protected $table = 'test';
     public $timestamps = false;
 }
 ```
@@ -318,10 +306,6 @@ For Eloquent ORM :
 
 [Eloquent ORM] (http://laravel.com/docs/eloquent)
 
-For Twig :
-
-[Twig] (http://twig.sensiolabs.org/documentation)
-
 For Blade :
 
 [Blade] (https://laravel.com/docs/5.1/blade)
@@ -329,12 +313,4 @@ For Blade :
 For PHPMailer :
 
 [PHPMailer] (https://github.com/PHPMailer/PHPMailer)
-
-For TCPDF :
-
-[TCPDF] (http://www.tcpdf.org/)
-
-For PHPExcel :
-
-[phpExcel] (https://github.com/PHPOffice/PHPExcel)
 
