@@ -40,16 +40,25 @@ class Application
        
         // Initialize all parameters before parsing url
         Loader::Init();
-           
+
         // get DI container
+        if(DEVELOPMENT_ENVIRONMENT){$this->watch->start('enable_container');}
         $this->container = ServiceProvider::GetDependencyContainer(); 
         if(DEVELOPMENT_ENVIRONMENT)
         {
             $this->debug = $this->container->get('debug');
         }
-
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $event = $this->watch->stop('enable_container');
+            $start_container = ( $event->getOrigin() + $event->getStartTime())/1000;
+            $stop_container = ( $event->getOrigin() +$event->getEndTime())/1000;
+            $this->debug['time']->addMeasure("Enable Container", $start_container,$stop_container);
+        }
+        $this->startMeasure('load_filter','Load filters');
         // instantiate filters object
         $this->filters = new Filters();
+        $this->stopMeasure('load_filter');
 
         // enable error reporting
         $this->setReporting();
@@ -83,16 +92,23 @@ class Application
     public function handle($url)
     {   
         $route = "";
+        $this->startMeasure('enable_error','Enable error system');
         $whoops = new \Whoops\Run;
-        $handler = new \GL\Core\Debug\ErrorHandler;
-        $handler->setContainer($this->container);
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $handler = new \Whoops\Handler\PrettyPageHandler;
-        } 
+        $handler = null;
+        switch (DEVELOPMENT_ENVIRONMENT) {
+            case true:
+                $handler = new \Whoops\Handler\PrettyPageHandler;                
+                break;
+            
+            case false:
+                $handler = new \GL\Core\Debug\ErrorHandler;
+                $handler->setContainer($this->container);
+                break;
+        }
+     
         $whoops->pushHandler($handler);
         $whoops->register();
-
+        $this->stopMeasure('enable_error');
         if(DEVELOPMENT_ENVIRONMENT)
         {        
             $end_boot_time = microtime(true);
@@ -178,21 +194,8 @@ class Application
         if ($response instanceof Response) {
             // prepare response
             $filteredresponse =  $this->filters->filterResponse($response,$route);
-            // add rendering time comment if content type is html
-            $event = $this->watch->stop('rendering');
-            // $headers = $filteredresponse->headers;
-            // $ct = $headers->get('Content-Type');
-            
-            // if(strtolower($ct)=="text/html")
-            // {
-            //     $html = $filteredresponse->getContent();
-            //     $time = $event->getDuration();
-            //     $html.= "<!-- generation time : " . $time . " ms -->";
-            //     $filteredresponse->setContent($html);
-            // }
-
-            $filteredresponse->send();
-             
+            $event = $this->watch->stop('rendering'); 
+            $filteredresponse->send();             
         }     
         else
         {
