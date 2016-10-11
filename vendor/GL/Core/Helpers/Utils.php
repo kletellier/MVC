@@ -2,6 +2,8 @@
 
 namespace GL\Core\Helpers;
 
+use Stringy\Stringy as S;
+
 class Utils
 {
      /**
@@ -29,17 +31,7 @@ class Utils
             $req = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('request');    
             $basepath = $req->getSchemeAndHttpHost().$req->getBasePath();             
         }
-        if(substr($basepath, -1)!=$sep)
-        {
-            $basepath = $basepath.$sep;
-        }
-        $partial = $partialurl;
-        if(substr($partial,0,1)==$sep)
-        {
-            $partial = substr($partial, 1);
-        }
-        $path = $basepath . $partial;
-        return $path;
+        return S::create($basepath)->ensureRight($sep)->__toString() . S::create($partialurl)->removeLeft($sep)->__toString();        
     }
 
      /**
