@@ -29,15 +29,19 @@ class ControllerResolver
      * @param Array $args Arguments extracted from route
      * 
      */
-  function __construct($controller, $action,$args) 
+  function __construct($controller, $action,$args,$container=null) 
         {
             $this->_controller = ucfirst($controller);
             $this->_action = $action;
             $this->_args = $args;
-            $this->_errors = array();
-            // return DI Container
-            $this->_container = ServiceProvider::GetDependencyContainer();             
+            $this->_errors = array();             
+            $this->_container = $container;             
       }      
+
+      public function setContainer($container)
+      {
+        $this->_container = $container;
+      }
 
         public function addDebug($str)
         {

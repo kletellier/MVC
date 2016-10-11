@@ -169,10 +169,10 @@ class Application
             $route = $parameters["_route"];
             if(DEVELOPMENT_ENVIRONMENT)
             {
-               $this->container->get('debug')["messages"]->addMessage("Route : " . $route);                      
+               $this->debug["messages"]->addMessage("Route : " . $route);                      
             } 
 
-            $cr = new ControllerResolver($controller,$action,$parameters);  
+            $cr = new ControllerResolver($controller,$action,$parameters,$this->container);  
             $this->stopMeasure('resolving'); 
             $this->startMeasure('before', 'Execute before');                                   
             $this->filters->executeBefores($route); 
@@ -185,7 +185,7 @@ class Application
         catch(ResourceNotFoundException $ex)
         {
             // return not found controller action
-            $cr404 = new ControllerResolver("error", "error404", array());
+            $cr404 = new ControllerResolver("error", "error404", array(),$this->container);
             $response = $cr404->execute();            
         }       
 

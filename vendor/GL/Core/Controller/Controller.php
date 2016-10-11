@@ -391,9 +391,10 @@ abstract class Controller implements ContainerAwareInterface
      */
     private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
     {
+        $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->get('debug') : null;
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->get('debug')["time"]->startMeasure('global','Insert global variables');
+            $debug["time"]->startMeasure('global','Insert global variables');
         }
         $fnparams = null;
         if($executeglobal)
@@ -406,7 +407,7 @@ abstract class Controller implements ContainerAwareInterface
         }
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $this->get('debug')["time"]->stopMeasure('global');
+            $debug["time"]->stopMeasure('global');
         }
         $tpl_service = $this->get('template')->getTemplateService();
         $tpl_service->setContainer($this->container);
