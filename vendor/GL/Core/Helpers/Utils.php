@@ -52,30 +52,21 @@ class Utils
             {
                 $pattern = $route->getPath();                 
                 $url = \GL\Core\Helpers\Utils::url($pattern);
+                $urlo = S::create($url);
+                $sep = "/";
                 $defaults = $route->getDefaults();
-                // replace parameters by provided array
-                foreach($params as $key => $value)
-                {
-                    $str = '{'.$key.'}';
-                    $url = str_replace($str, $value, $url);
-                }
-                // use defaults parameters
-                foreach ($defaults as $key => $value) {
-                   $str = '{'.$key.'}';
-                   $url = str_replace($str, $value, $url);
-                }
-                 // in case of optionnal parameters in last, remove last slash
-                $sep = "/";                
-                if(substr($url, -1)==$sep)
-                {
-                    $url = substr($url,0, -1);
-                }
+                $param_array = array_merge($defaults,$params);
+                foreach ($param_array as $key => $value) {
+                     $str = '{'.$key.'}'; 
+                     $urlo = $urlo->replace($str,$value);                     
+                }  
+                $urlo->removeRight($sep);
             }
         } catch (Exception $e) {
             
         }
         
-        return $url;
+        return $urlo->__toString();
     }
     
 }
