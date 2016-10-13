@@ -63,7 +63,7 @@ class Utils
                 $urlo->removeRight($sep);
             }
         } catch (Exception $e) {
-            
+            $urlo = S::create("");
         }
         
         return $urlo->__toString();
