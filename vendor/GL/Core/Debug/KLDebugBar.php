@@ -30,11 +30,9 @@ class KLDebugBar extends DebugBar
 {
     public function __construct()
     {
-        $this->addCollector(new PhpInfoCollector());
         $this->addCollector(new MessagesCollector());
         $this->addCollector(new RequestDataCollector());
         $this->addCollector(new TimeDataCollector());
-        $this->addCollector(new MemoryCollector());
         $this->addCollector(new RouteDataCollector());
         $this->addCollector(new ExceptionsCollector());
         
