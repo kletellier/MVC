@@ -41,7 +41,8 @@
             "Facades\\": "app/Facades", 
             "GL\\" : "vendor/GL",       
             "DI\\" : "cache/DI",
-            "Parameters\\": "cache/parameters"
+            "Parameters\\": "cache/parameters",
+            "Route\\": "cache/route"
             },
         "files": ["library/functions.php"]
     },

@@ -6,6 +6,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route; 
 use GL\Core\Routing\RouteParser;
 use GL\Core\Config\Config;
+use GL\Core\Routing\RouteArray;
 
 class RouteProvider
 {
@@ -17,11 +18,11 @@ class RouteProvider
      */
     public static function GetRouteCollection()
     {
+     
         // create Symfony routing route collection
-        $collection = new RouteCollection();
-        // read routes.yml
-        $config = new Config('routes');
-        $value = $config->load();
+        $collection = new RouteCollection();      
+        $routearray = new RouteArray();
+        $value = $routearray->getAll();
 
         // fill collection
         foreach($value as $name => $rte)
@@ -31,9 +32,9 @@ class RouteProvider
                 { 
                     $defaults = $rp->getArrayParams();    
                     $collection->add($name, new Route($rp->getPattern(), $defaults));  
-                }		 
+                }        
         }
-
+ 
         return $collection;
     } 
     
