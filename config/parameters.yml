@@ -42,3 +42,5 @@ security:
          duration : 3600
     session:
          name: "kletellier"
+router:
+  classes: GL\Core\Routing\Router

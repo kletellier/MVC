@@ -8,16 +8,13 @@ use GL\Core\Controller\ControllerResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route; 
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
+use GL\Core\Exception\NotFoundHttpException;
 use GL\Core\DI\ServiceProvider;
 use GL\Core\Config\Config;
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Stopwatch\Stopwatch;
 use GL\Core\Controller\Filters;
@@ -29,6 +26,28 @@ class Application
     protected $watch;
     protected $filters;
     protected $debug;
+
+    private function getRouterInstance()
+    {
+        $parameters = \Parameters::get('router');
+        $classes = "GL\Core\Routing\Router";
+        $inst = null;
+        if(isset($parameters["classes"]))
+        {
+            $classes = $parameters["classes"];
+        }
+        try
+        {
+            Assertion::classExists($classes);
+            $inst = new $classes;
+        } 
+        catch (AssertionFailedException $e) 
+        {
+            echo "Routing classes " . $classes . " does not exist";
+            die();
+        }
+        return $inst;
+    }
 
     public function __construct()
     {   
@@ -123,13 +142,9 @@ class Application
         {
             ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  );        
         }
-        
-        // enable routing context
-        $this->startMeasure('initrouting', 'Init Routing');    
-        $context = new RequestContext();    
-        $context->fromRequest($this->container->get('request'));
+         
         $response = null;
-        $this->stopMeasure('initrouting');
+       
 
         // enable security system
         $this->startMeasure('security', 'Start security');
@@ -145,28 +160,20 @@ class Application
         {    
             $this->startMeasure('routing', 'Routing'); 
 
-            $closure = function () {
-                return $this->container->get('routes');
-            };
-
-            $arrpar = array();
-            if(!DEVELOPMENT_ENVIRONMENT)
+            $router = $this->getRouterInstance();
+            $ret = $router->route($url);
+            if(!$ret)
             {
-                $arrpar['cache_dir']  = ROUTECACHE;
+                throw new NotFoundHttpException();
             }
-                         
-            $router = new Router(new ClosureLoader(),
-                $closure,
-                $arrpar,  
-                $context
-            );
-            $parameters = $router->match($url);
- 
+            $controller = $router->getController();
+            $action = $router->getMethod();    
+            $route = $router->getRoute();
+            $parameters = $router->getArgs();
+
             $this->stopMeasure('routing');  
             $this->startMeasure('resolving', 'Resolving controller');
-            $controller = $parameters['controller'];
-            $action = $parameters['action'];    
-            $route = $parameters["_route"];
+           
             if(DEVELOPMENT_ENVIRONMENT)
             {
                $this->debug["messages"]->addMessage("Route : " . $route);                      
@@ -182,7 +189,7 @@ class Application
             $this->stopMeasure('execute'); 
                                
         }
-        catch(ResourceNotFoundException $ex)
+        catch(NotFoundHttpException $ex)
         {
             // return not found controller action
             $cr404 = new ControllerResolver("error", "error404", array(),$this->container);
