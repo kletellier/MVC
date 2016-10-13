@@ -71,6 +71,10 @@ class Router implements \GL\Core\Routing\RouterInterface
             {
                 $arrpar['cache_dir']  = ROUTECACHE;
             }
+            else
+            {
+                $this->_container->get('debug')['routes']->setRoutes($this->_container->get('routes'));   
+            }
                          
             $router = new SymfonyRouter(new ClosureLoader(),
                 $closure,

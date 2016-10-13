@@ -152,9 +152,8 @@ class Application
         $this->stopMeasure('security');        
 
         if(DEVELOPMENT_ENVIRONMENT)
-        {
-           $this->debug['routes']->setRoutes($this->container->get('routes'));        
-           $this->debug["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));                      
+        {               
+           $this->debug["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));
         } 
         try 
         {    
