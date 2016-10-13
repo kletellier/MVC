@@ -370,7 +370,7 @@ abstract class Controller implements ContainerAwareInterface
     function AccessTest($roles = array())
     {
         $id = $this->get('session')->get('session.id');
-        if(isset($id) && $id=="")
+        if(!isset($id) || $id=="")
         {
             $this->isUnauthorized();
         }
