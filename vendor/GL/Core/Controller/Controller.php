@@ -135,6 +135,40 @@ abstract class Controller implements ContainerAwareInterface
         $this->container->get('debug')["messages"]->addMessage($message);
     }
 
+    /**
+     * Add measure to debugbar timeline 
+     * @param string $key Key used for stopped it 
+     * @param string $message Message diplayed in timeline
+     * @return void
+     */
+    public function startMeasure($key,$message)
+    {
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $this->get('debug')["time"]->startMeasure($key,$message);
+        }
+    }
+
+    /**
+     * Stop measure
+     * @param string $key 
+     * @return void
+     */
+    public function stopMeasure($key)
+    {
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            try 
+            {
+                $this->get('debug')["time"]->stopMeasure($key);  
+            } 
+            catch (\Exception $e) 
+            {
+                
+            }
+        }
+    }
+
      /**
        * Return actual route
        * @return string
