@@ -8,7 +8,8 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route; 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use GL\Core\DI\ServiceProvider;
-
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 /**
  * Request helper
  *
@@ -66,27 +67,41 @@ class RequestHelper
      */
     function getCurrentRoute()
     {
-        
-        $container = ServiceProvider::GetDependencyContainer();  
-        $collection = $container->get('routes'); 
-        $context = new RequestContext();    
-        $context->fromRequest($this->_request);
-        $matcher = new UrlMatcher($collection, $context);
+        $ret = null;
+        $inst = null;
         $url = null;
+
         if($this->_request->get('url'))
         {
             $url = $this->_request->get('url');
         } 
         $url = '/'.$url; 
 
-        $parameters = null;
-        try 
+        $parameters = \Parameters::get('router');
+        $classes = "GL\Core\Routing\Router";
+     
+        if(isset($parameters["classes"]))
         {
-            $parameters = $matcher->match($url);             
-        } catch (ResourceNotFoundException $e) 
-        {
-            
+            $classes = $parameters["classes"];
         }
-        return $parameters;  
+        try
+        {
+            Assertion::classExists($classes);
+            $inst = new $classes;
+            $ret = $inst->route($url);         
+            $args = $inst->getArgs(); 
+
+            $ret = array();
+            $ret["controller"] = $inst->getController();
+            $ret["action"] = $inst->getMethod(); 
+            $ret["_route"] = $inst->getRoute();
+            
+            $ret = array_merge($ret,$args);
+        } 
+        catch (AssertionFailedException $e) 
+        {
+            $ret = null();
+        }
+        return $ret;  
     }
 }
