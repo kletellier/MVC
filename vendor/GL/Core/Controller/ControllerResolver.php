@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\DI\ServiceProvider;
-
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 /**
  * 
  * Controller Resolver
@@ -131,6 +132,14 @@ class ControllerResolver
       */
         private function getInstance($controllername)
         {           
+            try 
+            {
+              Assertion::ClassExists($controllername);
+            } 
+            catch (AssertionFailedException $e) {
+              echo "Erreur la classe $controllername n'existe pas";
+              die();
+            }
             $instance =  new $controllername($this->_controller,$this->_action);
             // add dependency container in the controller instance
             $instance->setContainer($this->_container);
