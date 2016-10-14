@@ -137,7 +137,7 @@ class ControllerResolver
               Assertion::ClassExists($controllername);
             } 
             catch (AssertionFailedException $e) {
-              echo "Erreur la classe $controllername n'existe pas";
+              echo "Error class $controllername does not exists";
               die();
             }
             $instance =  new $controllername($this->_controller,$this->_action);
