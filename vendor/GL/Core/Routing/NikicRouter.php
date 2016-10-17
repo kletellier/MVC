@@ -59,6 +59,7 @@ class NikicRouter implements \GL\Core\Routing\RouterInterface
         {
             $this->_container->get('debug')["routes"]->setRoutes($routes);
         }
+        $dispatcher = null;
         $callable = function(FastRoute\RouteCollector $r) use ($routes) 
         {
             foreach ($routes as $key => $value) {
@@ -67,8 +68,17 @@ class NikicRouter implements \GL\Core\Routing\RouterInterface
                     $r->addRoute(array('GET','POST'),$value->getPath(),$chaine);
                 }
         };
-
-        $dispatcher = FastRoute\simpleDispatcher($callable);
+        if(DEVELOPMENT_ENVIRONMENT)
+        {
+            $dispatcher = FastRoute\simpleDispatcher($callable);
+        }
+        else
+        {
+            $pathCache = CACHEPATH . DS . "route" . DS . "route.cache";
+            $arrCache = array('cacheFile'=>$pathCache,'cacheDisabled'=>false);
+            $dispatcher = FastRoute\cachedDispatcher($callable,$arrCache);
+        }
+               
         $method = $this->_request->getMethod();
         if (false !== $pos = strpos($url, '?')) 
         {
