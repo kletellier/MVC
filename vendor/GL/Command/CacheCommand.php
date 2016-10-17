@@ -70,8 +70,18 @@ class CacheCommand extends Command
                 $finderroute = new Finder();
                 $iteratorroute = $finderroute->files()->name('*.php')->in($pathroute);
                 $fs->remove($iteratorroute); 
-                $fs->remove($pathroute);     
-                $fs->mkdir($pathroute);
+                $iteratorroute2 = $finderroute->files()->name('*.cache')->in($pathroute);
+                $fs->remove($iteratorroute2); 
+
+                if($fs->exists($pathroute))
+                {
+                     $fs->remove($pathroute); 
+                }
+                if(!$fs->exists($pathroute))
+                {                
+                     $fs->mkdir($pathroute);
+                }
+               
                 $fs->chmod($pathroute,0777,0000,true);     
 
                  if(class_exists("\Kletellier\Assets\AssetsUtils"))
