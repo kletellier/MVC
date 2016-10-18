@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
 use GL\Core\Config\Config;
 use GL\Core\Security\AuthenticationServiceInterface;
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 
 class AuthenticationService implements \GL\Core\Security\AuthenticationServiceInterface
 {
@@ -415,6 +417,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	public function autologin()
 	{		
 		$id = $this->session->get('session.id');
+		
 		try {
 			if(!isset($id) || $id=="")
 			{
@@ -677,10 +680,10 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 				$table->integer('profile')->default(-1);
 				$table->integer('nblogin')->default(0);
 				$table->timestamps();
-			});
-			// create model file
-			$this->createModel($tablename,ucfirst($tablename));
+			});			
 		}	
+		// create model file
+		$this->createModel($tablename,ucfirst($tablename));
 	}
 
 	/**
@@ -710,6 +713,11 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 			$inst->description = "guest role";
 			$inst->save();
 		}	
+		else
+		{
+			// create model file
+			$this->createModel($tablename,ucfirst($tablename));
+		}
 	}
 
 	/**
@@ -729,10 +737,10 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 				$table->integer('roles_id');
 				$table->integer('users_id');			 			 
 				$table->timestamps();
-			});
-			// create model file
-			$this->createModel($tablename,ucfirst($tablename));
+			});			
 		}	
+		// create model file
+		$this->createModel($tablename,ucfirst($tablename));
 	}
 
 
@@ -751,19 +759,25 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 */
 	protected function createModel($tablename ,$mode)
 	{
-		try {
-			$nmodel = $this->model;
-			$nmodel = str_replace('##modelname##',$mode,$nmodel);
-			$nmodel = str_replace('##tablename##',$tablename,$nmodel);             		
+		$class = "Application\\Models\\" . ucfirst($tablename);
+		if(!class_exists($class))
+		{
+			try 
+			{
+				$nmodel = $this->model;
+				$nmodel = str_replace('##modelname##',$mode,$nmodel);
+				$nmodel = str_replace('##tablename##',$tablename,$nmodel);             		
 
-			$path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
+				$path = ROOT . DS . "app" . DS . "Application" . DS . "Models". DS;
 
-			$filename = $path.$mode.".php";
-			file_put_contents($filename,$nmodel);	
-
-		} catch (Exception $e) {
+				$filename = $path.$mode.".php";
+				file_put_contents($filename,$nmodel);	
+			} 
+			catch (Exception $e)
+			{
 			
-		}
+			}
+		}		
 	}
 
 	/**
