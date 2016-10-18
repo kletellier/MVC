@@ -14,14 +14,14 @@ use GL\Core\Config\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserCommand extends Command
+class UserRoleCommand extends Command
 {
-     
+	 
     protected function configure()
     {
         $this
-            ->setName('security:createuser')
-            ->setDescription('Create user') 
+            ->setName('security:addroleuser')
+            ->setDescription('Add role to user') 
         ;
     }
 
@@ -35,33 +35,22 @@ class UserCommand extends Command
             $login = $helper->ask($input, $output, $question);
             if($login=="")
             {
-                    throw new \Exception("you must specify login");
+                throw new \Exception("you must specify login");
             }
-            $question = new Question('Please enter the mail : ', '');
-            $email = $helper->ask($input, $output, $question);
-            if($email=="")
-            {
-                throw new \Exception("you must specify a mail");
-            }            
-            $question = new Question('Please enter the password : ', '');
-            $password = $helper->ask($input, $output, $question);
-            if($password=="")
-            {
-                throw new \Exception("you must specify a password");
-            }             
+                    
             // récupération de la config securité
             $values = \Parameters::get('security');
             $class =   $values['security']['classes'];
             $ss = new $class(new Session(),new Request());
 
-            if($ss->emailExist($email))
+            // get user instance
+            $user = $ss->userFromLogin($login);
+            if($user==null)
             {
-                throw new \Exception("Email already exists.");                
+                throw new  \Exception("User $login doesn't exist");                
             }
-            if($ss->loginExist($login))
-            {
-                throw new \Exception("Login already exists."); 
-            }
+            $iduser = $user->id;
+
             // get all roles
             $roles = $ss->getRoles();
             $strRole = "[";
@@ -74,26 +63,26 @@ class UserCommand extends Command
                 $strRole.=$role->role;
             }
             $strRole.="]";
-            $question = new Question('Add roles for this user ' . $strRole . ', type role separated by comma : ', '');
+            $question = new Question('Add roles for ' . $login . ' ' . $strRole . ', type role separated by comma : ', '');
             $roles = $helper->ask($input, $output, $question);
             
-            $output->writeln('Create user');
-            $ret = $ss->userCreate($login,$email,$password);            
-            if($roles!="" && $ret!=null)
+            $output->writeln('Add roles to user');
+            			
+		    if($roles!="" && $iduser!=null)
             {           
                 $rolea = \Stringy\Stringy::create($roles)->split(",");
                 foreach ($rolea as $role) 
                 {
                     $roles = $ss->getRolesFromName(array($role));
                     $role1 = $roles->first();
-                    $ss->addUserToRole($ret,$role1->id);
+                    $ss->addUserToRole($iduser,$role1->id);
                 }
             }  
         } 
         catch (\Exception $e) 
         {
             $output->writeln('Error : ' . $e->getMessage());
-        }        
+        }		 
         $output->writeln('finished');
     }
 }
