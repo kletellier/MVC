@@ -47,7 +47,6 @@ class Utils
             $rc = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('routes');
             $route = $rc->get($routename);
 
-            
             if($route!=null)
             {
                 $pattern = $route->getPath();                 
@@ -60,7 +59,7 @@ class Utils
                      $str = '{'.$key.'}'; 
                      $urlo = $urlo->replace($str,$value);                     
                 }  
-                $urlo->removeRight($sep);
+                $urlo = $urlo->removeRight($sep);                 
             }
         } catch (Exception $e) {
             $urlo = S::create("");
