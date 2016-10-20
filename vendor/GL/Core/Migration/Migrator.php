@@ -153,7 +153,7 @@ class ##classname## implements \GL\Core\Migration\MigrationInterface
         {
             return 0;
         }
-        return ($a->getCreationDate() < $b->getCreationDate()) ? 1 : -1;
+        return ($a->getCreationDate() > $b->getCreationDate()) ? 1 : -1;
     }
 
     public function migrateAll()
