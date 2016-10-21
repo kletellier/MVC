@@ -46,7 +46,7 @@ class Utils
         try {
             $rc = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('routes');
             $route = $rc->get($routename);
-
+ 
             if($route!=null)
             {
                 $pattern = $route->getPath();                 
@@ -64,8 +64,8 @@ class Utils
         } catch (Exception $e) {
             $urlo = S::create("");
         }
-        
-        return $urlo->__toString();
+        $ret = (isset($urlo)==true) ?  $urlo->__toString() : "";
+        return $ret;
     }
     
 }
