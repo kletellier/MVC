@@ -13,6 +13,7 @@ class RouteParser {
     private $name;
     private $pattern;
     private $defaults;
+    private $methods;
 
     /**
      * Constructor
@@ -24,8 +25,9 @@ class RouteParser {
         $this->controller = '';
         $this->action = '';
         $this->name = $nom;
-	$this->pattern = '';
+	    $this->pattern = '';
         $this->defaults = null;
+        $this->methods = array();
     }
     
     /**
@@ -44,7 +46,11 @@ class RouteParser {
             if(isset($this->tableau["defaults"]))
             {
                  $this->defaults = $this->tableau["defaults"];                             
-            }                        
+            }     
+            if(isset($this->tableau["methods"]))  
+            {
+                $this->methods = $this->tableau["methods"];   
+            }                 
             $ret = true;
         }        
         return $ret;
@@ -113,5 +119,9 @@ class RouteParser {
      */
     public function getDefaults(){
         return $this->defaults;
+    }
+
+    public function getMethods(){
+        return $this->methods;
     }
 }

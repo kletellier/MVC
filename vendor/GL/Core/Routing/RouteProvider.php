@@ -30,8 +30,10 @@ class RouteProvider
                 $rp = new RouteParser($rte,$name);
                 if($rp->parse())
                 { 
-                    $defaults = $rp->getArrayParams();    
-                    $collection->add($name, new Route($rp->getPattern(), $defaults));  
+                    $defaults = $rp->getArrayParams();
+                    $route = new Route($rp->getPattern(), $defaults);
+                    $route->setMethods($rp->getMethods());
+                    $collection->add($name,$route );  
                 }        
         }
  

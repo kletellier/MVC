@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Reference;
 use GL\Core\Exception\NotFoundHttpException;
+use GL\Core\Exception\MethodNotAllowedException;
 use GL\Core\DI\ServiceProvider;
 use GL\Core\Config\Config;
 use Assert\Assertion;
@@ -18,6 +19,7 @@ use Assert\AssertionFailedException;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Stopwatch\Stopwatch;
 use GL\Core\Controller\Filters;
+
 
 class Application 
 {   
@@ -193,7 +195,13 @@ class Application
             // return not found controller action
             $cr404 = new ControllerResolver("error", "error404", array(),$this->container);
             $response = $cr404->execute();            
-        }       
+        }  
+        catch(MethodNotAllowedException $ema)   
+        {
+            // return methode not allowed controller action
+            $cr405 = new ControllerResolver("error", "error405", array(),$this->container);
+            $response = $cr405->execute();   
+        }  
 
         $this->startMeasure('filtering', 'Filtering response');               
          

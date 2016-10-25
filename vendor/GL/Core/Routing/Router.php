@@ -18,6 +18,7 @@ class Router implements \GL\Core\Routing\RouterInterface
     private $_args;
     private $_request;
     private $_container;
+    private $_methods_allowed;
 
     public function getRoute()
     {
@@ -94,7 +95,12 @@ class Router implements \GL\Core\Routing\RouterInterface
         } 
         catch (ResourceNotFoundException $e) 
         {
-            $this->_router = "";
+            $this->_route = "";
+        }
+        catch(\Symfony\Component\Routing\Exception\MethodNotAllowedException $ema)
+        {
+            $this->_route = "";
+            throw new \GL\Core\Exception\MethodNotAllowedException();
         }
         
         return ($this->_route!="");

@@ -51,6 +51,20 @@ class ControllerResolver
             }
            
         }  
+
+        /**
+         * 
+         * Return Error 405 Response
+         *         
+         */
+        private function get405Response()
+        {
+            ob_clean();
+            $this->_controller = "error";
+            $this->_action = "error405";
+            $this->_args = array();             
+            return $this->execute();           
+        }
                
          /**
          * 
@@ -244,6 +258,10 @@ class ControllerResolver
             catch(\GL\Core\Exception\NotFoundHttpException $nf)
             {
                 $response = $this->get404Response();
+            }  
+             catch(\GL\Core\Exception\MethodNotAllowedException $mna)
+            {
+                $response = $this->get405Response();
             }          
             return $response;
      }        

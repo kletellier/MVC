@@ -63,9 +63,13 @@ class NikicRouter implements \GL\Core\Routing\RouterInterface
         $callable = function(FastRoute\RouteCollector $r) use ($routes) 
         {
             foreach ($routes as $key => $value) {
-
+                    $methodsall = $value->getMethods();
+                    if(count($methodsall)==0)
+                    {
+                        $methodsall = array('GET','POST');
+                    }
                     $chaine = $key . "::" . $value->getDefaults()['controller'] . "::" . $value->getDefaults()['action'];
-                    $r->addRoute(array('GET','POST'),$value->getPath(),$chaine);
+                    $r->addRoute($methodsall,$value->getPath(),$chaine);
                 }
         };
         if(DEVELOPMENT_ENVIRONMENT)
@@ -94,6 +98,7 @@ class NikicRouter implements \GL\Core\Routing\RouterInterface
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 $this->_route = "";
+                throw new \GL\Core\Exception\MethodNotAllowedException();
                 break;
             case FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
