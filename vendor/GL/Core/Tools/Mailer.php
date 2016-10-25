@@ -53,6 +53,8 @@ class Mailer
 
             $this->_encryption = "";
             $this->_secure = 0;
+
+            $this->_charset = "UTF-8";
             
             $this->getParams();
     }
@@ -343,6 +345,16 @@ class Mailer
         }
         return $bret;
     }
+
+    public function setCharset($charset)
+    {
+      $this->_charset = $charset;
+    }
+
+    public function getCharset()
+    {
+      return $this->_charset;
+    }
     
     /**
      * Send mail
@@ -353,6 +365,7 @@ class Mailer
     {       
         $mail = new \PHPMailer;
         $mail->isSMTP();
+        $mail->CharSet = $this->_charset;
         $mail->Host = $this->_server;
         $mail->Port = $this->_port;
          if($this->_user!="")
