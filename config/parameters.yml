@@ -44,3 +44,5 @@ security:
          name: "kletellier"
 router:
   classes: GL\Core\Routing\Router
+error:
+  controller: Application\Controllers\ErrorController

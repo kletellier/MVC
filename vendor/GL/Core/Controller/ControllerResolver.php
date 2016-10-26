@@ -21,6 +21,7 @@ class ControllerResolver
     protected $_args;
     protected $_errors;
     protected $_container;
+    protected $_errorcontroller;
     
     /**
      * Constructor
@@ -36,8 +37,16 @@ class ControllerResolver
             $this->_action = $action;
             $this->_args = $args;
             $this->_errors = array();             
-            $this->_container = $container;             
-      }      
+            $this->_container = $container;            
+            $this->_errorcontroller = $this->getErrorController();
+      }     
+
+      private function getErrorController()
+      {
+          $error = \Parameters::get('error');
+          $ctl = (isset($error["controller"])===true) ? $error["controller"] : $this->getControllerName("error"); 
+          return $ctl;
+      } 
 
       public function setContainer($container)
       {
@@ -134,7 +143,17 @@ class ControllerResolver
        */
         private function getControllerName()
         {
-            return 'Application\\Controllers\\'.ucfirst($this->_controller).'Controller';
+            switch (strtolower($this->_controller)) 
+            {
+              case 'error':
+                return $this->_errorcontroller;
+                break;
+              
+              default:
+                return 'Application\\Controllers\\'.ucfirst($this->_controller).'Controller';
+                break;
+            }
+            
         }
         
      /**
