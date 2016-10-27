@@ -29,6 +29,13 @@ class Application
     protected $filters;
     protected $debug;
 
+    private function getErrorResponse($code)
+    {
+        $action = "error$code";
+        $cr_error = new ControllerResolver("error", $action, array(),$this->container);
+        return $cr_error->execute();      
+    }
+
     private function getRouterInstance()
     {
         $parameters = \Parameters::get('router');
@@ -115,7 +122,7 @@ class Application
         if(DEVELOPMENT_ENVIRONMENT)
         {  
             $this->debug["messages"]->addMessage("Url : " . $url);                 
-        }
+        }       
         $route = "";
         $this->startMeasure('enable_error','Enable error system');
         $whoops = new \Whoops\Run;
@@ -183,8 +190,8 @@ class Application
             {
                $this->debug["messages"]->addMessage("Route : " . $route);                      
             } 
-
-            $cr = new ControllerResolver($controller,$action,$parameters,$this->container);  
+                        
+            $cr = new ControllerResolver($controller,$action,$parameters,$this->container);            
             $this->stopMeasure('resolving'); 
             $this->startMeasure('before', 'Execute before');                                   
             $this->filters->executeBefores($route); 
@@ -196,16 +203,24 @@ class Application
         }
         catch(NotFoundHttpException $ex)
         {
-            // return not found controller action
-            $cr404 = new ControllerResolver("error", "error404", array(),$this->container);
-            $response = $cr404->execute();            
-        }  
-        catch(MethodNotAllowedException $ema)   
+            $response = $this->getErrorResponse(404);                 
+        }  // catch all KLetellier Exception
+        catch(\GL\Core\Exception\AccessDeniedHttpException $ad)
         {
-            // return methode not allowed controller action
-            $cr405 = new ControllerResolver("error", "error405", array(),$this->container);
-            $response = $cr405->execute();   
+            $response = $this->getErrorResponse(401);
+        }
+        catch(\GL\Core\Exception\AccessForbiddenHttpException $ad)
+        {
+            $response = $this->getErrorResponse(403);
+        }
+        catch(\GL\Core\Exception\NotFoundHttpException $nf)
+        {
+            $response = $this->getErrorResponse(404);
         }  
+         catch(\GL\Core\Exception\MethodNotAllowedException $mna)
+        {
+            $response = $this->getErrorResponse(405);
+        }          
        
         if(DEVELOPMENT_ENVIRONMENT)
         {  
