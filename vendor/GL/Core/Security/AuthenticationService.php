@@ -704,20 +704,10 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 				$table->string('description');				 			 
 				$table->integer('enabled')->default(1);				 
 				$table->timestamps();
-			});
-			// create model file
-			$this->createModel($tablename,ucfirst($tablename));
-			// create first role
-			$inst = $this->getInstance($this->roles_tablename);
-			$inst->role = "guest";
-			$inst->description = "guest role";
-			$inst->save();
-		}	
-		else
-		{
-			// create model file
-			$this->createModel($tablename,ucfirst($tablename));
-		}
+			});			 		
+		}			 
+		// create model file
+		$this->createModel($tablename,ucfirst($tablename));		 
 	}
 
 	/**
