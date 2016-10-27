@@ -74,7 +74,7 @@ class Router implements \GL\Core\Routing\RouterInterface
             }
             else
             {
-                $this->_container->get('debug')['routes']->setRoutes($this->_container->get('routes'));   
+                $this->_container->get('debug')['routes']->setRoutes($closure);   
             }
                          
             $router = new SymfonyRouter(new ClosureLoader(),
