@@ -84,7 +84,7 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
 
             if(DEVELOPMENT_ENVIRONMENT)
             {
-                 $this->_debug["time"]->startMeasure('initblade','Init Blade Environnment');
+                 $this->_debug["time"]->startMeasure('initblade','Init blade templating environnment');
             }
 
             $cachepath = CACHEPATH . DS . 'blade'; 

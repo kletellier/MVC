@@ -74,7 +74,7 @@ class Application
             $event = $this->watch->stop('enable_container');
             $start_container = ( $event->getOrigin() + $event->getStartTime())/1000;
             $stop_container = ( $event->getOrigin() +$event->getEndTime())/1000;
-            $this->debug['time']->addMeasure("Enable Container", $start_container,$stop_container);
+            $this->debug['time']->addMeasure("Enable container", $start_container,$stop_container);
         }
         $this->startMeasure('load_filter','Load filters');
         // instantiate filters object

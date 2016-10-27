@@ -28,7 +28,7 @@ class CreateConsoleCommand extends Command
     {
         $this
             ->setName('console:create')
-            ->setDescription('create console command and register it') 
+            ->setDescription('Create console command and register it') 
         ;
     }
 

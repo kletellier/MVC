@@ -322,7 +322,7 @@ abstract class Controller implements ContainerAwareInterface
         $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->get('debug') : null;
         if(DEVELOPMENT_ENVIRONMENT)
         {
-            $debug["time"]->startMeasure('gethtml','Get Html');
+            $debug["time"]->startMeasure('gethtml','Get html buffer');
         }
         $buf = $this->getHtmlBuffer($template,$params);
         if(DEVELOPMENT_ENVIRONMENT)
