@@ -112,6 +112,10 @@ class Application
 
     public function handle($url)
     {   
+        if(DEVELOPMENT_ENVIRONMENT)
+        {  
+            $this->debug["messages"]->addMessage("Url : " . $url);                 
+        }
         $route = "";
         $this->startMeasure('enable_error','Enable error system');
         $whoops = new \Whoops\Run;
@@ -202,13 +206,18 @@ class Application
             $cr405 = new ControllerResolver("error", "error405", array(),$this->container);
             $response = $cr405->execute();   
         }  
+       
+        if(DEVELOPMENT_ENVIRONMENT)
+        {  
+            $this->debug["messages"]->addMessage("HTTP code : " . $response->getStatusCode());            
+        }
 
         $this->startMeasure('filtering', 'Filtering response');               
          
         if ($response instanceof Response) {
             // prepare response
             $filteredresponse =  $this->filters->filterResponse($response,$route);
-            $event = $this->watch->stop('rendering'); 
+            $event = $this->watch->stop('rendering');             
             $filteredresponse->send();             
         }     
         else
