@@ -117,6 +117,15 @@ abstract class Controller implements ContainerAwareInterface
         return $this->getRequest()->getMethod()=="POST" ? true : false;
     }
 
+     /**
+     * Return hash of current url
+     * @return string
+     */
+    public function getUrlKey()
+    {
+        return $this->get('request_helper')->getUrlKey();
+    }
+
     /**
      * Add Log in debug bar
      * @param string $str string to be added by message

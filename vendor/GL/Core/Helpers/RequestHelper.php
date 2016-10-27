@@ -28,6 +28,16 @@ class RequestHelper
     {
         $this->_request = $request;
     }
+
+     /**
+     * Return hash of current url
+     * @return string
+     */
+    function getUrlKey()
+    {
+        $url = '/'.  $this->_request->get('url');
+        return sha1($url);
+    } 
     
     /**
      * Function for detecting mobile client with useragent
