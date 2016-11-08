@@ -20,6 +20,45 @@ class Filters
     }
 
     /**
+     * Allow or not filtering execution
+     * @param array $arrRoutes Array of allowed routes
+     * @param string $route actual route
+     * @param string $scope scope allowed (prod or dev)
+     * @return boolean
+     */
+    private function IsAllowed($arrRoutes,$route,$scope)
+    {
+        $bExecute = false;
+        // test if route is allowed
+        if(isset($arrRoutes))
+        {
+            // function restricted to specified routes in arrRoutes
+            if(in_array($route, $arrRoutes))
+            {
+                $bExecute = true;
+            }
+        }
+        else
+        {
+            // function executed for all routes
+            $bExecute = true;
+        }
+        if($scope!="all" && $bExecute)                
+        {
+            $bExecute = false;
+            if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
+            {
+                $bExecute = true;
+            }
+            if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
+            {
+                $bExecute = true;
+            }                                       
+        }
+        return $bExecute;
+    }
+
+    /**
      * Global function called after action executing before rendering 
      * in template, using it for adding permanent variables to 
      * array passed to template
@@ -39,8 +78,7 @@ class Filters
             foreach ($fnArray as $key => $value) 
             {
                 if($value["type"]=="global")
-                {
-                    $bExecute = false;
+                {                     
                     // for each global function defined
                     $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                     $scope = (isset($value["scope"])) ? $value["scope"] : "all";
@@ -48,32 +86,7 @@ class Filters
                     // test if class exist and implements interface
                     Assertion::ClassExists($class);
                     Assertion::implementsInterface($class,'\GL\Core\Controller\GlobalFunctionInterface');                       
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
+                    $bExecute = $this->IsAllowed($arrRoutes,$route,$scope);
                     if($bExecute)
                     {                    
                         $exc = new $class($ret,$this->_container);
@@ -105,43 +118,15 @@ class Filters
             {
                  
                 if($value["type"]=="filter")
-                {
-                    $bExecute = false;
+                {                    
                     // for each global function defined
                     $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                     $scope = (isset($value["scope"])) ? $value["scope"] : "all";
                     $class = $value["class"];
                     // test if class exist
                     Assertion::ClassExists($class);
-                    Assertion::implementsInterface($class,'\GL\Core\Controller\FilterResponseInterface');                   
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
-     
+                    Assertion::implementsInterface($class,'\GL\Core\Controller\FilterResponseInterface');   
+                    $bExecute = $this->IsAllowed($arrRoutes,$route,$scope);     
                     if($bExecute)
                     {
                         $exc = new $class($resp,$this->_container);                    
@@ -168,8 +153,7 @@ class Filters
             foreach ($fnArray as $key => $value) 
             {
                 if($value["type"]=="before")
-                {
-                    $bExecute = false;
+                {                   
                     // for each global function defined
                     $arrRoutes = (isset($value["routes"])) ? $value["routes"] : null;
                     $scope = (isset($value["scope"])) ? $value["scope"] : "all";
@@ -177,32 +161,7 @@ class Filters
                     // test if class exist and implements interface
                     Assertion::ClassExists($class);
                     Assertion::implementsInterface($class,'\GL\Core\Controller\BeforeFunctionInterface');    
-                    // test if route is allowed
-                    if(isset($arrRoutes))
-                    {
-                        // function restricted to specified routes in arrRoutes
-                        if(in_array($route, $arrRoutes))
-                        {
-                            $bExecute = true;
-                        }
-                    }
-                    else
-                    {
-                        // function executed for all routes
-                        $bExecute = true;
-                    }
-                    if($scope!="all" && $bExecute)                
-                    {
-                        $bExecute = false;
-                        if($scope=="dev" && DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }
-                        if($scope=="prod" && !DEVELOPMENT_ENVIRONMENT)
-                        {
-                            $bExecute = true;
-                        }                                       
-                    }
+                    $bExecute = $this->IsAllowed($arrRoutes,$route,$scope);
                     if($bExecute)
                     {
                         $exc = new $class($this->_container);
