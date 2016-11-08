@@ -40,13 +40,16 @@ class KLDebugBar extends DebugBar
         {
             $conn= Capsule::connection("default");
             if($conn!=null)
-            {
-                $db = $conn->getPdo();
+            {               
+                $db = $conn->getPdo();               
                 $pdo = new TraceablePDO($db);
-                $this->addCollector(new PDOCollector($pdo));
-            }
-           
+                $this->addCollector(new PDOCollector($pdo));                               
+            }           
         } 
+        catch(\Illuminate\Contracts\Container\BindingResolutionException $ex)
+        {
+            $this['exceptions']->addException($ex);
+        }
         catch (\PDOException $e) 
         {
             $this['exceptions']->addException($e);            
