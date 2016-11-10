@@ -53,14 +53,6 @@ class ControllerResolver
       $this->_container = $container;
     }
 
-    public function addDebug($str)
-    {
-      if(DEVELOPMENT_ENVIRONMENT){
-        $this->_container->get('debug')["messages"]->addMessage($str);
-      }
-
-    }  
-
     private function getErrorResponse($code)
     {
       ob_clean();
@@ -208,8 +200,8 @@ class ControllerResolver
           $controllerName = $this->getControllerName();
           $dispatch = $this->getInstance($controllerName);  
 
-          $this->addDebug("Controller : " . $controllerName);
-          $this->addDebug("Action : " . $this->_action);                   
+          \Debug::log("Controller : " . $controllerName);
+          \Debug::log("Action : " . $this->_action);                   
 
           if ((int)method_exists($controllerName, $this->_action)) 
           { 

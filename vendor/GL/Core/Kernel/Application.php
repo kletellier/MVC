@@ -72,21 +72,18 @@ class Application
         // get DI container
         if(DEVELOPMENT_ENVIRONMENT){$this->watch->start('enable_container');}
         $this->container = ServiceProvider::GetDependencyContainer(); 
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $this->debug = $this->container->get('debug');
-        }
+        
         if(DEVELOPMENT_ENVIRONMENT)
         {
             $event = $this->watch->stop('enable_container');
             $start_container = ( $event->getOrigin() + $event->getStartTime())/1000;
             $stop_container = ( $event->getOrigin() +$event->getEndTime())/1000;
-            $this->debug['time']->addMeasure("Enable container", $start_container,$stop_container);
+            \Debug::addMeasure("Enable container", $start_container,$stop_container);
         }
-        $this->startMeasure('load_filter','Load filters');
+        \Debug::startMeasure('load_filter','Load filters');
         // instantiate filters object
         $this->filters = new Filters();
-        $this->stopMeasure('load_filter');
+        \Debug::stopMeasure('load_filter');
 
         // enable error reporting
         $this->setReporting();
@@ -101,30 +98,11 @@ class Application
         ini_set('display_errors','Off');       
     }
 
-    private  function startMeasure($id,$text)
-    {
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $this->debug['time']->startMeasure($id, $text);
-        }
-    }
-
-    private  function stopMeasure($id)
-    {
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $this->debug['time']->stopMeasure($id);
-        }
-    }
-
     public function handle($url)
     {   
-        if(DEVELOPMENT_ENVIRONMENT)
-        {  
-            $this->debug["messages"]->addMessage("Url : " . $url);                 
-        }       
+        \Debug::log("Url : " . $url);
         $route = "";
-        $this->startMeasure('enable_error','Enable error system');
+        \Debug::startMeasure('enable_error','Enable error system');
         $whoops = new \Whoops\Run;
         $handler = null;
         switch (DEVELOPMENT_ENVIRONMENT) {
@@ -140,15 +118,15 @@ class Application
      
         $whoops->pushHandler($handler);
         $whoops->register();
-        $this->stopMeasure('enable_error');
+        \Debug::stopMeasure('enable_error');
         if(DEVELOPMENT_ENVIRONMENT)
         {        
             $end_boot_time = microtime(true);
             $boot_time = $end_boot_time - $this->start_time;
-            $this->debug['messages']->addMessage("Booting time : $boot_time sec");
-            $this->debug['time']->addMeasure("Booting time",$this->start_time,$end_boot_time);
+            \Debug::log("Booting time : $boot_time sec");
+            \Debug::addMeasure("Booting time",$this->start_time,$end_boot_time);
             $debug_boot_time = microtime(true);
-            $this->debug['time']->addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
+            \Debug::addMeasure("Enable debug sytem",$end_boot_time,$debug_boot_time);
         }
 
         if(!DEVELOPMENT_ENVIRONMENT)
@@ -156,21 +134,17 @@ class Application
             ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  );        
         }
          
-        $response = null;
-       
+        $response = null;       
 
         // enable security system
-        $this->startMeasure('security', 'Start security');
+        \Debug::startMeasure('security', 'Start security');
         $ss = $this->container->get('security');
-        $this->stopMeasure('security');        
-
-        if(DEVELOPMENT_ENVIRONMENT)
-        {               
-           $this->debug["messages"]->addMessage("Security Session Id : " . $this->container->get('session')->get('session.id'));
-        } 
+        \Debug::stopMeasure('security');        
+        \Debug::log("Security Session Id : " . $this->container->get('session')->get('session.id'));
+        
         try 
         {    
-            $this->startMeasure('routing', 'Routing'); 
+            \Debug::startMeasure('routing', 'Routing'); 
 
             $router = $this->getRouterInstance();
             $ret = $router->route($url);
@@ -183,22 +157,18 @@ class Application
             $route = $router->getRoute();
             $parameters = $router->getArgs();
 
-            $this->stopMeasure('routing');  
-            $this->startMeasure('resolving', 'Resolving controller');
-           
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-               $this->debug["messages"]->addMessage("Route : " . $route);                      
-            } 
+            \Debug::stopMeasure('routing');  
+            \Debug::startMeasure('resolving', 'Resolving controller');
+            \Debug::log("Route : " . $route);  
                         
             $cr = new ControllerResolver($controller,$action,$parameters,$this->container);            
-            $this->stopMeasure('resolving'); 
-            $this->startMeasure('before', 'Execute before');                                   
+            \Debug::stopMeasure('resolving'); 
+            \Debug::startMeasure('before', 'Execute before');                                   
             $this->filters->executeBefores($route); 
-            $this->stopMeasure('before'); 
-            $this->startMeasure('execute', 'Execute action');                        
+            \Debug::stopMeasure('before'); 
+            \Debug::startMeasure('execute', 'Execute action');                        
             $response = $cr->execute(); 
-            $this->stopMeasure('execute'); 
+            \Debug::stopMeasure('execute'); 
                                
         }
         catch(NotFoundHttpException $ex)
@@ -222,12 +192,8 @@ class Application
             $response = $this->getErrorResponse(405);
         }          
        
-        if(DEVELOPMENT_ENVIRONMENT)
-        {  
-            $this->debug["messages"]->addMessage("HTTP code : " . $response->getStatusCode());            
-        }
-
-        $this->startMeasure('filtering', 'Filtering response');               
+        \Debug::log("HTTP code : " . $response->getStatusCode());   
+        \Debug::startMeasure('filtering', 'Filtering response');               
          
         if ($response instanceof Response) {
             // prepare response

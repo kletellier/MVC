@@ -55,10 +55,8 @@ class NikicRouter implements \GL\Core\Routing\RouterInterface
     public function route($url)
     {
         $routes = $this->_container->get('routes');
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $this->_container->get('debug')["routes"]->setRoutes($routes);
-        }
+        \Debug::addRoutes($routes);
+       
         $dispatcher = null;
         $callable = function(FastRoute\RouteCollector $r) use ($routes) 
         {

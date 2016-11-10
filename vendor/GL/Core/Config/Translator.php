@@ -28,9 +28,8 @@ class Translator
     }
 
     public function setLocale($locale)
-    {
-        $dbg = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('debug');
-        $dbg["messages"]->addMessage("Loading translation $locale");
+    {        
+        \Debug::log("Loading translation $locale");
         $this->locale = $locale;
         $this->loadFile();
     }

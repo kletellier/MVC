@@ -13,8 +13,7 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
 {
      protected $_controller;
      protected $_container;
-     protected $_debug;
-           
+               
      function __construct($controller = "")
      {
          $this->_controller = $controller;   
@@ -37,11 +36,7 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
      */
      public function setContainer(\Symfony\Component\DependencyInjection\Container $container = null)
      {
-         $this->_container = $container;
-         if(DEVELOPMENT_ENVIRONMENT)
-         {
-            $this->_debug = $this->_container->get('debug');
-         }
+         $this->_container = $container;        
      }
 
       /**
@@ -82,11 +77,8 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
                 throw new \Exception("Missing Dependency Container, add it with setContainer Method");                
             }
 
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-                 $this->_debug["time"]->startMeasure('initblade','Init blade templating environnment');
-            }
-
+            \Debug::startMeasure('initblade','Init blade templating environnment');
+            
             $cachepath = CACHEPATH . DS . 'blade'; 
             $views = $this->getPathArray();
             $blade = new Blade($views, $cachepath); 
@@ -99,16 +91,14 @@ class Blade5Service implements \GL\Core\Templating\TemplateServiceInterface
                 return "<?php use $expression; ?>";
             });   
              
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-                $this->_debug["time"]->stopMeasure('initblade');
-            }
+            \Debug::stopMeasure('initblade');
+            
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             { 
-                $this->_debug["time"]->startMeasure('renderblade','Blade rendering');   
+                \Debug::startMeasure('renderblade','Blade rendering');   
                 // render the template file and echo it         
                 $ret = $blade->view()->make($template, $params)->render(); 
-                $this->_debug["time"]->stopMeasure('renderblade','Blade rendering');
+                \Debug::stopMeasure('renderblade','Blade rendering');
             }
             else
             {

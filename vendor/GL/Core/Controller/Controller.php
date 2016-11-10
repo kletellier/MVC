@@ -141,7 +141,7 @@ abstract class Controller implements ContainerAwareInterface
             $message = date('H:i:s', $sec) . $usec. " : ";
         }
         $message.=$str;
-        $this->container->get('debug')["messages"]->addMessage($message);
+        \Debug::log($message);
     }
 
     /**
@@ -152,10 +152,8 @@ abstract class Controller implements ContainerAwareInterface
      */
     public function startMeasure($key,$message)
     {
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $this->get('debug')["time"]->startMeasure($key,$message);
-        }
+        \Debug::startMeasure($key,$message);
+         
     }
 
     /**
@@ -164,18 +162,15 @@ abstract class Controller implements ContainerAwareInterface
      * @return void
      */
     public function stopMeasure($key)
-    {
-        if(DEVELOPMENT_ENVIRONMENT)
+    {        
+        try 
         {
-            try 
-            {
-                $this->get('debug')["time"]->stopMeasure($key);  
-            } 
-            catch (\Exception $e) 
-            {
-                
-            }
-        }
+            \Debug::stopMeasure($key);  
+        } 
+        catch (\Exception $e) 
+        {
+            
+        }         
     }
 
      /**
@@ -327,23 +322,13 @@ abstract class Controller implements ContainerAwareInterface
      * @param string template engine to use, blank use default defined in config.yml
      */
     function render($template,$params = array(), $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
-    {  
-        $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->get('debug') : null;
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $debug["time"]->startMeasure('gethtml','Get html buffer');
-        }
+    {           
+        \Debug::startMeasure('gethtml','Get html buffer');
         $buf = $this->getHtmlBuffer($template,$params);
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $debug["time"]->stopMeasure('gethtml');
-            $debug["time"]->startMeasure('response','Prepare response');
-        }
+        \Debug::stopMeasure('gethtml');
+        \Debug::startMeasure('response','Prepare response');
         $response = $this->getResponse($buf,$status,$headers);
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $debug["time"]->stopMeasure('response');
-        }
+        \Debug::stopMeasure('response');         
         return $response;
     }
     
@@ -434,11 +419,7 @@ abstract class Controller implements ContainerAwareInterface
      */
     private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
     {
-        $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->get('debug') : null;
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $debug["time"]->startMeasure('global','Insert global variables');
-        }
+        \Debug::startMeasure('global','Insert global variables');        
         $fnparams = null;
         if($executeglobal)
         { 
@@ -448,10 +429,7 @@ abstract class Controller implements ContainerAwareInterface
         {
             $fnparams = $params;
         }
-        if(DEVELOPMENT_ENVIRONMENT)
-        {
-            $debug["time"]->stopMeasure('global');
-        }
+        \Debug::stopMeasure('global');         
         $tpl_service = $this->get('template')->getTemplateService();
         $tpl_service->setContainer($this->container);
         $tpl_service->setController($this->_controller);

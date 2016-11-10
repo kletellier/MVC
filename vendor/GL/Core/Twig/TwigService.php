@@ -143,29 +143,23 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             {
                 throw new \Exception("Missing Dependency Container, add it with setContainer Method");                
             }
-            $debug = (DEVELOPMENT_ENVIRONMENT==TRUE) ? $this->_container->get('debug') : null;
-
+           
             $stopwatch = new Stopwatch();
             $stopwatch->start('render');
             
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-                $debug["time"]->startMeasure('inittwig','Init Twig Environnment');
-            }
+            \Debug::startMeasure('inittwig','Init Twig Environnment');             
             $env = $this->getTwigEnvironment();
-            if(DEVELOPMENT_ENVIRONMENT)
-            {
-                $debug["time"]->stopMeasure('inittwig');
-            }
+            \Debug::stopMeasure('inittwig');
+             
             if(DEVELOPMENT_ENVIRONMENT && $disabledebug==false)
             {       
-                if(!$debug->hasCollector('twig'))
+                if(!\Debug::hasCollector('twig'))
                 {
-                    $debug->addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
+                    \Debug::addCollector(new \GL\Core\Debug\TwigDataCollector($this->_profile));
                 } 
-                $debug["time"]->startMeasure('rendertwig','Twig rendering');             
+                \Debug::startMeasure('rendertwig','Twig rendering');             
                 $ret =  $env->render($template, $params);
-                $debug["time"]->stopMeasure('rendertwig','Twig rendering');
+                \Debug::stopMeasure('rendertwig','Twig rendering');
             }
             else
             {
@@ -173,21 +167,16 @@ class TwigService implements \GL\Core\Templating\TemplateServiceInterface
             }
             
             $event = $stopwatch->stop('render');
-            /*if(DEVELOPMENT_ENVIRONMENT)
-            {
-                echo "<!-- generated  twig  ".$event->getDuration()." ms -->\r\n";
-            } */       
+            
         } 
         catch (\Twig_Error $e) 
         {
             if($this->_container!=null && DEVELOPMENT_ENVIRONMENT)
             {
-
-                $debug["exceptions"]->addException($e);
+                \Debug::addException($e);
             }
            throw new \Exception($e->getMessage());
-        }
-         
+        }         
         return $ret;
     }
 }
