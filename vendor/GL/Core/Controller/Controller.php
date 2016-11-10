@@ -16,6 +16,7 @@ use Stringy\Stringy;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use GL\Core\Controller\Filters;
+use Carbon\Carbon;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -52,7 +53,8 @@ abstract class Controller implements ContainerAwareInterface
         try
         {
             $ret = $this->container->get($dependency);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
+            \Debug::addException($ex);
             $ret = null;
         }
         return $ret;
@@ -136,9 +138,7 @@ abstract class Controller implements ContainerAwareInterface
         $message = "";
         if($withdate)
         {
-            list($usec, $sec) = explode(' ', microtime());  
-            $usec = str_replace("0.", ".", $usec);  
-            $message = date('H:i:s', $sec) . $usec. " : ";
+            $message = Carbon::createFromFormat('U.u',microtime(true))->format('H:i:s.u') . " : ";            
         }
         $message.=$str;
         \Debug::log($message);
@@ -152,8 +152,7 @@ abstract class Controller implements ContainerAwareInterface
      */
     public function startMeasure($key,$message)
     {
-        \Debug::startMeasure($key,$message);
-         
+        \Debug::startMeasure($key,$message);         
     }
 
     /**
@@ -168,8 +167,8 @@ abstract class Controller implements ContainerAwareInterface
             \Debug::stopMeasure($key);  
         } 
         catch (\Exception $e) 
-        {
-            
+        {  
+            \Debug::addException($e);          
         }         
     }
 
@@ -240,18 +239,18 @@ abstract class Controller implements ContainerAwareInterface
      */
     function renderPHP($view,$inc_parameters = array())
     {           
-         extract($this->GetGlobalVariables($inc_parameters));
+        extract($this->GetGlobalVariables($inc_parameters));
         $ts = new \GL\Core\Templating\PhpTemplateService($this->container,$this->_controller);
-        $ret = $ts->getPathTemplate($view);  
+        $ret = $ts->getPathTemplate($view); 
             
         ob_start();
         try 
         {
             include $ret;
         } 
-        catch (Exception $e) 
+        catch (\Exception $e) 
         {
-            
+            \Debug::addException($e);
         }  
         $buffer = ltrim(ob_get_clean());
         $response = $this->getResponse($buffer);
@@ -405,8 +404,7 @@ abstract class Controller implements ContainerAwareInterface
      * @return string Html string buffer
      */
     function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
-    {         
-        
+    {  
         return $this->getHtmlBuffer($template,$params,$executeglobal,true);
     } 
 
@@ -420,15 +418,7 @@ abstract class Controller implements ContainerAwareInterface
     private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
     {
         \Debug::startMeasure('global','Insert global variables');        
-        $fnparams = null;
-        if($executeglobal)
-        { 
-            $fnparams = $this->GetGlobalVariables($params);
-        }
-        else
-        {
-            $fnparams = $params;
-        }
+        $fnparams = ($executeglobal==true) ? $this->GetGlobalVariables($params) : $params;        
         \Debug::stopMeasure('global');         
         $tpl_service = $this->get('template')->getTemplateService();
         $tpl_service->setContainer($this->container);
@@ -473,15 +463,14 @@ abstract class Controller implements ContainerAwareInterface
      */
     function redirect($routename,$params = array())
     {
-        $url = "";
-       
+        $url = "";       
         try 
         {
             $url = \GL\Core\Helpers\Utils::route($routename,$params);            
         }
-        catch (Exception $e )
+        catch (\Exception $e )
         {
-            
+            \Debug::addException($e);
         }        
         if($url!="")
         {
