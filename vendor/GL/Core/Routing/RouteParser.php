@@ -21,11 +21,11 @@ class RouteParser {
      * @param string $nom route name
      */
     public function __construct($tableau,$nom) {
-        $this->tableau = $tableau;		
+        $this->tableau = $tableau;      
         $this->controller = '';
         $this->action = '';
         $this->name = $nom;
-	    $this->pattern = '';
+        $this->pattern = '';
         $this->defaults = null;
         $this->methods = array();
     }
@@ -63,16 +63,15 @@ class RouteParser {
      */
     public function getArrayParams()
     {
-        // fonction qui rajoute les valeurs d'options par défaut
-        $arr = array('controller'=>$this->controller);
-        $arr = array_add($arr, 'action', $this->action);
+        // function who adds defaults parameters
+        $arr = array('controller'=>$this->controller,'action'=>$this->action);
         if(isset($this->defaults))
         {
             foreach($this->defaults as $key => $value)
             {
-               $arr = array_add($arr,$key,$value);
+               $arr[$key] = $value;
             }
-        }
+        }        
         return $arr;
     }
 
@@ -102,7 +101,7 @@ class RouteParser {
     public function getName() {
         return $this->name;
     }
-	
+    
     /**
      * Return route pattern
      * 
