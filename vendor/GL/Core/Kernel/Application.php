@@ -190,12 +190,10 @@ class Application
          catch(\GL\Core\Exception\MethodNotAllowedException $mna)
         {
             $response = $this->getErrorResponse(405);
-        }          
-       
-        \Debug::log("HTTP code : " . $response->getStatusCode());   
-        \Debug::startMeasure('filtering', 'Filtering response');               
-         
+        }  
+        \Debug::startMeasure('filtering', 'Filtering response'); 
         if ($response instanceof Response) {
+            \Debug::log("HTTP code : " . $response->getStatusCode());  
             // prepare response
             $filteredresponse =  $this->filters->filterResponse($response,$route);
             $event = $this->watch->stop('rendering');             
