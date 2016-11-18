@@ -19,7 +19,7 @@ class RedisDataCollector extends \DebugBar\DataCollector\DataCollector implement
     public function collect()
     {
         $redis = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('redis');
-        $commands = \Redis::getCommandsHistory();
+        $commands = $redis->getCommandsHistory();
 
         $data = array(); 
         $i = 1;

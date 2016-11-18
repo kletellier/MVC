@@ -20,7 +20,7 @@ class Redis
 
     private function init()
     {         
-        $commands = array();
+        $this->commands = array();
         $values = \Parameters::get('redis');
 
         $enable = isset($values['default']['enable']) ? $values['default']['enable'] : 0;
