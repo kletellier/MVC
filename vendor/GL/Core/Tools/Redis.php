@@ -11,6 +11,7 @@ use Predis\Client;
 class Redis 
 {   
     protected $client;
+    protected $commands;
     
     public function __construct()
     {    
@@ -19,6 +20,7 @@ class Redis
 
     private function init()
     {         
+        $commands = array();
         $values = \Parameters::get('redis');
 
         $enable = isset($values['default']['enable']) ? $values['default']['enable'] : 0;
@@ -39,6 +41,11 @@ class Redis
         }  
     }    
 
+    public function getCommandsHistory()
+    {
+        return $this->commands;
+    }
+
     public function getRedisClient()
     {
         return $this->client;
@@ -46,6 +53,10 @@ class Redis
 
     public function command($method, array $parameters = [])
     {
+        if(DEVELOPMENT_ENVIRONMENT)
+        {   
+            $this->commands[] = array('command'=>$method,'parameters'=>$parameters);
+        }        
         return call_user_func_array([$this->client, $method], $parameters);
     }
 

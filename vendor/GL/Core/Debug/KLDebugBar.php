@@ -22,7 +22,7 @@ use DebugBar\DataCollector\PDO\PDOCollector;
 use PDO;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use GL\Core\Debug\RouteDataCollector;
-
+use GL\Core\Debug\RedisDataCollector;
 /**
  * Debug bar subclass which adds all included collectors
  */
@@ -36,6 +36,12 @@ class KLDebugBar extends DebugBar
         $this->addCollector(new RouteDataCollector());
         $this->addCollector(new ExceptionsCollector());
         
+        $values = \Parameters::get('redis');
+        $redis_enable = isset($values['default']['enable']) ? $values['default']['enable'] : 0;
+        if($redis_enable!=0)
+        {
+            $this->addCollector(new RedisDataCollector());
+        }
         try 
         {
             $conn= Capsule::connection("default");
