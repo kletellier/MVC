@@ -9,9 +9,7 @@ use Predis\Client;
  * Class Redis
  */
 class Redis 
-{
-    
-    
+{   
     protected $client;
     
     public function __construct()
@@ -22,16 +20,23 @@ class Redis
     private function init()
     {         
         $values = \Parameters::get('redis');
+
         $enable = isset($values['default']['enable']) ? $values['default']['enable'] : 0;
+        $pwd = isset($values['default']['password']) ? $values['default']['password'] : "";
         $this->client = null;
         if($enable==1)
         {
-            $this->client = new \Predis\Client([
+            $params = [
             'scheme' => 'tcp',
             'host'   => $values['default']['server'],
             'port'   => $values['default']['port'],
-            ]);
-        }        
+            ];
+            if(trim($pwd)!="")
+            {
+                $params['password'] = $pwd;
+            }   
+            $this->client = new \Predis\Client($params);
+        }  
     }    
 
     public function getRedisClient()
