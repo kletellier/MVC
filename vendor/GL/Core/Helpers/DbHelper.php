@@ -60,6 +60,16 @@ class DbHelper {
     {
         return Capsule::connection($connection)->rollback();
     }
+
+    /**
+     * Return raw statement
+     * @param string $query 
+     * @return Expression Raw for eloquent
+     */
+    public static function raw($query,$connection="default")
+    {
+        return Capsule::connection($connection)->raw($query);
+    }
     
     /**
      * Execute raw select query
@@ -67,18 +77,18 @@ class DbHelper {
      * @param string $connection
      * @return type
      */
-    public static function select($query,$connection = "default") {
+    public static function select($query,$bindings = array(),$connection = "default") {
         Capsule::connection($connection)->setFetchMode(PDO::FETCH_CLASS);
-        $queryraw = Capsule::connection($connection)->raw($query);
-        return Capsule::connection($connection)->select($queryraw);
+        $queryraw = self::raw($query,$connection);
+        return Capsule::connection($connection)->select($queryraw,$bindings);
     }
  
     public static function selectPDO($query,$connection="default")
     {
-    	$pdo = Capsule::connection($connection)->getPdo();
-    	$q = $pdo->prepare($query);
-    	$q->execute();
-     	return $q->fetchAll(\PDO::FETCH_OBJ); 
+        $pdo = Capsule::connection($connection)->getPdo();
+        $q = $pdo->prepare($query);
+        $q->execute();
+        return $q->fetchAll(\PDO::FETCH_OBJ); 
     }
     
      /**
@@ -87,9 +97,10 @@ class DbHelper {
      * @param string $connection
      * @return type
      */
-    public static function insert($query,$connection = "default")
-    {
-        return Capsule::connection($connection)->insert($query);
+    public static function insert($query,$bindings = array(),$connection = "default")
+    {        
+        $queryraw = self::raw($query,$connection);
+        return Capsule::connection($connection)->insert($queryraw,$bindings);
     }
     
      /**
@@ -98,9 +109,10 @@ class DbHelper {
      * @param string $connection
      * @return type
      */
-    public static function update($query,$connection = "default")
+    public static function update($query,$bindings = array(),$connection = "default")
     {
-        return Capsule::connection($connection)->update($query);
+        $queryraw = self::raw($query,$connection);
+        return Capsule::connection($connection)->update($queryraw,$bindings);
     }
     
      /**
@@ -109,9 +121,10 @@ class DbHelper {
      * @param string $connection
      * @return type
      */
-    public static function delete($query,$connection = "default")
+    public static function delete($query,$bindings = array(),$connection = "default")
     {
-        return Capsule::connection($connection)->delete($query);
+        $queryraw = self::raw($query,$connection);
+        return Capsule::connection($connection)->delete($queryraw,$bindings);
     }
     
      /**
