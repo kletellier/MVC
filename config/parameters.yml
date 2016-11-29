@@ -36,6 +36,7 @@ security:
          roles_table : roles
          users_table : users
          usersroles_table : usersroles
+         hashing_classes : GL\Core\Security\PasswordHashing
     cookie:
          token : typeyoursecuritytokenhere
          name : REMEMBERME

@@ -23,7 +23,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	protected $cookiename;
 	protected $cookieduration;
 	protected $userlogged;
-
+	protected $hashingClasses;	 
 	protected $model = '<?php
 
 	namespace Application\Models;
@@ -43,7 +43,6 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 		$this->setSession($session);
 		$this->loadConfig();
 	}
-
 	public function loadConfig()
 	{
 		try 
@@ -58,6 +57,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 			$this->cookiename = $this->config['cookie']['name'];
 			$this->cookieduration = $this->config['cookie']['duration'];
 
+			$this->hashingClasses = isset($this->config['security']['hashing_classes']) ? $this->config['security']['hashing_classes'] : '';			 
 		} 
 		catch (Exception $e) 
 		{
@@ -138,8 +138,17 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 */
 	public function encryptPassword($salt,$password)
 	{
-		$tmp = $password.$salt;
-		return sha1($tmp);
+		if(class_exists(($this->hashingClasses)))
+		{
+			$inst = new $this->hashingClasses;
+			$pass = $inst->hash($salt,$password);			 
+		}
+		else
+		{
+			$tmp = $password.$salt;
+			$pass =  sha1($tmp);			
+		}
+		return $pass;
 	}
 
 	/**
@@ -150,9 +159,17 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 	 */
 	public function testPassword($user,$password)
 	{
-		$pass = $user->password;
-		$passe = $this->encryptPassword($user->salt,$password);
-		return ($pass==$passe);
+		if(class_exists(($this->hashingClasses)))
+		{
+			$inst = new $this->hashingClasses;
+			return $inst->verify($user->salt,$password,$user->password);			 
+		}
+		else
+		{
+			$pass = $user->password;
+			$passe = $this->encryptPassword($user->salt,$password);
+			return ($pass==$passe);			
+		}		
 	}
 
 	/**
@@ -332,6 +349,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 		$user = $inst->where('login','=',$login)->first();
 		if($user!=null)
 		{
+
 			$ret = $this->testPassword($user,$password);
 			if($ret)
 			{				
