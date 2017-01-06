@@ -121,6 +121,8 @@ class Application
         \Debug::stopMeasure('enable_error');
         if(DEVELOPMENT_ENVIRONMENT)
         {        
+            \Debug::log("PHP Version : " . phpversion());
+            \Debug::log("OS Version : " . php_uname());
             $end_boot_time = microtime(true);
             $boot_time = $end_boot_time - $this->start_time;
             \Debug::log("Booting time : $boot_time sec");
