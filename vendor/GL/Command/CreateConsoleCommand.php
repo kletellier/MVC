@@ -51,9 +51,11 @@ class CreateConsoleCommand extends Command
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP5);
         $prettyPrinter = new PrettyPrinter\Standard;
         $stmts = $parser->parse($code);
-        foreach ($stmts[0]->expr as $express) 
+        $items = $stmts[0]->expr->expr->items;
+       
+        foreach ($items as $command) 
         {
-           $tmp =  $express[0]->value->value;
+           $tmp = $command->value->value;
            if(S::create($tmp)->humanize()->__toString()==S::create($fqn)->humanize()->__toString())
            {
             $output->writeln("This command already exists in commands.php");
@@ -62,11 +64,13 @@ class CreateConsoleCommand extends Command
         } 
                 
         // commands not exists add it to commands.php
-        $nb = count($stmts[0]->expr->items);
-        $ligne  = 4 + $nb;
+        $nb = count($items);
+        $ligne  = 2 ; // 4 + $nb;
         $attributes = array("startLine"=>$ligne,"endLine"=>$ligne,"kind"=>2);
-        $obj = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($fqn,$attributes),null,false,$attributes);
-        array_push($stmts[0]->expr->items,$obj);
+        $attributes2 = array("startLine"=>$ligne,"endLine"=>$ligne);
+        $obj = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($fqn,$attributes),null,false,$attributes2);
+        array_push($stmts[0]->expr->expr->items,$obj);
+       
         $code = $prettyPrinter->prettyPrint($stmts);
         $code = "<?php \r\n" . $code;
 
