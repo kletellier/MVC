@@ -103,6 +103,18 @@ class CacheCommand extends Command
                 $output->writeln("    Create parameters cache file");
                 // create parameters files
                 $para = new \GL\Core\Config\Parameters();
+
+                $output->writeln("    Create events cache file directory");
+                $path = CACHEPATH . DS . "events";
+                if(!$fs->exists($path))
+                {
+                    $fs->mkdir($path);
+                }
+                $fs->chmod($path,0777,0000,true);
+                
+                $output->writeln("    Create events cache file");
+                // create parameters files
+                $eve = new \GL\Core\Events\EventsLoader();
                 
 
         } 
