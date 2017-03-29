@@ -21,6 +21,7 @@
         "symfony/filesystem": "3.2.*",          
         "symfony/config": "3.2.*",
         "symfony/console": "3.2.*",
+        "symfony/event-dispatcher":"3.2.*",
         "psr/log": "1.0.*@dev",
         "maximebf/debugbar": "1.*",
         "mobiledetect/mobiledetectlib": "dev-master",
@@ -42,7 +43,8 @@
             "GL\\" : "vendor/GL",       
             "DI\\" : "cache/DI",
             "Parameters\\": "cache/parameters",
-            "Route\\": "cache/route"
+            "Route\\": "cache/route",
+            "Events\\": "cache/events"
             },
         "files": ["library/functions.php"]
     },

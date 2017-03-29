@@ -1,0 +1,4 @@
+event1:
+       event: "test.tested"
+       listener: '\GL\Core\Events\Listener'
+       method: "onTested"

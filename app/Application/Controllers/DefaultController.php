@@ -2,6 +2,7 @@
 namespace Application\Controllers;
 
 use GL\Core\Controller\Controller as Controller;
+use GL\Core\Events\TestEvent;
 
 class DefaultController extends Controller
 {
@@ -9,6 +10,7 @@ class DefaultController extends Controller
     {                              
         $text = "Hello " .$name . " !";
         $date = new \DateTime();
+        \Event::dispatch( TestEvent::NAME, new TestEvent("Unix Timestamp : " . $date->format('U')));
         return $this->render('index',array('date'=>$date,'text'=>$text));   
     }
 }

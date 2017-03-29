@@ -136,7 +136,10 @@ class Application
             ob_start(null, 0, PHP_OUTPUT_HANDLER_CLEANABLE | PHP_OUTPUT_HANDLER_FLUSHABLE  );        
         }
          
-        $response = null;       
+        $response = null;   
+
+        // enable events system
+        \GL\Core\Events\ListenerLoader::Init();
 
         // enable security system
         \Debug::startMeasure('security', 'Start security');

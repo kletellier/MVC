@@ -120,7 +120,9 @@ class ServiceProvider
         $container->register('db','GL\Core\Helpers\DbHelper');
         // Inject Redis
         $container->register('redis','GL\Core\Tools\Redis');
-
+        // Inject Event Dispatcher
+        $container->register('event','Symfony\Component\EventDispatcher\EventDispatcher');
+        
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
         $loader->load('services.yml');
