@@ -19,7 +19,7 @@ use Assert\AssertionFailedException;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Stopwatch\Stopwatch;
 use GL\Core\Controller\Filters;
-
+use GL\Core\Controller\ResponseEvent;
 
 class Application 
 {   
@@ -196,13 +196,12 @@ class Application
         {
             $response = $this->getErrorResponse(405);
         }  
-        \Debug::startMeasure('filtering', 'Filtering response'); 
         if ($response instanceof Response) {
-            \Debug::log("HTTP code : " . $response->getStatusCode());  
-            // prepare response
-            $filteredresponse =  $this->filters->filterResponse($response,$route);
-            $event = $this->watch->stop('rendering');             
-            $filteredresponse->send();             
+            \Debug::log("HTTP code : " . $response->getStatusCode());            
+            \Debug::startMeasure('filtering', 'Filtering response'); 
+            $responseFiltered = \Event::dispatch( ResponseEvent::NAME, new ResponseEvent($response,$route))->getResponse();
+            $this->watch->stop('rendering');
+            $responseFiltered->send();             
         }     
         else
         {

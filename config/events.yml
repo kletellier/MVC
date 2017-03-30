@@ -2,3 +2,7 @@ event1:
        event: "test.tested"
        listener: '\GL\Core\Events\Listener'
        method: "onTested"
+event2:
+       event: "response.created"
+       listener: '\GL\Core\Controller\ResponseListener'
+       method: "onResponseCreated"
