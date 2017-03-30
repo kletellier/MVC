@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Stopwatch\Stopwatch;
 use GL\Core\Controller\Filters;
 use GL\Core\Controller\ResponseEvent;
-
+use GL\Core\Security\SecurityEvent;
 class Application 
 {   
     protected $start_time;
@@ -144,6 +144,8 @@ class Application
         // enable security system
         \Debug::startMeasure('security', 'Start security');
         $ss = $this->container->get('security');
+        \Event::dispatch( SecurityEvent::SECURITY_STARTED, new SecurityEvent($ss->userLogged()));
+
         \Debug::stopMeasure('security');        
         \Debug::log("Security Session Id : " . $this->container->get('session')->get('session.id'));
         

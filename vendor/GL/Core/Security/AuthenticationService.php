@@ -10,6 +10,7 @@ use GL\Core\Config\Config;
 use GL\Core\Security\AuthenticationServiceInterface;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
+use GL\Core\Security\SecurityEvent;
 
 class AuthenticationService implements \GL\Core\Security\AuthenticationServiceInterface
 {
@@ -359,6 +360,7 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 				$user->nblogin+=1;				 
 				$user->save();
 				$this->userlogged = $user;
+				\Event::dispatch( SecurityEvent::SECURITY_USER_LOGGED , new SecurityEvent($user));
 			}
 		}
 		return $ret;
@@ -423,7 +425,8 @@ class AuthenticationService implements \GL\Core\Security\AuthenticationServiceIn
 			$this->session->save();
 			$user->nblogin+=1;				 
 			$user->save();		
-			$this->userlogged = $user;	 
+			$this->userlogged = $user;	
+			\Event::dispatch( SecurityEvent::SECURITY_USER_LOGGED , new SecurityEvent($user)); 
 		}
 		return $user;
 	}
