@@ -78,9 +78,10 @@ class DbHelper {
      * @return type
      */
     public static function select($query,$bindings = array(),$connection = "default") {
-        Capsule::connection($connection)->setFetchMode(PDO::FETCH_CLASS);
-        $queryraw = self::raw($query,$connection);
-        return Capsule::connection($connection)->select($queryraw,$bindings);
+        $pdo = Capsule::connection($connection)->getPdo();
+        $q = $pdo->prepare($query);
+        $q->execute($bindings);
+        return $q->fetchAll(\PDO::FETCH_CLASS); 
     }
  
     public static function selectPDO($query,$connection="default")

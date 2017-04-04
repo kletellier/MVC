@@ -12,7 +12,7 @@
         "symfony/http-foundation": "3.2.*",
         "symfony/routing": "3.2.*",
         "symfony/yaml": "3.2.*",
-        "illuminate/database": "5.3.x-dev",
+        "illuminate/database": "*",
         "symfony/dependency-injection": "3.2.*",
         "symfony/stopwatch": "3.2.*",
         "phpmailer/phpmailer": "~5.2",  
