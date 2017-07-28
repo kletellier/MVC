@@ -11,7 +11,6 @@ class ListenerLoader
  
     public static function Init()
     {
-        $dispatcher = \GL\Core\DI\ServiceProvider::GetDependencyContainer()->get('event');
         $loader = new EventsLoader();
         $events = $loader->getAll();
         foreach ($events as $key => $value) 
@@ -20,7 +19,7 @@ class ListenerLoader
             $tmp = new $value["listener"];           
             $method = $value["method"];
             $event = $value["event"];
-            $dispatcher->addListener($event, array($tmp, $method));
+            \Event::addListener($event, array($tmp, $method));
         }
     }         
 }
