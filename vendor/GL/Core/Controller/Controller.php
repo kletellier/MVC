@@ -323,12 +323,22 @@ abstract class Controller implements ContainerAwareInterface
     function render($template,$params = array(), $status = 200, $headers = array('Content-Type' => 'text/html'),$engine="" )
     {           
         \Debug::startMeasure('gethtml','Get html buffer');
-        $buf = $this->getHtmlBuffer($template,$params,true,false,$engine);
+        $buf = $this->getHtmlBuffer($template,$params);
         \Debug::stopMeasure('gethtml');
         \Debug::startMeasure('response','Prepare response');
         $response = $this->getResponse($buf,$status,$headers);
         \Debug::stopMeasure('response');         
         return $response;
+    }
+
+    /**
+     * Throw new Exception with Http code provided
+     * @param integer $code 
+     * @return HttpException raised
+     */
+    function raiseHttpError($code)
+    {
+        throw new \GL\Core\Exception\HttpException($code);     
     }
     
     /**
@@ -415,12 +425,12 @@ abstract class Controller implements ContainerAwareInterface
      * @param bool $htmlmode internal for rendering htmltemplate (render mode)
      * @return string html return of template parsing     * 
      */
-    private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false,$engine="")
-    {        
+    private function getHtmlBuffer($template,$params = array(), $executeglobal=true,$htmlmode=false)
+    {
         \Debug::startMeasure('global','Insert global variables');        
         $fnparams = ($executeglobal==true) ? $this->GetGlobalVariables($params) : $params;        
         \Debug::stopMeasure('global');         
-        $tpl_service = $this->get('template')->getTemplateService($engine);
+        $tpl_service = $this->get('template')->getTemplateService();
         $tpl_service->setContainer($this->container);
         $tpl_service->setController($this->_controller);
         return $tpl_service->render($template,$fnparams,$htmlmode);

@@ -29,10 +29,11 @@ class Application
     protected $filters;
     protected $debug;
 
-    private function getErrorResponse($code)
+     private function getErrorResponse($code)
     {
-        $action = "error$code";
-        $cr_error = new ControllerResolver("error", $action, array(),$this->container);
+
+        $action = "error";
+        $cr_error = new ControllerResolver("error", $action, array("code" => $code),$this->container);
         return $cr_error->execute();      
     }
 
@@ -181,6 +182,11 @@ class Application
             $response = $cr->execute(); 
             \Debug::stopMeasure('execute'); 
                                
+        }
+        catch(\GL\Core\Exception\HttpException $hex)
+        {
+            $sc = $hex->getStatusCode();
+            $response = $this->getErrorResponse($sc);
         }
         catch(NotFoundHttpException $ex)
         {

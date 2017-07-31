@@ -57,8 +57,8 @@ class ControllerResolver
     {
       ob_clean();
       $this->_controller = "error";
-      $this->_action = "error$code";
-      $this->_args = array();             
+      $this->_action = "error";
+      $this->_args = array("code"=>$code);             
       return $this->execute();    
     }
 
@@ -213,6 +213,11 @@ class ControllerResolver
             $response = $this->getErrorResponse(404);                   
           } 
 
+        }
+        catch(\GL\Core\Exception\HttpException $hex)
+        {
+            $sc = $hex->getStatusCode();
+            $response = $this->getErrorResponse($sc);
         }
         catch(\GL\Core\Exception\AccessDeniedHttpException $ad)
         {
