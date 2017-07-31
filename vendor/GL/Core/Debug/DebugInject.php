@@ -65,8 +65,8 @@ class DebugInject implements \GL\Core\Controller\FilterResponseInterface
             if(strtolower($ct)=="application/json")
             {
                 $debugbar = $this->_container->get('debug');
-                $debugbar->sendDataInHeaders                 
-            }          
+                $debugbar->sendDataInHeaders();                 
+            }           
         } 
         catch (Exception $e) 
         {
