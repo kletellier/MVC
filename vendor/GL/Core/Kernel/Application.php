@@ -164,6 +164,10 @@ class Application
             $route = $router->getRoute();
             $parameters = $router->getArgs();
 
+            // Fire Request Event
+            $req = $this->container->get('request');
+            \Event::dispatch( RequestEvent::NAME, new RequestEvent($req,$router));
+
             \Debug::stopMeasure('routing');  
             \Debug::startMeasure('resolving', 'Resolving controller');
             \Debug::log("Route : " . $route);  
