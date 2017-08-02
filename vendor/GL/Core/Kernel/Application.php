@@ -21,6 +21,8 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use GL\Core\Controller\Filters;
 use GL\Core\Controller\ResponseEvent;
 use GL\Core\Security\SecurityEvent;
+use GL\Core\Controller\RequestEvent;
+
 class Application 
 {   
     protected $start_time;
