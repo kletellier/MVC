@@ -15,7 +15,7 @@
         "illuminate/database": "*",
         "symfony/dependency-injection": "4.0.*",
         "symfony/stopwatch": "4.0.*",
-        "phpmailer/phpmailer": "5.2.*",
+        "phpmailer/phpmailer": "6.0.*",
         "symfony/class-loader": "3.4.*",
         "symfony/finder": "4.0.*",
         "symfony/filesystem": "4.0.*",

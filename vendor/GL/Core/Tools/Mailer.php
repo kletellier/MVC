@@ -5,7 +5,7 @@ namespace GL\Core\Tools;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 use GL\Core\Config\Config;
-
+use PHPMailer\PHPMailer\PHPMailer;
 /**
  * PHPMailer wrapper
  */
@@ -62,9 +62,9 @@ class Mailer
     /**
      * Add all attachments in $message
      * 
-     * @param Swift_Message $message Swift message instance
+     * @param PHPMailer $message PHPMailer message instance
      */
-    private function getAttachment(\PHPMailer $message)
+    private function getAttachment(PHPMailer $message)
     {
         foreach($this->_attach as $tmp)
         {
@@ -114,9 +114,9 @@ class Mailer
      * 
      * Add all recipients in message
      * 
-     * @param Swift_Message $message Swift message instance
+     * @param PHPMailer $message PHPMailer message instance
      */
-    private function getTo(\PHPMailer $message)
+    private function getTo(PHPMailer $message)
     {            
         // ajout destinataire    
         foreach($this->_to as $mail)
@@ -363,7 +363,7 @@ class Mailer
      */
     public function send($call_reset_after=false)
     {       
-        $mail = new \PHPMailer;
+        $mail = new PHPMailer;
         $mail->isSMTP();
         $mail->CharSet = $this->_charset;
         $mail->Host = $this->_server;
