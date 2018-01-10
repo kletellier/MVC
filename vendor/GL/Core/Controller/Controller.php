@@ -413,9 +413,9 @@ abstract class Controller implements ContainerAwareInterface
      * @param array $params Twig parameters array
      * @return string Html string buffer
      */
-    function renderHtmlTemplate($template,$params = array(), $executeglobal=false)
+    function renderHtmlTemplate($template,$params = array(), $executeglobal=false,$engine="")
     {  
-        return $this->getHtmlBuffer($template,$params,$executeglobal,true);
+        return $this->getHtmlBuffer($template,$params,$executeglobal,true,$engine);
     } 
 
     /**

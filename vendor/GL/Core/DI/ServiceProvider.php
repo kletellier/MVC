@@ -83,45 +83,45 @@ class ServiceProvider
         }          
 
         // Inject mailer
-        $container->register('mailer', 'GL\Core\Tools\Mailer');
+        $container->register('mailer', 'GL\Core\Tools\Mailer')->setPublic(true);
         // Inject Request
-        $container->register('request', 'Symfony\Component\HttpFoundation\Request')->setFactory("Symfony\Component\HttpFoundation\Request::createFromGlobals");
+        $container->register('request', 'Symfony\Component\HttpFoundation\Request')->setFactory("Symfony\Component\HttpFoundation\Request::createFromGlobals")->setPublic(true);
         // Inject Request helper
-        $container->register('request_helper', 'GL\Core\Helpers\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')));
+        $container->register('request_helper', 'GL\Core\Helpers\RequestHelper')->addMethodCall('setRequest', array(new Reference('request')))->setPublic(true);
         // Inject Twig Service
-        $container->register('template','GL\Core\Templating\TemplateProvider');
+        $container->register('template','GL\Core\Templating\TemplateProvider')->setPublic(true);
         // Inject RouteCollection
-        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')->setFactory("GL\Core\Routing\RouteProvider::GetRouteCollection");  
+        $container->register('routes', 'Symfony\Component\Routing\RouteCollection')->setFactory("GL\Core\Routing\RouteProvider::GetRouteCollection")->setPublic(true);  
         if(class_exists("\PHPExcel"))
         {
             // Inject PHPExcel Wrapper
-            $container->register('excel', 'GL\Core\Tools\Excel');
+            $container->register('excel', 'GL\Core\Tools\Excel')->setPublic(true);
         }   
         if(class_exists("\TCPDF"))
         {
             // Inject FPDF Wrapper
-            $container->register('pdf', 'GL\Core\Tools\PDF');
+            $container->register('pdf', 'GL\Core\Tools\PDF')->setPublic(true);
         }   
         // Inject Session
-        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name))->addMethodCall('start');
+        $container->register('session','Symfony\Component\HttpFoundation\Session\Session')->addMethodCall('setName',array($session_name))->addMethodCall('start')->setPublic(true);
         // Inject Crsf verifier
-        $container->register('crsf','GL\Core\Security\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'));
+        $container->register('crsf','GL\Core\Security\FormCrsf')->addArgument(new Reference('session'))->addArgument(new Reference('request'))->setPublic(true);
         // Inject translator service
-        $container->register('translator','GL\Core\Config\Translator');
+        $container->register('translator','GL\Core\Config\Translator')->setPublic(true);
         // Inject Security Service
-        $container->register('security',$class)->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin');
+        $container->register('security',$class)->addArgument(new Reference('session'))->addArgument(new Reference('request'))->addMethodCall('autologin')->setPublic(true);
         // Inject DebugBar
-        $container->register('debug','GL\Core\Debug\KLDebugBar');
+        $container->register('debug','GL\Core\Debug\KLDebugBar')->setPublic(true);
          // Inject Pdo Object
-        $container->register('pdo', 'PDO')->setFactory("GL\Core\Helpers\DbHelper::getPdo");         
+        $container->register('pdo', 'PDO')->setFactory("GL\Core\Helpers\DbHelper::getPdo")->setPublic(true);         
         // Inject Config
-        $container->register('config','GL\Core\Config\Config');
+        $container->register('config','GL\Core\Config\Config')->setPublic(true);
         // Inject DbHelper
-        $container->register('db','GL\Core\Helpers\DbHelper');
+        $container->register('db','GL\Core\Helpers\DbHelper')->setPublic(true);
         // Inject Redis
-        $container->register('redis','GL\Core\Tools\Redis');
+        $container->register('redis','GL\Core\Tools\Redis')->setPublic(true);
         // Inject Event Dispatcher
-        $container->register('event','Symfony\Component\EventDispatcher\EventDispatcher');
+        $container->register('event','Symfony\Component\EventDispatcher\EventDispatcher')->setPublic(true);
         
         // Inject services defined in config/services.yml
         $loader = new YamlFileLoader($container, new FileLocator(SERVICEPATH));
