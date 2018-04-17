@@ -33,7 +33,7 @@
         "hoa/mime": "~3.0",
         "filp/whoops": "2.1.14",
         "philo/laravel-blade": "3.*",
-        "nikic/php-parser": "*"
+        "nikic/php-parser": "3.1.5"
     },
     "autoload": {
         "psr-4": {
