@@ -2,7 +2,7 @@
     "name": "kletellier/mvc",
     "description": "A small MVC framework based on Symfony component and Eloquent ORM",
     "keywords": ["framework", "eloquent","symfony"],
-    "license": "GPL",
+    "license": "GPL-3.0-or-later",
     "type": "project",
     "config": {
         "vendor-dir": "plugins"
@@ -12,7 +12,7 @@
         "symfony/http-foundation": "4.0.*",
         "symfony/routing": "4.0.*",
         "symfony/yaml": "4.0.*",
-        "illuminate/database": "*",
+        "illuminate/database": "5.3.*",
         "symfony/dependency-injection": "4.0.*",
         "symfony/stopwatch": "4.0.*",
         "phpmailer/phpmailer": "6.0.*",
@@ -31,9 +31,9 @@
         "nesbot/carbon": "1.22.*",
         "predis/predis": "1.1.*",
         "hoa/mime": "~3.0",
-        "filp/whoops": "2.1.14",
+        "filp/whoops": "2.1.*",
         "philo/laravel-blade": "3.*",
-        "nikic/php-parser": "3.1.5"
+        "nikic/php-parser": "3.1.*"
     },
     "autoload": {
         "psr-4": {
@@ -64,7 +64,5 @@
             "php console debugbar:install"
         ]
     },
-    "minimum-stability": "dev",
-    "optimize-autoloader": true,
-    "preferred-install":"dist"
+    "minimum-stability": "dev"
 }
